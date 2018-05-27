@@ -1,0 +1,169 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 60px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.app-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover !important;
+}
+
+.app-bg:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(to bottom right, red, blue);
+  opacity: .6; 
+}
+
+.game-view {
+  margin: 0 auto;
+}
+
+.hand-view {
+  display: inline-block;
+  perspective: 600;
+  vertical-align: top;
+  width: 102px;
+}
+
+.hand-view .card-view {
+  display: block;
+}
+
+.grid-view {
+  display: inline-block;
+  margin: 103px 0;
+  width: 424px;
+  vertical-align: top;
+}
+
+.grid-row {
+  display: block;
+  margin-bottom: -5px;
+}
+
+.grid-view .card-view {
+  display: inline-block;
+}
+
+.card-view {
+  border: 2px solid white;
+  border-radius: 2px;
+  height: 100px;
+  margin: 1px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 800ms ease-in-out;
+  width: 100px;
+}
+
+.card-view .side {
+  backface-visibility: hidden;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+}
+
+@keyframes flip_top { from { transform: rotateX(0deg) } to { transform: rotateX(360deg) }  }
+@keyframes flip_right { from { transform: rotateY(0deg) } to { transform: rotateY(-360deg) }  }
+@keyframes flip_bottom { from { transform: rotateX(0deg) } to { transform: rotateX(-360deg) }  }
+@keyframes flip_left { from { transform: rotateY(0deg) } to { transform: rotateY(360deg) }  }
+
+.card-view.top {
+  animation: 1s ease-in-out 0s flip_top;
+}
+
+.card-view.right {
+  animation: 1s ease-in-out 0s flip_right;
+}
+
+.card-view.bottom {
+  animation: 1s ease-in-out 0s flip_bottom;
+}
+
+.card-view.left {
+  animation: 1s ease-in-out 0s flip_left;
+}
+
+.card-view img {
+  left: 0;
+  position: absolute;
+}
+
+.card-view.hand {
+  border: 2px solid blue;
+}
+
+.card-view.enemy {
+  border: 2px solid red;
+}
+
+.card-view .power {
+  backface-visibility: hidden;
+  color: white;
+  position: absolute;
+  right: 20px;
+  text-shadow: -2px -2px 0px rgba(255,255,255,0.3), 2px 2px 0px rgba(0,0,0,0.8);
+  top: 14px; 
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.card-view .power-wrap {
+  position: relative;
+}
+
+.card-view .top,
+.card-view .right,
+.card-view .bottom,
+.card-view .left {
+  position: absolute;
+}
+
+.card-view .top {
+  top: -12px;
+}
+
+.card-view .right {
+  right: -17px;
+}
+
+.card-view .bottom {
+  bottom: -32px;
+}
+
+.card-view .left {
+  left: -8px;
+}
