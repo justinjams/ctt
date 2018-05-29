@@ -1,19 +1,14 @@
 import CardView from './card_view';
-
-let context = require.context("../../tiles", true, /\.(jpg)$/);
-const files={};
-context.keys().forEach((filename)=>{
-  files[filename.match(/\.\/([^_]+)_/)[1]] = context(filename);
-});
+import assets from '../helpers/assets'
 
 class HandCardView extends CardView {
   championImage () {
     const card = this.getCardName().toLowerCase();
-    return files[card];
+    return assets.getTile(card);
   }
 
   getCardName () {
-    return this.props.game[this.props.hand][this.props.pos];
+    return this.props.game.players[this.props.hand].hand[this.props.pos];
   }
 
   getHand() {

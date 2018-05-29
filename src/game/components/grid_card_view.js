@@ -1,10 +1,5 @@
 import CardView from './card_view';
-
-let context = require.context("../../tiles", true, /\.(jpg)$/);
-const files={};
-context.keys().forEach((filename)=>{
-  files[filename.match(/\.\/([^_]+)_/)[1]] = context(filename);
-});
+import assets from '../helpers/assets'
 
 class GridCardView extends CardView {
   getCardName () {
@@ -17,7 +12,7 @@ class GridCardView extends CardView {
   getHand() {
     const self = this.props.game.grid[this.props.pos];
     if (self) {
-      return self.player;
+      return self.hand;
     }
   }
 
@@ -30,7 +25,7 @@ class GridCardView extends CardView {
 
   championImage () {
     const card = this.getCardName().toLowerCase();
-    return files[card];
+    return assets.getTile(card);
   }
 }
 export default GridCardView;

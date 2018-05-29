@@ -1,0 +1,50 @@
+.game-view {
+  margin: 15px auto;
+}
+
+.game-over {
+  color: white;
+  font-size: 100px;
+  position: absolute;
+  width: 100%;
+}
+
+.hand-view {
+  display: inline-block;
+  perspective: 600;
+  vertical-align: top;
+  width: 144px;
+}
+
+.hand-view .card-view {
+  display: block;
+}
+
+.grid-view {
+  display: inline-block;
+  width: 508px;
+  vertical-align: top;
+}
+
+.grid-row {
+  display: block;
+  margin-bottom: -5px;
+}
+
+.grid-view .score {
+  display: inline-block;
+  font-size: 50px;
+  font-weight: bold;
+  padding: 10px 0px;
+  width: 102px;
+}
+
+.grid-view .player.score {
+  color: $blue;
+}
+
+.grid-view .enemy.score {
+  color: $red;
+}
+
+@import '_card.scss';

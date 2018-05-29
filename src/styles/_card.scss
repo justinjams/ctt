@@ -1,0 +1,114 @@
+.grid-view .card-view {
+  display: inline-block;
+}
+
+.hand-view .card-view:empty {
+  display: none;
+}
+
+.player-turn .player-hand .card-slider:hover,
+.player-turn .player-hand .card-slider.selected  {
+  padding-left: 25px;
+}
+
+.enemy-turn .enemy-hand .card-slider:hover,
+.enemy-turn .enemy-hand .card-slider.selected {
+  margin-left: -25px;
+  padding-right: 25px;
+}
+
+@keyframes flip_top { from { transform: rotateX(0deg) } to { transform: rotateX(360deg) }  }
+@keyframes flip_right { from { transform: rotateY(0deg) } to { transform: rotateY(-360deg) }  }
+@keyframes flip_bottom { from { transform: rotateX(0deg) } to { transform: rotateX(-360deg) }  }
+@keyframes flip_left { from { transform: rotateY(0deg) } to { transform: rotateY(360deg) }  }
+
+.card-view {
+  background-color: rgba(10, 1, 13, 0.6);
+  border: 8px solid white;
+  border-radius: 3px;
+  height: 128px;
+  margin: 1px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 120ms ease-in-out;
+  width: 128px;
+}
+
+.card-view .side {
+  backface-visibility: hidden;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card-slider {
+  transition: all 120ms ease-in-out;
+}
+
+.card-view.top {
+  animation: 1s ease-out 0s flip_top;
+}
+
+.card-view.right {
+  animation: 1s ease-out 0s flip_right;
+}
+
+.card-view.bottom {
+  animation: 1s ease-out 0s flip_bottom;
+}
+
+.card-view.left {
+  animation: 1s ease-out 0s flip_left;
+}
+
+.card-view img {
+  left: 0;
+  position: absolute;
+}
+
+.card-view.player {
+  border: 8px solid $blue;
+}
+
+.card-view.enemy {
+  border: 8px solid $red;
+}
+
+.card-view .power {
+  backface-visibility: hidden;
+  color: white;
+  position: absolute;
+  right: 20px;
+  text-shadow: -2px -2px 0px rgba(255,255,255,0.3), 2px 2px 0px rgba(0,0,0,0.8);
+  top: 14px; 
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.card-view .power-wrap {
+  position: relative;
+}
+
+.card-view .top,
+.card-view .right,
+.card-view .bottom,
+.card-view .left {
+  position: absolute;
+}
+
+.card-view .top {
+  top: -12px;
+}
+
+.card-view .right {
+  right: -17px;
+}
+
+.card-view .bottom {
+  bottom: -32px;
+}
+
+.card-view .left {
+  left: -8px;
+}

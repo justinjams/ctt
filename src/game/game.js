@@ -1,37 +1,68 @@
-import data from './data.json'
+import data from '../data/data.json'
+const DATA_KEYS = Object.keys(data.cards);
+
+class AI {
+  constructor (game) {
+    this.game = game;
+    this.hand = [0,0,0,0,0].map(()=> DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]);
+    this.score = 5;
+  }
+
+  play () {
+    let holding;
+    do {
+      holding = { hand: 'enemy', pos: Math.floor(Math.random()*this.hand.length) };
+    } while(!this.game.setCard(Math.floor(Math.random()*9), holding));
+  }
+}
+
+class User {
+  constructor () {
+    this.hand = [0,0,0,0,0].map(()=> DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]);
+    this.score = 5;
+  }
+}
 
 class Game {
-  constructor() {
+  constructor () {
     this.grid = [];
-    const keys = Object.keys(data.cards);
-    this.hand = [0,0,0,0,0].map(()=> keys[(Math.random() * keys.length)|0]);
-    this.enemy = [0,0,0,0,0].map(()=> keys[(Math.random() * keys.length)|0]);
-    console.log(this.hand);
+    this.players = {
+      player: new User(),
+      enemy: new AI(this)
+    };
+    this.turn = 0;
 
     this.setCard = this.setCard.bind(this);
   }
 
-  setCard(pos, holding) {
+  setCard (pos, holding) {
     if (!this.grid[pos]) {
       this.grid[pos] = {
-        player: holding.hand,
-        card: this[holding.hand][holding.pos]
+        hand: holding.hand,
+        card: this.players[holding.hand].hand[holding.pos]
       };
-      let play = data.cards[this[holding.hand].splice(holding.pos, 1)[0]];
-      let neighbors = Game.NEIGHBORS[pos];
+      const play = data.cards[this.players[holding.hand].hand.splice(holding.pos, 1)[0]];
+      const neighbors = Game.NEIGHBORS[pos];
+
       for(let i=0; i<4; i++) {
         let j = (i+2) % 4;
         let other = this.grid[neighbors[i]];
         if(neighbors[i] !== null &&
            other &&
-           other.player !== holding.hand) {
+           other.hand !== holding.hand) {
           let otherCard = data.cards[other.card];
           if((i%2 === 0 && play.power[i] > otherCard.power[j]) ||
              (i%2 && play.power[i] < otherCard.power[j])) {
-            other.player = holding.hand;
+            this.players[other.hand].score--;
+            this.players[holding.hand].score++;
+            other.hand = holding.hand;
             other.flipped = ['top', 'right', 'bottom', 'left'][i];
           }
         }
+      }
+      this.turn ++;
+      if (this.turn%2 && this.turn < 9) {
+        this.players.enemy.play();
       }
 
       return true;
