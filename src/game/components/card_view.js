@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import data from '../../data/data.json'
+import assets from '../helpers/assets'
 
 class CardView extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class CardView extends Component {
     return (
       <div className={`card-view ${this.getHand()} ${this.getFlipped()}`} onClick={this.handleClick.bind(this)}>
         <div className="side">
-          <img height={150} width={150} src={this.championImage()} alt="" />
+          <img height={128} width={128} src={this.championImage()} alt="" />
           <div className="power-wrap">
             <div className="power">
               <div className="top">{card.power[0] > 9 ? 'A' : card.power[0]}</div>
@@ -36,7 +37,9 @@ class CardView extends Component {
             </div>
           </div>
         </div>
-        <div className="side back"></div>
+        <div className="side back">
+        <img height={128} width={128} src={assets.getCardBack()} alt=""/>
+        </div>
       </div>
     );
   }

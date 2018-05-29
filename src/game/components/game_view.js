@@ -15,7 +15,8 @@ class GameView extends Component {
   }
 
   selectCard (pos, hand) {
-    if ((this.game.turn % 2 === 0 && hand === 'player') || (this.game.turn % 2 && hand === 'enemy')) {
+    if ((this.game.turn % 2 === 0 && hand === 'player') ||
+        (this.game.turn % 2 && hand === 'enemy')) {
       const holding = { hand, pos };
       this.game.holding = holding;
       this.setState({ holding: holding });
@@ -25,7 +26,7 @@ class GameView extends Component {
   selectGrid (pos) {
     const holding = this.state.holding;
 
-    if (holding && this.game.setCard(pos, holding)) {
+    if (holding && this.game.setCard(pos, holding, this)) {
       this.game.holding = false;
       this.setState({ holding: false });
     }
@@ -37,7 +38,12 @@ class GameView extends Component {
       if (this.game.players.player.score > this.game.players.enemy.score) state = 'Victory'
       else if (this.game.players.player.score < this.game.players.enemy.score) state = 'Defeat'
       else state = 'Tie'
-      return (<div className="game-over">{state}</div>);
+      return (
+        <div className="game-over">
+          <div className={state.toLowerCase()}>{state}</div>
+          <div className="restart" onClick={()=>{window.location.href = ''}}>Play Again</div>
+        </div>
+      );
     } else return null;
   }
 

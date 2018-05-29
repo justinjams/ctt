@@ -9,6 +9,14 @@
   width: 100%;
 }
 
+.game-over .victory {
+  color: $blue;
+}
+
+.game-over .defeat {
+  color: $red;
+}
+
 .hand-view {
   display: inline-block;
   perspective: 600;

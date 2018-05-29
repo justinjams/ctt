@@ -8,11 +8,16 @@ class AI {
     this.score = 5;
   }
 
-  play () {
-    let holding;
-    do {
-      holding = { hand: 'enemy', pos: Math.floor(Math.random()*this.hand.length) };
-    } while(!this.game.setCard(Math.floor(Math.random()*9), holding));
+  play (view) {
+    setTimeout(()=>{
+      this.game.holding = { hand: 'enemy', pos: Math.floor(Math.random()*this.hand.length) };
+      view.setState({ holding: this.game.holding });
+
+      setTimeout(()=>{
+        while(!this.game.setCard(Math.floor(Math.random()*9), this.game.holding)) {};
+        view.setState({});
+      }, 250);
+    }, 0);
   }
 }
 
@@ -35,7 +40,7 @@ class Game {
     this.setCard = this.setCard.bind(this);
   }
 
-  setCard (pos, holding) {
+  setCard (pos, holding, view) {
     if (!this.grid[pos]) {
       this.grid[pos] = {
         hand: holding.hand,
@@ -62,7 +67,7 @@ class Game {
       }
       this.turn ++;
       if (this.turn%2 && this.turn < 9) {
-        this.players.enemy.play();
+        this.players.enemy.play(view);
       }
 
       return true;

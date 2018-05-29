@@ -42,6 +42,10 @@
   width: 100%;
 }
 
+.card-view .back.side {
+  transform: rotateY(180deg);
+}
+
 .card-slider {
   transition: all 120ms ease-in-out;
 }
@@ -62,11 +66,6 @@
   animation: 1s ease-out 0s flip_left;
 }
 
-.card-view img {
-  left: 0;
-  position: absolute;
-}
-
 .card-view.player {
   border: 8px solid $blue;
 }
@@ -78,16 +77,13 @@
 .card-view .power {
   backface-visibility: hidden;
   color: white;
+  font-size: 20px;
   position: absolute;
-  right: 20px;
+  right: 24px;
   text-shadow: -2px -2px 0px rgba(255,255,255,0.3), 2px 2px 0px rgba(0,0,0,0.8);
-  top: 14px; 
+  top: 18px; 
   transform-style: preserve-3d;
   z-index: 1;
-}
-
-.card-view .power-wrap {
-  position: relative;
 }
 
 .card-view .top,
@@ -98,17 +94,17 @@
 }
 
 .card-view .top {
-  top: -12px;
+  top: -16px;
 }
 
 .card-view .right {
-  right: -17px;
+  right: -22px;
 }
 
 .card-view .bottom {
-  bottom: -32px;
+  bottom: -40px;
 }
 
 .card-view .left {
-  left: -8px;
+  left: -11px;
 }
