@@ -11,9 +11,20 @@ class HandView extends Component {
     } else return '';
   }
 
+  renderClassName () {
+    let classNames = [`hand-view ${this.props.hand}-hand`];
+
+    // TODO: Change this to check for local player
+    if (!this.props.game.isOpen() && this.props.hand !== 'player1') {
+      classNames.push('closed');
+    }
+
+    return classNames.join(' ');
+  }
+
   render () {
     return (
-      <div className={`hand-view ${this.props.hand}-hand`}>
+      <div className={this.renderClassName()}>
       {[0,1,2,3,4].map((pos)=>{
         return (
           <div className={`card-slider ${this.getSelected(pos)}`} key={pos}>

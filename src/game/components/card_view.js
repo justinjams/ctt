@@ -17,6 +17,10 @@ class CardView extends Component {
     return data.cards[this.getCardName()];
   }
 
+  getFlipped() {
+    return '';
+  }
+
   render () {
     const card = this.getCard();
     if (!card) {
@@ -31,9 +35,9 @@ class CardView extends Component {
           <div className="power-wrap">
             <div className="power">
               <div className="top">{card.power[0] > 9 ? 'A' : card.power[0]}</div>
-              <div className="left">{card.power[1] > 9 ? 'A' : card.power[1]}</div>
+              <div className="right">{card.power[1] > 9 ? 'A' : card.power[1]}</div>
               <div className="bottom">{card.power[2] > 9 ? 'A' : card.power[2]}</div>
-              <div className="right">{card.power[3] > 9 ? 'A' : card.power[3]}</div>
+              <div className="left">{card.power[3] > 9 ? 'A' : card.power[3]}</div>
             </div>
           </div>
         </div>

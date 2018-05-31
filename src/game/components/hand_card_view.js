@@ -14,9 +14,5 @@ class HandCardView extends CardView {
   getHand() {
     return this.props.hand;
   }
-
-  getFlipped() {
-    
-  }
 }
 export default HandCardView;

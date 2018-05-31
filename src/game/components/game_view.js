@@ -6,19 +6,17 @@ import HandView from './hand_view';
 class GameView extends Component {
   constructor (props) {
     super(props);
-    this.game = new Game();
-    this.state = {
-      holding: false
-    };
+    this.state = this.getInitialState();
+
+    this.handleRestart = this.handleRestart.bind(this);
     this.selectCard = this.selectCard.bind(this);
     this.selectGrid = this.selectGrid.bind(this);
   }
 
   selectCard (pos, hand) {
-    if ((this.game.turn % 2 === 0 && hand === 'player') ||
-        (this.game.turn % 2 && hand === 'enemy')) {
+    if (hand === this.state.game.getCurrentTurn()) {
       const holding = { hand, pos };
-      this.game.holding = holding;
+      this.state.game.holding = holding;
       this.setState({ holding: holding });
     }
   }
@@ -26,29 +24,36 @@ class GameView extends Component {
   selectGrid (pos) {
     const holding = this.state.holding;
 
-    if (holding && this.game.setCard(pos, holding, this)) {
-      this.game.holding = false;
+    if (holding && this.state.game.setCard(pos, holding, this)) {
+      this.state.game.holding = false;
       this.setState({ holding: false });
     }
   }
 
   renderGameOver () {
-    if (this.game.turn === 9) {
+    if (this.state.game.isGameOver()) {
       let state;
-      if (this.game.players.player.score > this.game.players.enemy.score) state = 'Victory'
-      else if (this.game.players.player.score < this.game.players.enemy.score) state = 'Defeat'
+      if (this.state.game.players.player1.score > this.state.game.players.player2.score) state = 'Victory'
+      else if (this.state.game.players.player1.score < this.state.game.players.player2.score) state = 'Defeat'
       else state = 'Tie'
       return (
         <div className="game-over">
           <div className={state.toLowerCase()}>{state}</div>
-          <div className="restart" onClick={()=>{window.location.href = ''}}>Play Again</div>
+          <div className="restart" onClick={this.handleRestart}>Play Again</div>
         </div>
       );
     } else return null;
   }
 
-  getCurrentTurn () {
-    return ['player', 'enemy'][this.game.turn%2];
+  getInitialState () {
+    return {
+      holding: false,
+      game: new Game(this, {OPEN: true})
+    };
+  }
+
+  handleRestart () {
+    this.setState(this.getInitialState());
   }
 
   // Card order: top, right, down, left
@@ -57,34 +62,34 @@ class GameView extends Component {
   // 6 7 8
   render () {
     return (
-      <div className={`game-view ${this.getCurrentTurn()}-turn`}>
-        <HandView game={this.game} hand={'player'} handleClick={this.selectCard} />
+      <div className={`game-view ${this.state.game.getCurrentTurn()}-turn`}>
+        <HandView game={this.state.game} hand={'player1'} handleClick={this.selectCard} />
         <div className="grid-view">
           <div className="grid-row">
-            <span className="player score">
-              {this.game.players.player.score}
+            <span className="player1 score">
+              {this.state.game.players.player1.score}
             </span>
-            <span className="enemy score">
-              {this.game.players.enemy.score}
+            <span className="player2 score">
+              {this.state.game.players.player2.score}
             </span>
           </div>
           <div className="grid-row">
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={0} />
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={1} />
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={2} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={0} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={1} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={2} />
           </div>
           <div className="grid-row">
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={3} />
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={4} />
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={5} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={3} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={4} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={5} />
           </div>
           <div className="grid-row">
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={6} />
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={7} />
-            <GridCardView game={this.game} handleClick={this.selectGrid} pos={8} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={6} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={7} />
+            <GridCardView game={this.state.game} handleClick={this.selectGrid} pos={8} />
           </div>
         </div>
-        <HandView game={this.game} hand={'enemy'} handleClick={this.selectCard} />
+        <HandView game={this.state.game} hand={'player2'} handleClick={this.selectCard} />
         {this.renderGameOver()}
       </div>
     );

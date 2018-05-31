@@ -7,14 +7,14 @@
   font-size: 100px;
   position: absolute;
   width: 100%;
-}
 
-.game-over .victory {
-  color: $blue;
-}
+  .victory {
+    color: $blue;
+  }
 
-.game-over .defeat {
-  color: $red;
+  .defeat {
+    color: $red;
+  }
 }
 
 .hand-view {
@@ -22,10 +22,14 @@
   perspective: 600;
   vertical-align: top;
   width: 144px;
-}
 
-.hand-view .card-view {
-  display: block;
+  &.closed .card-view .side:not(.back) {
+    display: none;
+  }
+
+  .card-view {
+    display: block;
+  }
 }
 
 .grid-view {
@@ -37,21 +41,21 @@
 .grid-row {
   display: block;
   margin-bottom: -5px;
+
+  .score {
+    display: inline-block;
+    font-size: 50px;
+    font-weight: bold;
+    padding: 10px 0px;
+    width: 102px;
+  }
 }
 
-.grid-view .score {
-  display: inline-block;
-  font-size: 50px;
-  font-weight: bold;
-  padding: 10px 0px;
-  width: 102px;
-}
-
-.grid-view .player.score {
+.grid-view .player1.score {
   color: $blue;
 }
 
-.grid-view .enemy.score {
+.grid-view .player2.score {
   color: $red;
 }
 
