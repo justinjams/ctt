@@ -17,9 +17,19 @@
   }
 }
 
+.rules-view {
+  background: rgba(255,255,255,0.5);
+  height: 76%;
+  left: 0;
+  margin: 8% 8%;
+  position: absolute;
+  top: 0;
+  width: 84%;
+}
+
 .hand-view {
   display: inline-block;
-  perspective: 600;
+  perspective: 200;
   vertical-align: top;
   width: 144px;
 

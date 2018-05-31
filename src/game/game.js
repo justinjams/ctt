@@ -39,8 +39,13 @@ class Game {
       this.players.player2.play(view);
     }
     this.rules = Object.assign(DEFAULT_RULES, rules);
-    
+
     this.setCard = this.setCard.bind(this);
+    this.setRule = this.setRule.bind(this);
+  }
+
+  setRule (rule, state) {
+    this.rules[rule] = state;
   }
 
   isOpen () {
@@ -72,10 +77,13 @@ class Game {
            other.hand !== holding.hand) {
           let otherCard = data.cards[other.card];
           if(play.power[i] > otherCard.power[j]) {
+            console.log(`Capture! ${play.power[i]} > ${otherCard.power[j]}`);
             this.players[other.hand].score--;
             this.players[holding.hand].score++;
             other.hand = holding.hand;
             other.flipped = ['top', 'right', 'bottom', 'left'][i];
+          } else {
+            console.log(`No capture! ${play.power[i]} <= ${otherCard.power[j]}`);
           }
         }
       }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Game from '../game';
 import GridCardView from './grid_card_view';
 import HandView from './hand_view';
+import RulesView from './rules_view';
 
 class GameView extends Component {
   constructor (props) {
@@ -87,6 +88,7 @@ class GameView extends Component {
         </div>
         <HandView game={this.state.game} hand={'player2'} handleClick={this.selectCard} />
         {this.renderGameOver()}
+        <RulesView game={this.state.game} handleRuleChange={this.handleRestart} />
       </div>
     );
   }
