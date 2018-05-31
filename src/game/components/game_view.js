@@ -48,7 +48,7 @@ class GameView extends Component {
   getInitialState () {
     return {
       holding: false,
-      game: new Game(this, {OPEN: true})
+      game: new Game(this)
     };
   }
 
@@ -56,10 +56,6 @@ class GameView extends Component {
     this.setState(this.getInitialState());
   }
 
-  // Card order: top, right, down, left
-  // 0 1 2
-  // 3 4 5
-  // 6 7 8
   render () {
     return (
       <div className={`game-view ${this.state.game.getCurrentTurn()}-turn`}>

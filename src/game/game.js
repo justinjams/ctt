@@ -47,12 +47,12 @@ class Game {
     return this.rules.OPEN;
   }
 
-  getCurrentTurn () {
-    return ['player1', 'player2'][(this.turn + this.player2Starts)%2];
-  }
-
   isGameOver () {
     return (this.players.player1.hand.length + this.players.player2.hand.length) === 1
+  }
+
+  getCurrentTurn () {
+    return ['player1', 'player2'][(this.turn + this.player2Starts)%2];
   }
 
   setCard (pos, holding, view) {
@@ -88,5 +88,4 @@ class Game {
     }
   }
 }
-Game.x = [2, 3, 0, 1];
 export default Game;

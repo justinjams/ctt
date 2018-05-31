@@ -23,8 +23,8 @@
   vertical-align: top;
   width: 144px;
 
-  &.closed .card-view .side:not(.back) {
-    display: none;
+  &.closed .card-view .side.back {
+    transform: rotateY(0deg);
   }
 
   .card-view {

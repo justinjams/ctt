@@ -28,7 +28,10 @@ class HandView extends Component {
       {[0,1,2,3,4].map((pos)=>{
         return (
           <div className={`card-slider ${this.getSelected(pos)}`} key={pos}>
-            <HandCardView game={this.props.game} hand={this.props.hand} handleClick={this.props.handleClick} pos={pos} />
+            <HandCardView game={this.props.game}
+                          hand={this.props.hand}
+                          handleClick={this.props.handleClick}
+                          pos={pos} />
           </div>
         );
       })}

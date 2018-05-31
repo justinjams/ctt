@@ -21,6 +21,14 @@ class CardView extends Component {
     return '';
   }
 
+  renderCardBack() {
+    return (
+      <div className="side back">
+        <img height={128} width={128} src={assets.getCardBack()} alt=""/>
+      </div>
+    );
+  }
+
   render () {
     const card = this.getCard();
     if (!card) {
@@ -41,9 +49,7 @@ class CardView extends Component {
             </div>
           </div>
         </div>
-        <div className="side back">
-        <img height={128} width={128} src={assets.getCardBack()} alt=""/>
-        </div>
+        {this.renderCardBack()}
       </div>
     );
   }
