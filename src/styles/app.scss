@@ -5,7 +5,7 @@
 }
 
 .App-header {
-  background-color: #070024;
+  background-color: $dark-blue;
   background-image: url("https://www.transparenttextures.com/patterns/rocky-wall.png");
   height: 60px;
   padding: 20px;
@@ -37,6 +37,10 @@
   left: 0;
   background-image: linear-gradient(to bottom right, $blue, $red);
   opacity: .6; 
+}
+
+[role="button"] {
+  cursor: pointer;
 }
 
 @import '_game.scss';

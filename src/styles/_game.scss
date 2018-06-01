@@ -6,6 +6,13 @@
   color: white;
   font-size: 100px;
   position: absolute;
+  text-shadow:
+  -1px -1px 0 #000,
+  2px -1px 0 #000,
+  0px 4px 0 #000,
+  1px 1px 0 #000,
+  1px 4px 7px rgba(255, 255, 255, 0.8);
+  top: 180px;
   width: 100%;
 
   .victory {
@@ -17,14 +24,40 @@
   }
 }
 
+.button {
+  background: #a77314;
+  border-radius: 4px;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 5px 10px;
+  width: 150px;
+}
+
 .rules-view {
-  background: rgba(255,255,255,0.5);
-  height: 76%;
-  left: 0;
-  margin: 8% 8%;
-  position: absolute;
-  top: 0;
-  width: 84%;
+  background-color: $dark-blue;
+  background-image: url("https://www.transparenttextures.com/patterns/rocky-wall.png");
+  border: 20px solid #a77314;;
+  border-radius: 12px;
+  height: 200px;
+  margin: 0 auto;
+  position: relative;
+  width: 320px;
+
+  .rule {
+    margin: 18px 0 0;
+  }
+
+  .rule-name {
+    color: white;
+    font-size: 26px;
+  }
+
+  .close {
+    bottom: 24px;
+    position: absolute;
+    left: 80px;
+  }
 }
 
 .hand-view {
@@ -46,6 +79,10 @@
   display: inline-block;
   width: 508px;
   vertical-align: top;
+
+  .restart.button {
+    margin: 55px auto;
+  }
 }
 
 .grid-row {

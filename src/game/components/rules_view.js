@@ -7,28 +7,21 @@ class RulesView extends Component {
     this.state = this.getInitialState();
 
     this.handleClose = this.handleClose.bind(this);
-    this.createRulesChandler = this.createRulesChandler.bind(this);
   }
 
   getInitialState () {
-    return {
-      rulesOpen: true,
-      rules: Object.assign({}, this.props.game.rules)
-    }
+    return Object.assign({ rulesOpen: true }, this.props.game.rules)
   }
 
   handleClose () {
     this.setState({ rulesOpen: false });
-    this.props.handleRuleChange();
+    this.props.handleRulesClosed();
   }
 
-  createRulesChandler (prop) {
+  createRulesHandler (prop) {
     return (e) => {
-      let newRules = {}
-      newRules[prop] = e.target.value === 'on';
-      this.props.game.setRule(prop, newRules[prop])
-      this.setState({ rules: newRules });
-      console.log(this.state);
+      this.props.game.rules[prop] = e.target.checked;
+      this.setState({ [prop]: e.target.checked });
     }
   }
 
@@ -37,13 +30,22 @@ class RulesView extends Component {
       return (
         <div className='rules-view'>
           <div className='rule'>
-            <span>Open: </span>
-            <input name="open"
-                   type="checkbox"
-                   checked={this.state.rules.open}
-                   onChange={this.createRulesChandler('OPEN')} />
+            <span className='rule-name'>Open: </span>
+            <input name='open'
+                   type='checkbox'
+                   checked={this.state.OPEN}
+                   onChange={this.createRulesHandler('OPEN')} />
           </div>
-          <div onClick={this.handleClose}>close</div>
+          <div className='rule'>
+            <span className='rule-name'>Same: </span>
+            <input name='same'
+                   type='checkbox'
+                   checked={this.state.SAME}
+                   onChange={this.createRulesHandler('SAME')} />
+          </div>
+          <div className='close button'
+               onClick={this.handleClose}
+               role="button">Ready</div>
         </div>
       );
     } else return '';

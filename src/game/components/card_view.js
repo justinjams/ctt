@@ -37,7 +37,9 @@ class CardView extends Component {
     }
 
     return (
-      <div className={`card-view ${this.getHand()} ${this.getFlipped()}`} onClick={this.handleClick.bind(this)}>
+      <div className={`card-view ${this.getHand()} ${this.getFlipped()}`}
+           onClick={this.handleClick.bind(this)}
+           role="button">
         <div className="side">
           <img height={128} width={128} src={this.championImage()} alt="" />
           <div className="power-wrap">

@@ -6,10 +6,10 @@ import User from './game/user';
 const DEFAULT_RULES = {
   COMBO: false,
   ELEMENTAL: false,
-  OPEN: false,
+  OPEN: true,
   PLUS: false,
   RANDOM: false,
-  SAME: false,
+  SAME: true,
   SAME_WALL: false,
   SUDDEN_DEATH: false
 }
@@ -41,11 +41,7 @@ class Game {
     this.rules = Object.assign(DEFAULT_RULES, rules);
 
     this.setCard = this.setCard.bind(this);
-    this.setRule = this.setRule.bind(this);
-  }
-
-  setRule (rule, state) {
-    this.rules[rule] = state;
+    this.captureCard = this.captureCard.bind(this);
   }
 
   isOpen () {
@@ -60,30 +56,64 @@ class Game {
     return ['player1', 'player2'][(this.turn + this.player2Starts)%2];
   }
 
+  checkSameRule(card, x, otherCard, y, neighbors) {
+    if (this.rules.SAME) {
+      const left = (x + 3) % 4;
+      const leftCard = data.cards[this.grid[neighbors[left]]];
+      const right = (x + 1) % 4;
+      const rightCard = data.cards[this.grid[neighbors[right]]];
+
+      console.log('checking same rule');
+      console.log(leftCard, rightCard, card, otherCard)
+
+      if(card.power[x] === otherCard.power[y] && (
+          (leftCard && card.power[left] === leftCard.power[right]) ||
+          (rightCard && card.power[left] === rightCard.power[right]))) {
+        console.log('Same');
+        return true;
+      };
+    } else return false;
+  }
+
+  captureCard (i, other, holding) {
+    this.players[other.hand].score--;
+    this.players[holding.hand].score++;
+    other.hand = holding.hand;
+    other.flipped = ['top', 'right', 'bottom', 'left'][i];
+  }
+
   setCard (pos, holding, view) {
     if (!this.grid[pos]) {
       this.grid[pos] = {
         hand: holding.hand,
         card: this.players[holding.hand].hand[holding.pos]
       };
-      const play = data.cards[this.players[holding.hand].hand.splice(holding.pos, 1)[0]];
+      const card = data.cards[this.players[holding.hand].hand.splice(holding.pos, 1)[0]];
       const neighbors = NEIGHBORS[pos];
+      let sames = [];
 
       for(let i=0; i<4; i++) {
-        let j = (i+2) % 4;
-        let other = this.grid[neighbors[i]];
-        if(neighbors[i] !== null &&
-           other &&
-           other.hand !== holding.hand) {
+        const j = (i + 2) % 4;
+        const other = this.grid[neighbors[i]];
+        if(neighbors[i] !== null && other) {
           let otherCard = data.cards[other.card];
-          if(play.power[i] > otherCard.power[j]) {
-            console.log(`Capture! ${play.power[i]} > ${otherCard.power[j]}`);
-            this.players[other.hand].score--;
-            this.players[holding.hand].score++;
-            other.hand = holding.hand;
-            other.flipped = ['top', 'right', 'bottom', 'left'][i];
-          } else {
-            console.log(`No capture! ${play.power[i]} <= ${otherCard.power[j]}`);
+          console.log("Comparing", card.power[i], otherCard.power[j]);
+
+          if(other.hand !== holding.hand && card.power[i] > otherCard.power[j]) {
+            this.captureCard(i, other, holding);
+          }
+
+          if (this.rules.SAME && card.power[i] === otherCard.power[j]) {
+            sames.push(i);
+          }
+        }
+      }
+
+      if (sames.length > 1) {
+        for(let sameIndex of sames) {
+          const other = this.grid[neighbors[sameIndex]];
+          if(other.hand !== holding.hand) {
+            this.captureCard(sameIndex, other, holding);
           }
         }
       }
