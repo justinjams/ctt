@@ -26,30 +26,40 @@ class GameView extends Component {
   selectGrid (pos) {
     const holding = this.state.holding;
 
-    if (holding && this.state.game.setCard(pos, holding, this)) {
-      this.state.game.holding = false;
-      this.setState({ holding: false });
+    if (holding) {
+      const couldPlayCard = this.state.game.setCard({
+        card: this.state.game.players[holding.hand].hand[holding.pos],
+        gridPos: pos,
+        hand: holding.hand,
+        handPos: holding.pos
+      });
+
+      if (couldPlayCard) {
+        this.state.game.holding = false;
+        this.setState({ holding: false });
+      }
     }
   }
 
-  renderGameOver () {
-    if (this.state.game.isGameOver()) {
-      let state;
-      if (this.state.game.players.player1.score > this.state.game.players.player2.score) state = 'Victory'
-      else if (this.state.game.players.player1.score < this.state.game.players.player2.score) state = 'Defeat'
-      else state = 'Tie'
-      return (
-        <div className="game-over">
-          <div className={state.toLowerCase()}>{state}</div>
-        </div>
-      );
-    } else return null;
+  setGameOver (winner) {
+    let winnerText = winner === 'player1' ? 'Victory' : winner === 'player2' ? 'Defeat' : 'Tie';
+
+    this.setState({
+      headline: {
+        message: winnerText,
+        color: `game-over ${winner}`
+      }
+    })
   }
 
   getInitialState () {
     return {
-      holding: false,
       game: new Game(this),
+      headline: {
+        messasge: '',
+        color: ''
+      },
+      holding: false,
       rulesOpen: false
     };
   }
@@ -63,12 +73,33 @@ class GameView extends Component {
     this.setState(this.getInitialState());
   }
 
+  setHeadline (message, color) {
+    this.setState({
+      headline: {
+        message: message,
+        color: color
+      }
+    });
+
+    // setTimeout(()=>{
+    //   this.setState({
+    //     headline: {
+    //       message: '',
+    //       color: ''
+    //     }
+    //   });
+    // }, 1000);
+  }
+
   renderGridView () {
     return (
       <div className="grid-view">
         <div className="grid-row">
           <span className="player1 score">
             {this.state.game.players.player1.score}
+          </span>
+          <span className={`headline ${this.state.headline.color}`}>
+            {this.state.headline.message}
           </span>
           <span className="player2 score">
             {this.state.game.players.player2.score}
@@ -103,10 +134,11 @@ class GameView extends Component {
       body = (<RulesView game={this.state.game} handleRulesClosed={this.toggleRulesClosed} />);
     } else {
       body = (
-        <div><HandView game={this.state.game} hand={'player1'} handleClick={this.selectCard} />
-        {this.renderGridView()}
-        <HandView game={this.state.game} hand={'player2'} handleClick={this.selectCard} />
-        {this.renderGameOver()}</div>
+        <div>
+          <HandView game={this.state.game} hand={'player1'} handleClick={this.selectCard} />
+          {this.renderGridView()}
+          <HandView game={this.state.game} hand={'player2'} handleClick={this.selectCard} />
+        </div>
       );
     }
 

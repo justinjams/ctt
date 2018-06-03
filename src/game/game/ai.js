@@ -11,11 +11,16 @@ class AI {
 
   play (view) {
     setTimeout(()=>{
-      this.game.holding = { hand: 'player2', pos: Math.floor(Math.random()*this.hand.length) };
+      this.game.holding = { hand: 'player2', pos: Math.floor(Math.random() * this.hand.length) };
       view.setState({ holding: this.game.holding });
 
       setTimeout(()=>{
-        while(!this.game.setCard(Math.floor(Math.random()*9), this.game.holding)) {};
+        while(!this.game.setCard({
+          card: this.game.players[this.game.holding.hand].hand[this.game.holding.pos],
+          gridPos: Math.floor(Math.random()*9),
+          hand: this.game.holding.hand,
+          handPos: this.game.holding.pos
+        })) {};
         this.game.holding = null;
         view.setState({ holding: false });
       }, 250);

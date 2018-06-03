@@ -5,14 +5,12 @@
 .game-over {
   color: white;
   font-size: 100px;
-  position: absolute;
   text-shadow:
   -1px -1px 0 #000,
   2px -1px 0 #000,
   0px 4px 0 #000,
   1px 1px 0 #000,
   1px 4px 7px rgba(255, 255, 255, 0.8);
-  top: 180px;
   width: 100%;
 
   .victory {
@@ -80,30 +78,58 @@
   width: 508px;
   vertical-align: top;
 
+  > :first-child {
+    height: 100px;
+  }
+
+  .score {
+    position: absolute;
+  }
+
+  .player1 {
+    color: $blue;
+
+    &.score {
+      left: 24px;
+    }
+  }
+
+  .player2 {
+    color: $red;
+
+    &.score {
+      right: 24px;
+    }
+  }
+
   .restart.button {
     margin: 55px auto;
+  }
+
+  .headline {
+    bottom: 12px;
+    font-size: 54px;
+    font-weight: bold;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
   }
 }
 
 .grid-row {
   display: block;
   margin-bottom: -5px;
+  position: relative;
 
   .score {
+    bottom: 8px;
     display: inline-block;
     font-size: 50px;
     font-weight: bold;
-    padding: 10px 0px;
     width: 102px;
   }
 }
 
-.grid-view .player1.score {
-  color: $blue;
-}
-
-.grid-view .player2.score {
-  color: $red;
-}
 
 @import '_card.scss';

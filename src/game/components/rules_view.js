@@ -29,20 +29,17 @@ class RulesView extends Component {
     if (this.state.rulesOpen) {
       return (
         <div className='rules-view'>
-          <div className='rule'>
-            <span className='rule-name'>Open: </span>
-            <input name='open'
-                   type='checkbox'
-                   checked={this.state.OPEN}
-                   onChange={this.createRulesHandler('OPEN')} />
-          </div>
-          <div className='rule'>
-            <span className='rule-name'>Same: </span>
-            <input name='same'
-                   type='checkbox'
-                   checked={this.state.SAME}
-                   onChange={this.createRulesHandler('SAME')} />
-          </div>
+          {['OPEN', 'SAME', 'PLUS'].map((rule, i)=>{
+            return (
+              <div className='rule' key={i}>
+                <span className='rule-name'>{rule}: </span>
+                <input name={rule}
+                       type='checkbox'
+                       checked={this.state[rule]}
+                       onChange={this.createRulesHandler(rule)} />
+              </div>
+            );
+          })}
           <div className='close button'
                onClick={this.handleClose}
                role="button">Ready</div>
