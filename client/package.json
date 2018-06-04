@@ -1,0 +1,28 @@
+{
+  "name": "loltt-client",
+  "version": "0.1.0",
+  "author": "Justin Hall <justin@justinjams.com>",
+  "private": true,
+  "proxy": "http://localhost:3002/",
+  "dependencies": {
+    "global": "^4.3.2",
+    "node-sass-chokidar": "^1.3.0",
+    "npm": "^6.1.0",
+    "npm-run-all": "^4.1.3",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4",
+    "riot-lol-api": "^4.2.16"
+  },
+  "homepage": "https://loltt-80a97.firebaseapp.com",
+  "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build-js": "react-scripts build",
+    "build": "npm-run-all build-css build-js",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
