@@ -1,4 +1,4 @@
-import data from '../../data/data.json'
+const data = require('../data/data.json');
 const DATA_KEYS = Object.keys(data.cards);
 
 class AI {
@@ -16,7 +16,6 @@ class AI {
 
       setTimeout(()=>{
         while(!this.game.setCard({
-          card: this.game.players[this.game.holding.hand].hand[this.game.holding.pos],
           gridPos: Math.floor(Math.random()*9),
           hand: this.game.holding.hand,
           handPos: this.game.holding.pos
@@ -27,4 +26,5 @@ class AI {
     }, 0);
   }
 }
-export default AI;
+
+module.exports = AI;

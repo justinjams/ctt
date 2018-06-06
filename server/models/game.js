@@ -1,7 +1,5 @@
-import data from '../data/data.json'
-
-import AI from './game/ai';
-import User from './game/user';
+const AI = require('./ai');
+const User = require('./user');
 
 const DEFAULT_RULES = {
   ELEMENTAL: false,
@@ -26,35 +24,47 @@ const NEIGHBORS = [
 ];
 
 class Game {
-  constructor (view, rules) {
+  constructor (props) {
     this.grid = [];
-    this.players = {
-      player1: new User(),
-      player2: new AI(this)
-    };
-    this.turn = 0;
-    this.player2Starts = Math.round(Math.random());
-    if(this.player2Starts) {
-      this.players.player2.play(view);
-    }
-    this.rules = Object.assign(DEFAULT_RULES, rules);
-    this.view = view;
+    this.players = [
+      new User(),
+      new User() //AI(this)
+    ];
+    this.totalTurn = 0;
+    this.startPlayer = Math.round(Math.random());
+    this.rules = Object.assign(DEFAULT_RULES, props.rules || {});
+    this.id = props.id;
 
-    this.setCard = this.setCard.bind(this);
+    this.toJson = this.toJson.bind(this);
     this.captureCard = this.captureCard.bind(this);
   }
 
-  isOpen () {
-    return this.rules.OPEN;
+  toAttributes () {
+    const gridAttributes = this.grid.map((item) => {
+      if (item) {
+        return {
+          card: item.card.toAttributes(),
+          flipped: item.flipped,
+          hand: item.hand
+        }
+      }
+    });
+    return {
+      grid: gridAttributes,
+      id: this.id,
+      players: [
+        this.players[0].toAttributes(),
+        this.players[1].toAttributes()
+      ],
+      rules: this.rules,
+      turn: (this.totalTurn + this.startPlayer) % 2
+    };
   }
 
-  isGameOver () {
-    return (this.players.player1.hand.length + this.players.player2.hand.length) === 1
+  toJson () {
+    return JSON.stringify(this.toAttributes());
   }
 
-  getCurrentTurn () {
-    return ['player1', 'player2'][(this.turn + this.player2Starts)%2];
-  }
 
   captureCard (i, pos, hand, neighbors) {
     const other = this.grid[pos];
@@ -66,34 +76,30 @@ class Game {
   }
 
   setCard (options) {
-    //console.log('setCard');
-    //console.log(options);
-
     if (!this.grid[options.gridPos] || options.combo) {
+      const card = this.players[options.hand].hand[options.handPos];
       this.grid[options.gridPos] = this.grid[options.gridPos] || {};
       this.grid[options.gridPos].hand = options.hand;
-      this.grid[options.gridPos].card = options.card;
+      this.grid[options.gridPos].card = card;
 
       if (options.handPos !== null && options.handPos !== undefined) {
         this.players[options.hand].hand.splice(options.handPos, 1);
       }
-      const card = data.cards[options.card];
       const neighbors = NEIGHBORS[options.gridPos];
       let sames = [];
       let pluses = [];
 
-      for(let i=0; i<4; i++) {
+      for(let i = 0; i < 4; i++) {
         const j = (i + 2) % 4;
         const other = this.grid[neighbors[i]];
-        if(neighbors[i] !== null && other && data.cards[other.card]) {
-          let otherCard = data.cards[other.card];
+        if(neighbors[i] !== null && other && other.card) {
 
-          if(other.hand !== options.hand && card.power[i] > otherCard.power[j]) {
+          if(other.hand !== options.hand && card.power[i] > other.card.power[j]) {
             this.captureCard(i, neighbors[i], options.hand, neighbors);
           }
 
           if (this.rules.PLUS) {
-            let index = card.power[i] + otherCard.power[j];
+            let index = card.power[i] + other.card.power[j];
             pluses[index] = pluses[index] || [];
             pluses[index].push(() => {
               if(options.hand === other.hand) return;
@@ -107,7 +113,7 @@ class Game {
             });
           }
 
-          if (this.rules.SAME && card.power[i] === otherCard.power[j]) {
+          if (this.rules.SAME && card.power[i] === other.card.power[j]) {
             sames.push(()=>{
               if(options.hand === other.hand) return;
               this.captureCard(i, neighbors[i], options.hand, NEIGHBORS[neighbors[i]]);
@@ -137,7 +143,7 @@ class Game {
       }
 
       if (!options.combo) {
-        this.turn ++;
+        this.totalTurn ++;
         
         if (this.isGameOver()) {
           let winner;
@@ -145,13 +151,16 @@ class Game {
           else if (this.players.player1.score < this.players.player2.score) winner = 'player2';
           else winner = null;
           this.view.setGameOver(winner);
-        } else if (this.getCurrentTurn() === 'player2') {
-          this.players.player2.play(this.view);
         }
       }
 
       return true;
     }
   }
+
+  isGameOver () {
+    return (this.players[0].hand.length + this.players[1].hand.length) === 1
+  }
 }
-export default Game;
+
+module.exports = Game;

@@ -1,30 +1,23 @@
 import React, { Component } from 'react';
-import data from '../../data/data.json'
-import assets from '../helpers/assets'
+import profileIcon from '../../dt/8.9.1/img/profileicon/501.png'
 
 class CardView extends Component {
-  constructor(props) {
-    super(props);
-
-    this.getCard = this.getCard.bind(this);
-  }
-
   handleClick() {
     this.props.handleClick(this.props.pos, this.props.hand)
-  }
-
-  getCard() {
-    return data.cards[this.getCardName()];
   }
 
   getFlipped() {
     return '';
   }
 
+  getCard() {
+    return this.props.card;
+  }
+
   renderCardBack() {
     return (
       <div className="side back">
-        <img height={128} width={128} src={assets.getCardBack()} alt=""/>
+        <img height={128} width={128} src={profileIcon} alt=""/>
       </div>
     );
   }
@@ -37,7 +30,7 @@ class CardView extends Component {
     }
 
     return (
-      <div className={`card-view ${this.getHand()} ${this.getFlipped()}`}
+      <div className={`card-view player-${this.getHand()} ${this.getFlipped()}`}
            onClick={this.handleClick.bind(this)}
            role="button">
         <div className="side">

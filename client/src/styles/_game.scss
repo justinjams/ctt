@@ -86,7 +86,7 @@
     position: absolute;
   }
 
-  .player1 {
+  .player-0 {
     color: $blue;
 
     &.score {
@@ -94,7 +94,7 @@
     }
   }
 
-  .player2 {
+  .player-1 {
     color: $red;
 
     &.score {

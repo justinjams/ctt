@@ -3,12 +3,8 @@ import assets from '../helpers/assets'
 
 class HandCardView extends CardView {
   championImage () {
-    const card = this.getCardName().toLowerCase();
+    const card = this.props.card.key.toLowerCase();
     return assets.getTile(card);
-  }
-
-  getCardName () {
-    return this.props.game.players[this.props.hand].hand[this.props.pos];
   }
 
   getHand() {

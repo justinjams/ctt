@@ -5,11 +5,13 @@
   "author": "Justin Hall <justin@justinjams.com>",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^3.5.1"
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.17.5"
   },
   "scripts": {
-    "start": "concurrently \"npm run server\" \"cd client && npm start\"",
-    "server": "node server.js"
+    "deploy": "cd client && yarn build && cd ../ && firebase deploy",
+    "start": "concurrently \"yarn run server\" \"cd client && yarn start\"",
+    "server": "nodemon ./server.js"
   },
   "dependencies": {
     "express": "^4.16.3"

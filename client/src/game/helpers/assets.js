@@ -1,6 +1,3 @@
-import data from '../../data/data.json'
-import profileIcon from '../../dt/8.9.1/img/profileicon/501.png'
-
 const ASSET_MAP = {
   img_champion_tiles: require.context('../../dt/img/champion/tiles', true, /0\.(jpg)$/),
   img_champion_splash: require.context('../../dt/img/champion/splash', true, /0\.(jpg)$/)
@@ -16,8 +13,8 @@ Object.keys(ASSET_MAP).forEach((assetKey) => {
   });
 });
 
-assets.getTile = (champion) => {
-  return assets.img_champion_tiles[champion];
+assets.getTile = (championName) => {
+  return assets.img_champion_tiles[championName];
 }
 
 assets.getRandomSplash = () => {
@@ -25,9 +22,5 @@ assets.getRandomSplash = () => {
   const index = Math.floor(keys.length * Math.random());
   return assets.img_champion_splash[keys[index]];
 }
-
-assets.getCardBack = () => {
-  return profileIcon;
-};
 
 export default assets;

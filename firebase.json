@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "build",
+    "public": "client/build",
     "headers": [
       {
         "source": "/service-worker.js",
@@ -20,7 +20,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/build/index.html"
+        "destination": "/client/build/index.html"
       }
     ]
   },
