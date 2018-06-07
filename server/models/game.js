@@ -77,7 +77,7 @@ class Game {
 
   setCard (options) {
     if (!this.grid[options.gridPos] || options.combo) {
-      const card = this.players[options.hand].hand[options.handPos];
+      const card = options.card || this.players[options.hand].hand[options.handPos];
       this.grid[options.gridPos] = this.grid[options.gridPos] || {};
       this.grid[options.gridPos].hand = options.hand;
       this.grid[options.gridPos].card = card;
@@ -106,9 +106,9 @@ class Game {
               this.captureCard(i, neighbors[i], options.hand, NEIGHBORS[neighbors[i]]);
               this.setCard({
                 card: this.grid[neighbors[i]].card,
+                combo: true,
                 gridPos: neighbors[i],
-                hand: options.hand,
-                combo: true
+                hand: options.hand
               });
             });
           }
@@ -119,9 +119,9 @@ class Game {
               this.captureCard(i, neighbors[i], options.hand, NEIGHBORS[neighbors[i]]);
               this.setCard({
                 card: this.grid[neighbors[i]].card,
+                combo: true,
                 gridPos: neighbors[i],
-                hand: options.hand,
-                combo: true
+                hand: options.hand
               });
             });
           }
@@ -130,14 +130,14 @@ class Game {
 
       if (sames.length > 1 && !options.combo) {
         this.sames.map((f)=>f());
-        this.view.setHeadline('Same!', options.hand);
+        //this.view.setHeadline('Same!', options.hand);
       }
 
       if (this.rules.PLUS && !options.combo) {
         for(let sum in pluses) {
           if (pluses[sum].length > 1) {
             pluses[sum].map((f)=>f());
-            this.view.setHeadline('Plus!', options.hand);
+            //this.view.setHeadline('Plus!', options.hand);
           }
         }
       }
@@ -150,7 +150,7 @@ class Game {
           if (this.players.player1.score > this.players.player2.score) winner = 'player1';
           else if (this.players.player1.score < this.players.player2.score) winner = 'player2';
           else winner = null;
-          this.view.setGameOver(winner);
+          //this.view.setGameOver(winner);
         }
       }
 

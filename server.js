@@ -1,4 +1,4 @@
-const SERVER_PORT = process.env.SERVER_PORT || 3002;
+const PORT = process.env.PORT || 3002;
 
 const express = require('express');
 const app = express();
@@ -28,6 +28,6 @@ app.post('/api/games/:gameId/play', function (req, res) {
   res.send(JSON.stringify(response));
 });
 
-app.listen(SERVER_PORT, () => {
-  console.log(`Server listening on port ${SERVER_PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
