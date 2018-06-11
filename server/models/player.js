@@ -1,18 +1,24 @@
+const mongoose = require('mongoose');
+
 const Card = require('./card');
 
-class Player {
-  constructor () {
-    this.type = 'user';
-    this.hand = [0,0,0,0,0].map(Card.random);
-    this.score = 5;
-    
-    this.toJson = this.toJson.bind(this);
-    this.toAttributes = this.toAttributes.bind(this);
+const PlayerSchema = new mongoose.Schema({
+  hand: [String],
+  score: {
+    default: 5,
+    required: true,
+    type: String
+  },
+  userId: {
+    type: String
   }
+});
+
+class PlayerClass {
 
   toAttributes () {
     return {
-      hand: this.hand.map((card) => card.toAttributes()),
+      hand: this.hand.map((card) => new Card(card).toAttributes()),
       score: this.score,
       type: this.type,
       userId: 1
@@ -24,4 +30,13 @@ class Player {
   }
 }
 
+PlayerSchema.statics.forUser = (userId, callback) => {
+  Player.create({
+    hand: [0,0,0,0,0].map(Card.random),
+    userId: userId
+  }, callback);
+}
+
+PlayerSchema.loadClass(PlayerClass);
+const Player = mongoose.model('Player', PlayerSchema);
 module.exports = Player;
