@@ -39,7 +39,6 @@ class GridView extends Component {
           <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={8} />
         </div>
         <div className="grid-row">
-          <div className="restart button" role="button" onClick={this.handleRestart}>Restart</div>
           <div className="restart button" role="button" onClick={this.toggleRulesClosed}>Configure</div>
         </div>
       </div>
@@ -54,7 +53,7 @@ class GridView extends Component {
       headers: headers,
       method: 'POST'
     }
-    return fetch(`/api/games/${this.props.game.id}/play`, params).then((response) => {
+    return fetch(`/api/v1/games/${this.props.game.id}/play`, params).then((response) => {
       return response.json();
     });
   }

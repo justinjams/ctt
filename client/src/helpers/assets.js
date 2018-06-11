@@ -1,6 +1,6 @@
 const ASSET_MAP = {
-  img_champion_tiles: require.context('../../dt/img/champion/tiles', true, /0\.(jpg)$/),
-  img_champion_splash: require.context('../../dt/img/champion/splash', true, /0\.(jpg)$/)
+  img_champion_tiles: require.context('../dt/img/champion/tiles', true, /0\.(jpg)$/),
+  img_champion_splash: require.context('../dt/img/champion/splash', true, /0\.(jpg)$/)
 };
 const assets = {};
 

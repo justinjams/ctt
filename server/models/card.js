@@ -26,7 +26,7 @@ class Card {
 }
 
 Card.random = () => {
-  return new Card(DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]);
+  return DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)];
 };
 
 module.exports = Card;

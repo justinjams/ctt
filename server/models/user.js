@@ -1,26 +1,59 @@
-const data = require('../data/data.json');
-const DATA_KEYS = Object.keys(data.cards);
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-const Card = require('./card');
-
-class User {
-  constructor () {
-    this.type = 'user';
-    this.hand = [0,0,0,0,0].map(Card.random);
-    this.score = 5;
-    this.toJson = this.toJson.bind(this);
+const UserSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  passwordConf: {
+    type: String,
+    required: true,
   }
+});
 
-  toAttributes () {
-    return {
-      hand: this.hand.map((card) => card.toAttributes()),
-      score: this.score,
-      type: this.type
-    };
-  }
+UserSchema.pre('save', function (next) {
+  var user = this;
+  bcrypt.hash(user.password, 10, function (err, hash){
+    if (err) {
+      return next(err);
+    }
+    user.password = hash;
+    next();
+  })
+});
 
-  toJson () {
-    return JSON.stringify(this.toAttributes());
-  }
+UserSchema.statics.authenticate = function (userData, callback) {
+  User.findOne({ username: userData.username }).exec(function (err, user) {
+    if (err) {
+      return callback(err)
+    } else if (!user) {
+      const err = new Error('User not found.');
+      err.status = 401;
+      return callback(err);
+    }
+
+    bcrypt.compare(userData.password, user.password, function (err, result) {
+      if (result === true) {
+        return callback(null, user);
+      } else {
+        return callback();
+      }
+    })
+  });
 }
+
+const User = mongoose.model('User', UserSchema);
 module.exports = User;

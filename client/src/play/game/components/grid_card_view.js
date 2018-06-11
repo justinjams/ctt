@@ -1,5 +1,5 @@
 import CardView from './card_view';
-import assets from '../helpers/assets'
+import assets from '../../../helpers/assets'
 
 class GridCardView extends CardView {
   getHand() {

@@ -1,44 +1,71 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
 import './styles/app.css';
-import assets from './game/helpers/assets'
-import GameView from './game/components/game_view'
-import MenuView from './menu/components/menu_view'
+
+import assets from './helpers/assets'
+
+import PlayView from './play/components/play_view'
+import Welcome from './welcome/welcome'
 
 class App extends Component {
-   constructor (props) {
+  constructor (props) {
     super(props);
 
-    this.state = {
-      bgImage: assets.getRandomSplash(),
-      gameId: null
-    };
+    this.state = this.getInitialState();
 
-    this.onGameReady = this.onGameReady.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
-  renderBodyView () {
-    if (this.state.game) {
-      return <GameView game={this.state.game} />;
-    } else {
-      return <MenuView onGameReady={this.onGameReady} />;
-    }
+  getInitialState () {
+    const options = {
+      bgImage: assets.getRandomSplash(),
+      gameId: null,
+      user: null
+    };
+    return Object.assign(options, window.bootstrap.appState);
   }
 
   render () {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">League of Legends: Triple Triad</h1>
-        </header>
-        <div className="app-bg" style={{background: `url('${this.state.bgImage}') center center no-repeat`}}>
-        </div>
-        {this.renderBodyView()}
-      </div>
-    );
+    if (this.state.user) {
+      return (
+        <Router>
+          <div className="App">
+            <header className="app-header">
+              <Link to="/">
+                <h1 className="app-title">Champions Triple Triad</h1>
+              </Link>
+              <ul className="app-nav">
+                <li>
+                  <Link to="/">Play</Link>
+                </li>
+                <li>
+                  <Link to="/cards">Cards</Link>
+                </li>
+                <li>
+                  <a href="/api/v1/users/logout" onClick={this.handleLogout}>Logout</a>
+                </li>
+              </ul>
+            </header>
+            <div className="app-body" style={{background: `url('${this.state.bgImage}') center center no-repeat`}}>
+              <Route exact path="/" component={PlayView} />
+              <Route path="/cards" component={PlayView} />
+            </div>
+          </div>
+        </Router>
+      );
+    } else {
+      return (<Welcome />);
+    }
   }
 
-  onGameReady (game) {
-    this.setState({ game: game });
+  handleLogout (e) {
+    e.preventDefault();  
+    fetch('/api/v1/users/logout', { credentials: "same-origin" }).then(() => window.location = '/' );
+  }
+
+  handleUser (user) {
+    this.setState({ user: user });
   }
 }
 

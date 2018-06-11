@@ -1,12 +1,15 @@
+const mongoose = require('mongoose');
+
 const AI = require('./ai');
-const User = require('./user');
+const Player = require('./player');
+const Card = require('./card');
 
 const DEFAULT_RULES = {
   ELEMENTAL: false,
-  OPEN: true,
-  PLUS: true,
+  OPEN: false,
+  PLUS: false,
   RANDOM: false,
-  SAME: true,
+  SAME: false,
   SAME_WALL: false,
   SUDDEN_DEATH: false
 }
@@ -23,27 +26,45 @@ const NEIGHBORS = [
   [5, null, null, 7],
 ];
 
-class Game {
-  constructor (props) {
-    this.grid = [];
-    this.players = [
-      new User(),
-      new User() //AI(this)
-    ];
-    this.totalTurn = 0;
-    this.startPlayer = Math.round(Math.random());
-    this.rules = Object.assign(DEFAULT_RULES, props.rules || {});
-    this.id = props.id;
-
-    this.toJson = this.toJson.bind(this);
-    this.captureCard = this.captureCard.bind(this);
+const GridSchema = new mongoose.Schema({
+  cardId: {
+    type: String,
+    required: true
+  },
+  flipped: {
+    type: String,
+  },
+  hand: {
+    type: String,
+    required: true
   }
+});
 
+const GameSchema = new mongoose.Schema({
+  grid: [GridSchema],
+  players: [Player.schema],
+  rules: {
+    default: DEFAULT_RULES,
+    type: Object,
+    required: true
+  },
+  startPlayer: {
+    type: Number,
+    required: true
+  },
+  totalTurn: {
+    default: 0,
+    type: Number,
+    required: true
+  }
+});
+
+class GameClass {
   toAttributes () {
     const gridAttributes = this.grid.map((item) => {
       if (item) {
         return {
-          card: item.card.toAttributes(),
+          card: new Card(item.cardId).toAttributes(),
           flipped: item.flipped,
           hand: item.hand
         }
@@ -65,7 +86,6 @@ class Game {
     return JSON.stringify(this.toAttributes());
   }
 
-
   captureCard (i, pos, hand, neighbors) {
     const other = this.grid[pos];
     this.players[other.hand].score--;
@@ -75,12 +95,12 @@ class Game {
     console.log("Capturing", other.card, other.flipped);
   }
 
-  setCard (options) {
+  setCard (options, callback) {
     if (!this.grid[options.gridPos] || options.combo) {
-      const card = options.card || this.players[options.hand].hand[options.handPos];
+      const card = new Card(options.cardId || this.players[options.hand].hand[options.handPos]);
       this.grid[options.gridPos] = this.grid[options.gridPos] || {};
       this.grid[options.gridPos].hand = options.hand;
-      this.grid[options.gridPos].card = card;
+      this.grid[options.gridPos].cardId = card.key;
 
       if (options.handPos !== null && options.handPos !== undefined) {
         this.players[options.hand].hand.splice(options.handPos, 1);
@@ -92,20 +112,21 @@ class Game {
       for(let i = 0; i < 4; i++) {
         const j = (i + 2) % 4;
         const other = this.grid[neighbors[i]];
-        if(neighbors[i] !== null && other && other.card) {
-
-          if(other.hand !== options.hand && card.power[i] > other.card.power[j]) {
+        if(neighbors[i] !== null && other && other.cardId) {
+          console.log(other.hand, options.hand);
+          const otherCard = new Card(other.cardId);
+          if(other.hand !== options.hand && card.power[i] > otherCard.power[j]) {
             this.captureCard(i, neighbors[i], options.hand, neighbors);
           }
 
           if (this.rules.PLUS) {
-            let index = card.power[i] + other.card.power[j];
+            let index = card.power[i] + otherCard.power[j];
             pluses[index] = pluses[index] || [];
             pluses[index].push(() => {
               if(options.hand === other.hand) return;
               this.captureCard(i, neighbors[i], options.hand, NEIGHBORS[neighbors[i]]);
               this.setCard({
-                card: this.grid[neighbors[i]].card,
+                cardId: this.grid[neighbors[i]].cardId,
                 combo: true,
                 gridPos: neighbors[i],
                 hand: options.hand
@@ -118,7 +139,7 @@ class Game {
               if(options.hand === other.hand) return;
               this.captureCard(i, neighbors[i], options.hand, NEIGHBORS[neighbors[i]]);
               this.setCard({
-                card: this.grid[neighbors[i]].card,
+                cardId: this.grid[neighbors[i]].cardId,
                 combo: true,
                 gridPos: neighbors[i],
                 hand: options.hand
@@ -154,7 +175,12 @@ class Game {
         }
       }
 
-      return true;
+      this.save((err) => {
+        if(err) return callback(err);
+        callback(null, true);
+      });
+    } else {
+      callback('Invalid move');
     }
   }
 
@@ -163,4 +189,21 @@ class Game {
   }
 }
 
+GameSchema.loadClass(GameClass);
+
+GameSchema.statics.start = (gameData, callback) => {
+  Player.forUser(gameData.userId, (err, player) => {
+    const params = {
+      players: [
+        player,
+        player
+      ],
+      rules: Object.assign({}, DEFAULT_RULES, gameData.rules), 
+      startPlayer: Math.round(Math.random())
+    };
+    Game.create(params, callback);
+  });
+};
+
+const Game = mongoose.model('Game', GameSchema);
 module.exports = Game;

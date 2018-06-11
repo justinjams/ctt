@@ -1,41 +1,36 @@
 import React, { Component } from 'react';
+
 import GridView from './grid_view';
 import HandView from './hand_view';
-import RulesView from './rules_view';
+import MenuView from '../../menu/components/menu_view'
 
 class GameView extends Component {
   constructor (props) {
     super(props);
     this.state = this.getInitialState(props.game);
 
-    this.handleRestart = this.handleRestart.bind(this);
+    this.onGameReady = this.onGameReady.bind(this);
     this.onPlayHolding = this.onPlayHolding.bind(this);
     this.selectCard = this.selectCard.bind(this);
-    this.toggleRulesClosed = this.toggleRulesClosed.bind(this);
   }
 
   render () {
-    let body;
-    if (this.state.rulesOpen) {
-      body = (<RulesView game={this.state.game} handleRulesClosed={this.toggleRulesClosed} />);
-    } else {
-      body = (
-        <div>
-          <HandView game={this.state.game} hand={0} handleClick={this.selectCard} />
-          <GridView game={this.state.game}
-                    headline={this.state.headline}
-                    holding={this.state.holding}
-                    onPlayHolding={this.onPlayHolding} />
-          <HandView game={this.state.game} hand={1} handleClick={this.selectCard} />
+    if (this.state.game) {
+      return (
+        <div className={`game-view player-${this.state.game.turn}-turn`}>
+          <div>
+            <HandView game={this.state.game} hand={0} handleClick={this.selectCard} />
+            <GridView game={this.state.game}
+                      headline={this.state.headline}
+                      holding={this.state.holding}
+                      onPlayHolding={this.onPlayHolding} />
+            <HandView game={this.state.game} hand={1} handleClick={this.selectCard} />
+          </div>
         </div>
       );
+    } else {
+      return <MenuView onGameReady={this.onGameReady} />;
     }
-
-    return (
-      <div className={`game-view player-${this.state.game.turn}-turn`}>
-        {body}
-      </div>
-    );
   }
 
   selectCard (pos, hand) {
@@ -64,18 +59,8 @@ class GameView extends Component {
         messasge: '',
         color: ''
       },
-      holding: false,
-      rulesOpen: false
+      holding: false
     };
-  }
-
-  toggleRulesClosed () {
-    this.setState({ rulesOpen: !this.state.rulesOpen });
-    if(this.state.rulesOpen) this.handleRestart();
-  }
-
-  handleRestart () {
-    this.setState(this.getInitialState());
   }
 
   onPlayHolding (game) {
@@ -100,6 +85,10 @@ class GameView extends Component {
     //     }
     //   });
     // }, 1000);
+  }
+
+  onGameReady (game) {
+    this.setState({ game: game });
   }
 }
 export default GameView;

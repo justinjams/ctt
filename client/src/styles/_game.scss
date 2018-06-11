@@ -32,31 +32,6 @@
   width: 150px;
 }
 
-.rules-view {
-  background-color: $dark-blue;
-  background-image: url("https://www.transparenttextures.com/patterns/rocky-wall.png");
-  border: 20px solid #a77314;;
-  border-radius: 12px;
-  height: 200px;
-  margin: 0 auto;
-  position: relative;
-  width: 320px;
-
-  .rule {
-    margin: 18px 0 0;
-  }
-
-  .rule-name {
-    color: white;
-    font-size: 26px;
-  }
-
-  .close {
-    bottom: 24px;
-    position: absolute;
-    left: 80px;
-  }
-}
 
 .hand-view {
   display: inline-block;

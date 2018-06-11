@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import profileIcon from '../../dt/8.9.1/img/profileicon/501.png'
+import profileIcon from '../../../dt/8.9.1/img/profileicon/501.png'
 
 class CardView extends Component {
   handleClick() {
