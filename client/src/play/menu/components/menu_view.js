@@ -4,14 +4,14 @@ class MenuView extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { rules: {} };
+    this.state = { rules: {}, solo: null };
 
-    this.startSinglePlayer = this.startSinglePlayer.bind(this);
+    this.handleCreateGame = this.handleCreateGame.bind(this);
   }
 
   createRulesHandler (prop) {
     return (e) => {
-      const newRules = Object.assign({[prop]: e.target.checked }, this.state.rules)
+      const newRules = Object.assign({ [prop]: e.target.checked }, this.state.rules);
       this.setState({ rules: newRules });
     }
   }
@@ -22,26 +22,34 @@ class MenuView extends Component {
         {['OPEN', 'SAME', 'PLUS'].map((rule, i)=>{
           return (
             <div className='rule' key={i}>
-              <span className='rule-name'>{rule}: </span>
+              <span className='rule-name'>{rule.replace(/^(.)(.*)$/, (e, l, r) => l + r.toLowerCase() )}: </span>
               <input name={rule}
                      type='checkbox'
-                     checked={this.state[rule]}
+                     checked={this.state.rules[rule]}
                      onChange={this.createRulesHandler(rule)} />
             </div>
           );
         })}
+        <div className='rule'>
+          <span className='rule-name'>Solo: </span>
+          <input name='solo'
+                 type='checkbox'
+                 checked={this.state.solo}
+                 onChange={() => this.state.solo = !this.state.solo} />
+        </div>
         <div className='close button'
-             onClick={this.startSinglePlayer}
+             onClick={this.handleCreateGame}
              role="button">Create Game</div>
       </div>
     );
   }
 
-  startSinglePlayer () {
+  handleCreateGame () {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const params = {
-      body: JSON.stringify({ rules: this.state.rules }),
+      body: JSON.stringify({ rules: this.state.rules, solo: this.state.solo }),
+      credentials: 'same-origin',
       headers: headers,
       method: 'POST'
     };

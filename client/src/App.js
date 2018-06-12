@@ -5,7 +5,7 @@ import './styles/app.css';
 
 import assets from './helpers/assets'
 
-import PlayView from './play/components/play_view'
+import Play from './play/play'
 import Welcome from './welcome/welcome'
 
 class App extends Component {
@@ -20,7 +20,7 @@ class App extends Component {
   getInitialState () {
     const options = {
       bgImage: assets.getRandomSplash(),
-      gameId: null,
+      game: null,
       user: null
     };
     return Object.assign(options, window.bootstrap.appState);
@@ -48,20 +48,22 @@ class App extends Component {
               </ul>
             </header>
             <div className="app-body" style={{background: `url('${this.state.bgImage}') center center no-repeat`}}>
-              <Route exact path="/" component={PlayView} />
-              <Route path="/cards" component={PlayView} />
+              <Route path="/" 
+                     render={(props) => <Play {...props} user={this.state.user} />} />
+              <Route path="/cards" 
+                     render={(props) => <Play {...props} user={this.state.user} />} />
             </div>
           </div>
         </Router>
       );
     } else {
-      return (<Welcome />);
+      return <Welcome />;
     }
   }
 
   handleLogout (e) {
     e.preventDefault();  
-    fetch('/api/v1/users/logout', { credentials: "same-origin" }).then(() => window.location = '/' );
+    fetch('/api/v1/users/logout', { credentials: 'same-origin' }).then(() => window.location = '/' );
   }
 
   handleUser (user) {

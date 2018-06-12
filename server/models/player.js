@@ -10,6 +10,7 @@ const PlayerSchema = new mongoose.Schema({
     type: String
   },
   userId: {
+    required: true,
     type: String
   }
 });
@@ -21,7 +22,7 @@ class PlayerClass {
       hand: this.hand.map((card) => new Card(card).toAttributes()),
       score: this.score,
       type: this.type,
-      userId: 1
+      userId: this.userId
     };
   }
 

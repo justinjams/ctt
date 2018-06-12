@@ -36,24 +36,27 @@ const User = require('./server/models/user');
 // APP API
 app.get('/api/v1/app/start.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
-  let user;
+
+  const bootstrap = {
+    appState: {}
+  };
   if (req.session.userId) {
-    user = {
+    bootstrap.appState.user = {
       id: req.session.userId
     };
+    Game.findOne({ state: ['created', 'active'], userIds: req.session.userId }, (err, game) => {
+      if (err) next(err);
+      if (game) bootstrap.appState.game = game.toAttributes();
+      res.send(`window.bootstrap = ${JSON.stringify(bootstrap)};`);
+    });
+  } else {
+    res.send(`window.bootstrap = ${JSON.stringify(bootstrap)};`);
   }
-  const bootstrap = {
-    appState: {
-      user: user
-    }
-  };
-
-  res.send(`window.bootstrap = ${JSON.stringify(bootstrap)};`);
 });
 
 // GAMES API
 app.post('/api/v1/games/new', (req, res) => {
-  Game.start({ userId: req.session.userId, rules: req.body.rules }, (err, game) => {
+  Game.start({ userId: req.session.userId, rules: req.body.rules, solo: req.body.solo }, (err, game) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(game.toJson());
   });
@@ -66,6 +69,19 @@ app.post('/api/v1/games/:gameId/play', (req, res) => {
       const response = {
         game: game.toAttributes(),
         success: !err
+      };
+      res.send(JSON.stringify(response));
+    });
+  });
+});
+
+app.post('/api/v1/games/:gameId/forfeit', (req, res) => {
+  Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
+    game.active = false;
+    game.save((err) => {
+      res.setHeader('Content-Type', 'application/json');
+      const response = {
+        game: game.toAttributes(),
       };
       res.send(JSON.stringify(response));
     });

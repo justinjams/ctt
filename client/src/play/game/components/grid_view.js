@@ -5,8 +5,9 @@ class GridView extends Component {
   constructor (props) {
     super(props);
 
-    this.selectGrid = this.selectGrid.bind(this);
-    this.setCard = this.setCard.bind(this);
+    this.handleForfeit = this.handleForfeit.bind(this);
+    this.handleSelectGrid = this.handleSelectGrid.bind(this);
+    this.handleSetCard = this.handleSetCard.bind(this);
   }
 
   render () {
@@ -24,54 +25,70 @@ class GridView extends Component {
           </span>
         </div>
         <div className="grid-row">
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={0} />
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={1} />
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={2} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={0} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={1} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={2} />
         </div>
         <div className="grid-row">
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={3} />
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={4} />
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={5} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={3} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={4} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={5} />
         </div>
         <div className="grid-row">
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={6} />
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={7} />
-          <GridCardView game={this.props.game} handleClick={this.selectGrid} pos={8} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={6} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={7} />
+          <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={8} />
         </div>
         <div className="grid-row">
-          <div className="restart button" role="button" onClick={this.toggleRulesClosed}>Configure</div>
+          <div className="forfeit button" role="button" onClick={this.handleForfeit}>Forfeit</div>
         </div>
       </div>
     );
   }
 
-  setCard (options) {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const params = {
-      body: JSON.stringify(options),
-      headers: headers,
-      method: 'POST'
-    }
-    return fetch(`/api/v1/games/${this.props.game.id}/play`, params).then((response) => {
-      return response.json();
-    });
+  handleSetCard (options) {
   }
 
-  selectGrid (pos) {
+  handleSelectGrid (pos) {
     const holding = this.props.holding;
 
     if (holding) {
-      this.setCard({
+      const options = {
         gridPos: pos,
         hand: holding.hand,
         handPos: holding.pos
+      }
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      const params = {
+        body: JSON.stringify(options),
+        credentials: 'same-origin',
+        headers: headers,
+        method: 'POST'
+      }
+      fetch(`/api/v1/games/${this.props.game.id}/play`, params).then((response) => {
+        return response.json();
       }).then((body) => {
         if (body.success) {
           this.props.onPlayHolding(body.game);
         }
       });
     }
+  }
+
+  handleForfeit () {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const params = {
+      credentials: 'same-origin',
+      headers: headers,
+      method: 'POST'
+    }
+    fetch(`/api/v1/games/${this.props.game.id}/forfeit`, params).then((response) => {
+      return response.json();
+    }).then((body) => {
+      this.props.onPlayHolding();
+    });
   }
 }
 export default GridView;

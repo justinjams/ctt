@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 const AI = require('./ai');
 const Player = require('./player');
 const Card = require('./card');
-
+const STATES = [
+  'created',
+  'active',
+  'finished'
+];
 const DEFAULT_RULES = {
   ELEMENTAL: false,
   OPEN: false,
@@ -41,8 +45,14 @@ const GridSchema = new mongoose.Schema({
 });
 
 const GameSchema = new mongoose.Schema({
+  state: {
+    default: 'created',
+    type: String,
+    required: true
+  },
   grid: [GridSchema],
   players: [Player.schema],
+  userIds: [String],
   rules: {
     default: DEFAULT_RULES,
     type: Object,
@@ -73,11 +83,9 @@ class GameClass {
     return {
       grid: gridAttributes,
       id: this.id,
-      players: [
-        this.players[0].toAttributes(),
-        this.players[1].toAttributes()
-      ],
+      players: this.players.map((p) => p.toAttributes()),
       rules: this.rules,
+      state: this.state,
       turn: (this.totalTurn + this.startPlayer) % 2
     };
   }
@@ -101,6 +109,11 @@ class GameClass {
       this.grid[options.gridPos] = this.grid[options.gridPos] || {};
       this.grid[options.gridPos].hand = options.hand;
       this.grid[options.gridPos].cardId = card.key;
+      if (!options.combo) {
+        for(let obj of this.grid) {
+          if (obj) obj.flipped = '';
+        }
+      }
 
       if (options.handPos !== null && options.handPos !== undefined) {
         this.players[options.hand].hand.splice(options.handPos, 1);
@@ -113,7 +126,6 @@ class GameClass {
         const j = (i + 2) % 4;
         const other = this.grid[neighbors[i]];
         if(neighbors[i] !== null && other && other.cardId) {
-          console.log(other.hand, options.hand);
           const otherCard = new Card(other.cardId);
           if(other.hand !== options.hand && card.power[i] > otherCard.power[j]) {
             this.captureCard(i, neighbors[i], options.hand, neighbors);
@@ -193,14 +205,20 @@ GameSchema.loadClass(GameClass);
 
 GameSchema.statics.start = (gameData, callback) => {
   Player.forUser(gameData.userId, (err, player) => {
+    const players = [player];
+    const userIds = [gameData.userId];
     const params = {
-      players: [
-        player,
-        player
-      ],
+      players: players,
       rules: Object.assign({}, DEFAULT_RULES, gameData.rules), 
-      startPlayer: Math.round(Math.random())
+      startPlayer: Math.round(Math.random()),
+      userIds: userIds
     };
+
+    if (gameData.solo) {
+      players.push(player);
+      userIds.push(gameData.userId);
+      params.state = 'active';
+    }
     Game.create(params, callback);
   });
 };

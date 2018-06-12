@@ -19,12 +19,12 @@ class GameView extends Component {
       return (
         <div className={`game-view player-${this.state.game.turn}-turn`}>
           <div>
-            <HandView game={this.state.game} hand={0} handleClick={this.selectCard} />
+            <HandView game={this.state.game} hand={0} handleClick={this.selectCard} user={this.props.user} />
             <GridView game={this.state.game}
                       headline={this.state.headline}
                       holding={this.state.holding}
                       onPlayHolding={this.onPlayHolding} />
-            <HandView game={this.state.game} hand={1} handleClick={this.selectCard} />
+            <HandView game={this.state.game} hand={1} handleClick={this.selectCard} user={this.props.user} />
           </div>
         </div>
       );

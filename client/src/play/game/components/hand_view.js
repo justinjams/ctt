@@ -13,9 +13,8 @@ class HandView extends Component {
 
   renderClassName () {
     let classNames = [`hand-view player-${this.props.hand}-hand`];
-
-    // TODO: Change this to check for local player
-    if (!this.props.game.rules.OPEN && this.props.hand !== 0) {
+    if (!this.props.game.rules.OPEN &&
+        this.props.game.players[this.props.hand].userId !== this.props.user.id) {
       classNames.push('closed');
     }
 
