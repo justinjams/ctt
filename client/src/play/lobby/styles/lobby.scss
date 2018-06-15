@@ -1,0 +1,31 @@
+@import '../../../styles/_variables.scss';
+
+.lobby-view {
+  margin: 10px auto;
+  position: relative;
+  width: 300px;
+}
+
+.lobby-game-view {
+  background-color: $dark-blue;
+  background-image: url($rock-texture);
+  border-radius: 4px;
+  border: 1px solid white;
+  color: white;
+  margin: 8px 0px;
+  padding: 6px;
+
+  > span {
+    margin: 0 10px;
+  }
+
+  .rule {
+    display: inline-block;
+    margin: 0 5px;
+    color: gray;
+
+    &.active {
+      color: white;
+    }
+  }
+}

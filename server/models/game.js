@@ -9,13 +9,13 @@ const STATES = [
   'finished'
 ];
 const DEFAULT_RULES = {
-  ELEMENTAL: false,
+//  ELEMENTAL: false,
   OPEN: false,
   PLUS: false,
-  RANDOM: false,
+//  RANDOM: false,
   SAME: false,
-  SAME_WALL: false,
-  SUDDEN_DEATH: false
+//  SAME_WALL: false,
+//  SUDDEN_DEATH: false
 }
 
 const NEIGHBORS = [
@@ -66,8 +66,8 @@ const GameSchema = new mongoose.Schema({
     default: 0,
     type: Number,
     required: true
-  }
-});
+  },
+}, { timestamps: true });
 
 class GameClass {
   toAttributes () {

@@ -31,6 +31,7 @@ app.use(session({
 
 // APP DEPENDENCIES
 const Game = require('./server/models/game');
+const Player = require('./server/models/player');
 const User = require('./server/models/user');
 
 // APP API
@@ -55,10 +56,28 @@ app.get('/api/v1/app/start.js', (req, res) => {
 });
 
 // GAMES API
-app.post('/api/v1/games/new', (req, res) => {
-  Game.start({ userId: req.session.userId, rules: req.body.rules, solo: req.body.solo }, (err, game) => {
+app.get('/api/v1/games', (req, res) => {
+  const params = {
+    state: req.body.state
+  };
+
+  Game.find({ state: 'created' }).
+       sort({ updatedAt: -1 }).
+       exec((err, games) => {
     res.setHeader('Content-Type', 'application/json');
-    res.send(game.toJson());
+    const gamesJson = JSON.stringify({
+      games: games.map((game) => game.toAttributes())
+    });
+    res.send(gamesJson);
+  });
+});
+
+app.post('/api/v1/games/new', (req, res) => {
+  Game.start({ userId: req.session.userId,
+               rules: req.body.rules,
+               solo: req.body.solo }, (err, game) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ game: game.toAttributes() }));
   });
 });
 
@@ -75,9 +94,22 @@ app.post('/api/v1/games/:gameId/play', (req, res) => {
   });
 });
 
+app.post('/api/v1/games/:gameId/join', (req, res) => {
+  Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
+    Player.forUser(req.session.userId, (err, player) => {
+      game.userIds.push(req.session.userId);
+      game.players.push(player);
+      game.save(() => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ game: game.toAttributes() }));
+      });
+    });
+  });
+});
+
 app.post('/api/v1/games/:gameId/forfeit', (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
-    game.active = false;
+    game.state = 'finished';
     game.save((err) => {
       res.setHeader('Content-Type', 'application/json');
       const response = {
@@ -91,21 +123,25 @@ app.post('/api/v1/games/:gameId/forfeit', (req, res) => {
 // USERS API
 app.post('/api/v1/users/new', (req, res, next) => {
   const userData = req.body.user;
+  console.log(userData);
 
   if (userData.email &&
       userData.username &&
       userData.password &&
-      userData.passwordConf) {
+      userData.passwordConf &&
+      userData.password === userData.passwordConf) {
 
     const newUserData = {
       email: userData.email,
       username: userData.username,
       password: userData.password
-    }
+    };
+    console.log('made it');
 
     User.create(newUserData, (err, user) => {
       if (err) return next(err);
       
+      req.session.userId = user.id;
       res.redirect('/');
     });
   } else {

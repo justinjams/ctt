@@ -18,19 +18,17 @@ class App extends Component {
   }
 
   getInitialState () {
-    const options = {
+    return {
       bgImage: assets.getRandomSplash(),
-      game: null,
-      user: null
+      user: window.bootstrap.appState.user
     };
-    return Object.assign(options, window.bootstrap.appState);
   }
 
   render () {
     if (this.state.user) {
       return (
         <Router>
-          <div className="App">
+          <div className="app">
             <header className="app-header">
               <Link to="/">
                 <h1 className="app-title">Champions Triple Triad</h1>
@@ -47,7 +45,7 @@ class App extends Component {
                 </li>
               </ul>
             </header>
-            <div className="app-body" style={{background: `url('${this.state.bgImage}') center center no-repeat`}}>
+            <div className="app-body" style={{background: `url('${this.state.bgImage}') center 60px no-repeat`}}>
               <Route path="/" 
                      render={(props) => <Play {...props} user={this.state.user} />} />
               <Route path="/cards" 

@@ -7,7 +7,6 @@ class GridView extends Component {
 
     this.handleForfeit = this.handleForfeit.bind(this);
     this.handleSelectGrid = this.handleSelectGrid.bind(this);
-    this.handleSetCard = this.handleSetCard.bind(this);
   }
 
   render () {
@@ -44,9 +43,6 @@ class GridView extends Component {
         </div>
       </div>
     );
-  }
-
-  handleSetCard (options) {
   }
 
   handleSelectGrid (pos) {
@@ -87,7 +83,7 @@ class GridView extends Component {
     fetch(`/api/v1/games/${this.props.game.id}/forfeit`, params).then((response) => {
       return response.json();
     }).then((body) => {
-      this.props.onPlayHolding();
+      this.props.onGameReady();
     });
   }
 }

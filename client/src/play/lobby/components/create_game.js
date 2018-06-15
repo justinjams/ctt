@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class MenuView extends Component {
+class CreateGame extends Component {
   constructor (props) {
     super(props);
 
@@ -55,10 +55,10 @@ class MenuView extends Component {
     };
     fetch('/api/v1/games/new', params).then((response) => {
       response.json().then((body) => {
-        this.props.onGameReady(body);
+        this.props.onGameReady(body.game);
       });
     });
   }
 
 }
-export default MenuView;
+export default CreateGame;
