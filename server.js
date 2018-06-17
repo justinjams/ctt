@@ -36,12 +36,17 @@ const Game = require('./server/models/game');
 const Player = require('./server/models/player');
 const User = require('./server/models/user');
 
+const data = require('./server/data/data.json');
+const DATA_KEYS = Object.keys(data.cards);
+
 // APP API
 app.get('/api/v1/app/start.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
 
+  const randomCard = DATA_KEYS[parseInt(Math.random() * DATA_KEYS.length)].toLowerCase();
   const bootstrap = {
-    appState: {}
+    appState: {},
+    bgImage: `https://s3.amazonaws.com/champions-triple-triad/champion/splash/${randomCard}_0.jpg`
   };
   if (req.session.userId) {
     bootstrap.appState.user = {

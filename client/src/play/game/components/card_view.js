@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import profileIcon from '../../../dt/8.9.1/img/profileicon/501.png'
+import hand0Card from '../images/0.png';
+import hand1Card from '../images/1.png';
+import assets from '../../../helpers/assets'
 
 class CardView extends Component {
   handleClick() {
@@ -14,10 +16,18 @@ class CardView extends Component {
     return this.props.card;
   }
 
+  championImage () {
+    const card = this.getCard();
+    if (card) {
+      return assets.getTile(card.key.toLowerCase());
+    }
+  }
+
   renderCardBack() {
+    const cardBackImage = [hand0Card, hand1Card][this.getHand()];
     return (
       <div className="side back">
-        <img height={128} width={128} src={profileIcon} alt=""/>
+        <img height={128} width={128} src={cardBackImage} alt="" />
       </div>
     );
   }

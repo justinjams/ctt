@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import './styles/app.css';
 
-import assets from './helpers/assets'
-
 import Play from './play/play'
 import Welcome from './welcome/welcome'
 
@@ -18,8 +16,10 @@ class App extends Component {
   }
 
   getInitialState () {
+    // hack to reload page in development
+    if (!window.bootstrap) window.location.href = '/';
     return {
-      bgImage: assets.getRandomSplash(),
+      bgImage: window.bootstrap.bgImage,
       user: window.bootstrap.appState.user
     };
   }

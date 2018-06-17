@@ -10,7 +10,7 @@
   },
   "scripts": {
     "deploy": "cd client && yarn build",
-    "start": "concurrently \"PORT=3002 yarn run server\" \"cd client && PORT=3001 yarn start\"",
+    "start": "concurrently --kill-others \"PORT=3002 yarn run server\" \"cd client && PORT=3001 yarn start\"",
     "server": "nodemon ./server.js"
   },
   "dependencies": {

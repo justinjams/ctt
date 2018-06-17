@@ -1,5 +1,4 @@
 import CardView from './card_view';
-import assets from '../../../helpers/assets'
 
 class GridCardView extends CardView {
   getHand() {
@@ -20,13 +19,6 @@ class GridCardView extends CardView {
     const self = this.props.game.grid[this.props.pos];
     if (self) {
       return self.card;
-    }
-  }
-
-  championImage () {
-    const card = this.getCard();
-    if (card) {
-      return assets.getTile(card.key.toLowerCase());
     }
   }
 }
