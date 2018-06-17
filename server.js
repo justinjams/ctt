@@ -1,3 +1,5 @@
+#!/usr/bin/env nodejs
+
 const PORT = process.env.PORT || 3002;
 
 // THIRD PARTY DEPENDENCIES
@@ -99,6 +101,9 @@ app.post('/api/v1/games/:gameId/join', (req, res) => {
     Player.forUser(req.session.userId, (err, player) => {
       game.userIds.push(req.session.userId);
       game.players.push(player);
+      if (game.players.length === 2) {
+        game.state = 'active';
+      }
       game.save(() => {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ game: game.toAttributes() }));
@@ -123,7 +128,6 @@ app.post('/api/v1/games/:gameId/forfeit', (req, res) => {
 // USERS API
 app.post('/api/v1/users/new', (req, res, next) => {
   const userData = req.body.user;
-  console.log(userData);
 
   if (userData.email &&
       userData.username &&
@@ -136,7 +140,6 @@ app.post('/api/v1/users/new', (req, res, next) => {
       username: userData.username,
       password: userData.password
     };
-    console.log('made it');
 
     User.create(newUserData, (err, user) => {
       if (err) return next(err);

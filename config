@@ -1,0 +1,6 @@
+Host dokku.me
+    Port 2222
+
+Host 172.40.*
+  User ec2-user
+  IdentityFile ~/.ssh/rt_shared.pem

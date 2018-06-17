@@ -22,3 +22,6 @@ yarn-error.log*
 
 # dragontail data in raw
 dragontail-*
+
+# ansible retry files
+**.retry

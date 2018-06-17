@@ -39,7 +39,7 @@ const GridSchema = new mongoose.Schema({
     type: String,
   },
   hand: {
-    type: String,
+    type: Number,
     required: true
   }
 });
@@ -127,6 +127,7 @@ class GameClass {
         const other = this.grid[neighbors[i]];
         if(neighbors[i] !== null && other && other.cardId) {
           const otherCard = new Card(other.cardId);
+          console.log(other, options);
           if(other.hand !== options.hand && card.power[i] > otherCard.power[j]) {
             this.captureCard(i, neighbors[i], options.hand, neighbors);
           }
@@ -180,8 +181,8 @@ class GameClass {
         
         if (this.isGameOver()) {
           let winner;
-          if (this.players.player1.score > this.players.player2.score) winner = 'player1';
-          else if (this.players.player1.score < this.players.player2.score) winner = 'player2';
+          if (this.players[0].score > this.players[1].score) winner = 'player1';
+          else if (this.players[0].score < this.players[1].score) winner = 'player2';
           else winner = null;
           //this.view.setGameOver(winner);
         }

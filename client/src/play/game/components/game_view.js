@@ -13,10 +13,21 @@ class GameView extends Component {
     this.selectCard = this.selectCard.bind(this);
   }
 
+  renderClassName () {
+    const className = ['game-view', `player-${this.state.game.turn}-turn`];
+    this.state.game.players.map((p, i) => {
+      if (p.userId === this.props.user.id) {
+        className.push(`player-${i}-playing`);
+      }
+    });
+
+    return className.join(' ');
+  }
+
   render () {
     if (this.state.game.state !== 'created') {
      return (
-        <div className={`game-view player-${this.state.game.turn}-turn`}>
+        <div className={this.renderClassName()}>
           <div>
             <HandView game={this.state.game}
                       hand={0}
@@ -40,7 +51,9 @@ class GameView extends Component {
   }
 
   selectCard (pos, hand) {
-    if (hand === this.state.game.turn) {
+    console.log(this.state.currentPlayerHand, this.state.game.turn);
+    if (hand === this.state.game.turn &&
+        this.props.user.id === this.state.game.players[this.state.game.turn].userId) {
       const holding = { hand, pos };
       this.setState({ holding: holding });
     }
@@ -64,7 +77,8 @@ class GameView extends Component {
         messasge: '',
         color: ''
       },
-      holding: false
+      holding: false,
+      currentPlayerHand: game.players.map((p) => p.userId).indexOf(this.props.user.id)
     };
   }
 

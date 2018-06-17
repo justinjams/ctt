@@ -11,13 +11,13 @@
   }
 }
 
-.player-0-turn .player-0-hand .card-slider:hover,
-.player-0-turn .player-0-hand .card-slider.selected  {
+.player-0-turn.player-0-playing .player-0-hand .card-slider:hover,
+.player-0-turn.player-0-playing .player-0-hand .card-slider.selected  {
   transform: translateX(25px);
 }
 
-.player-1-turn .player-1-hand .card-slider:hover,
-.player-1-turn .player-1-hand .card-slider.selected {
+.player-1-turn.player-1-playing .player-1-hand .card-slider:hover,
+.player-1-turn.player-1-playing .player-1-hand .card-slider.selected {
   transform: translateX(-25px);
 }
 
