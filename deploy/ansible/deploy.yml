@@ -69,7 +69,7 @@
 
     - name: Update repository cache and install packages
       apt:
-        name: ['nginx', 'nodejs']
+        name: ['mongodb', 'nginx', 'nodejs']
         force: yes
         update_cache: yes
       become: yes
@@ -84,19 +84,44 @@
         chdir: /srv/ctt/client/
 
     - name: Launch pm2
-      shell: "/home/ubuntu/node_modules/pm2/bin/pm2 start ./server.js"
+      shell: "/srv/ctt/node_modules/pm2/bin/pm2 start -f /srv/ctt/server.js"
       become: yes
 
     - name: Generate service config with pm2
-      shell: "env PATH=$PATH:/usr/bin /home/ubuntu/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu"
+      shell: "env PATH=$PATH:/usr/bin /srv/ctt/node_modules/.bin/pm2 startup systemd -u ubuntu --hp /srv/ctt"
       become: yes
 
     - name: Replace /var/www/html with build link
-      command: rm -rf /var/www/html && ln -s /srv/ctt/build /var/www/html
+      shell: "rm -rf /var/www/html && ln -s /srv/ctt/client/build /var/www/html"
+      become: yes
+
+    - name: Remove default nginx config
+      file:
+        path: /etc/nginx/sites-available/default
+        state: absent
+      become: yes
+
+    - name: Copy nginx config
+      copy:
+        src: ../ctt.conf
+        dest: /etc/nginx/sites-available/ctt.conf
+        mode: 0644
+      become: yes
+
+    - name: Remove default nginx config symlink
+      file:
+        src: /etc/nginx/sites-available/ctt.conf 
+        dest: /etc/nginx/sites-enabled/ctt.conf
+        state: link
+      become: yes
+
+    - name: Stop nginx if started
+      command: service nginx stop
       become: yes
 
     - name: Start nginx
       command: service nginx start
       become: yes
+
 
 

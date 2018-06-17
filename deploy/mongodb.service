@@ -1,0 +1,14 @@
+[Unit]
+Description=CTT DB
+
+[Service]
+ExecStart=mongod
+Restart=always
+User=nogroup
+Group=nogroup
+Environment=PATH=/usr/bin:/usr/local/bin
+WorkingDirectory=/srv/ctt
+
+[Install]
+WantedBy=multi-user.target
+
