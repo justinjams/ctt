@@ -4,9 +4,9 @@ import HandCardView from './hand_card_view';
 class HandView extends Component {
 
   getSelected (pos) {
-    if(this.props.game.holding &&
-      this.props.game.holding.hand === this.props.hand &&
-      this.props.game.holding.pos === pos) {
+    if(this.props.holding &&
+      this.props.holding.hand === this.props.hand &&
+      this.props.holding.pos === pos) {
       return 'selected';
     } else return '';
   }

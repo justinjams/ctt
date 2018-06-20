@@ -1,23 +1,55 @@
+@import '../../styles/_variables.scss';
+
 .welcome-view {
+  background: $dark-blue;
+  color: $light-gold;
   height: 100%;
+  margin: 20% 0;
   text-align: center;
   width: 100%;
+
+  h1 {
+    color: $gold;
+  }
+
+  input:not(.button) {
+    background: $dark-blue;
+    border: 1px solid $dark-gold;
+    color: $white;
+
+    &:focus {
+      background: lighten($dark-blue, 10%);
+    }
+  }
 
   > div {
     display: inline-block;
     margin: 0 10px;
+    vertical-align: top;
 
     label {
       display: block;
-      padding: 1px;
+      font-size: 12px;
+      padding: 0 11px 0;
+      margin: 4px 0 0;
+      text-align: left;
+    }
+
+    .button {
+      margin: 10px 0 0;
     }
   }
 
   .register-view {
-   
+    .button {
+      display: block;
+    }
   }
 
   .login-view {
-
+    .button {
+      display: block;
+    }
   }
+
 }

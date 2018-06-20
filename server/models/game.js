@@ -81,12 +81,14 @@ class GameClass {
       }
     });
     return {
+      createdAt: this.createdAt,
       grid: gridAttributes,
       id: this.id,
       players: this.players.map((p) => p.toAttributes()),
       rules: this.rules,
       state: this.state,
-      turn: (this.totalTurn + this.startPlayer) % 2
+      turn: (this.totalTurn + this.startPlayer) % 2,
+      updatedAt: this.updatedAt
     };
   }
 

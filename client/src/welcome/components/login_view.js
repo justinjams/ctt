@@ -23,15 +23,11 @@ class LoginView extends Component {
     return (
       <div className="login-view">
         <form action="/api/v1/users/login" method="post">
-          <label>
-            Username
-            <input type="text" name="user[username]" value={this.state.values.username} onChange={this.createChangeHandler('username')} />
-          </label>
-          <label>
-            Password
-            <input type="password" name="user[password]" value={this.state.values.password} onChange={this.createChangeHandler('password')} />
-          </label>
-          <input type="submit" value="Login" />
+          <label for="user[username]">Username</label>
+          <input type="text" name="user[username]" value={this.state.values.username} onChange={this.createChangeHandler('username')} />
+          <label for="user[password]">Password</label>
+          <input type="password" name="user[password]" value={this.state.values.password} onChange={this.createChangeHandler('password')} />
+          <input class="button" role="button" type="submit" value="SIGN IN" />
         </form>
       </div>
     );

@@ -1,7 +1,25 @@
 @import '_variables.scss';
 
-html {
+html, body, #root {
+  background: $dark-blue;
+  border-top: 1px solid $gold;
   height: 100%;
+  overflow: hidden;
+}
+
+.button {
+  background: $dark-blue;
+  border: 1px solid $gold;
+  border-radius: 2px;
+  color: $gold;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 5px 10px;
+  width: 150px;
+
+  &:hover {
+    background: lighten($dark-blue, 10%);
+  }
 }
 
 .app {

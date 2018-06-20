@@ -39,9 +39,26 @@ const User = require('./server/models/user');
 const data = require('./server/data/data.json');
 const DATA_KEYS = Object.keys(data.cards);
 
+// middlewares
+
+function isAuthenticated(req, res, next) {
+  console.log(req.path)
+  if (req.session.userId) {
+    next();
+  } else if(req.xhr) {
+    res.status(403);
+    res.json({
+      message: 'Please log in to continue',
+      error: 'Authentication required'
+    });
+  } else if(req.path !== '/') {
+    res.redirect('/');
+  }
+}
+
 // APP API
-app.get('/api/v1/app/start.js', (req, res) => {
-  res.setHeader('Content-Type', 'application/javascript');
+app.get('/api/v1/app/start', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
 
   const randomCard = DATA_KEYS[parseInt(Math.random() * DATA_KEYS.length)].toLowerCase();
   const bootstrap = {
@@ -55,15 +72,15 @@ app.get('/api/v1/app/start.js', (req, res) => {
     Game.findOne({ state: ['created', 'active'], userIds: req.session.userId }, (err, game) => {
       if (err) next(err);
       if (game) bootstrap.appState.game = game.toAttributes();
-      res.send(`window.bootstrap = ${JSON.stringify(bootstrap)};`);
+      res.send(JSON.stringify(bootstrap));
     });
   } else {
-    res.send(`window.bootstrap = ${JSON.stringify(bootstrap)};`);
+    res.send(JSON.stringify(bootstrap));
   }
 });
 
 // GAMES API
-app.get('/api/v1/games', (req, res) => {
+app.get('/api/v1/games', isAuthenticated, (req, res) => {
   const params = {
     state: req.body.state
   };
@@ -79,7 +96,7 @@ app.get('/api/v1/games', (req, res) => {
   });
 });
 
-app.post('/api/v1/games/new', (req, res) => {
+app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
   Game.start({ userId: req.session.userId,
                rules: req.body.rules,
                solo: req.body.solo }, (err, game) => {
@@ -88,7 +105,7 @@ app.post('/api/v1/games/new', (req, res) => {
   });
 });
 
-app.post('/api/v1/games/:gameId/play', (req, res) => {
+app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
     const success = game.setCard(req.body, (err) => {
       res.setHeader('Content-Type', 'application/json');
@@ -101,7 +118,7 @@ app.post('/api/v1/games/:gameId/play', (req, res) => {
   });
 });
 
-app.post('/api/v1/games/:gameId/join', (req, res) => {
+app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
     Player.forUser(req.session.userId, (err, player) => {
       game.userIds.push(req.session.userId);
@@ -117,7 +134,7 @@ app.post('/api/v1/games/:gameId/join', (req, res) => {
   });
 });
 
-app.post('/api/v1/games/:gameId/forfeit', (req, res) => {
+app.post('/api/v1/games/:gameId/forfeit', isAuthenticated, (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
     game.state = 'finished';
     game.save((err) => {
@@ -174,15 +191,13 @@ app.post('/api/v1/users/login', (req, res, next) => {
   }
 });
 
-app.get('/api/v1/users/logout', (req, res, next) => {
-  if (req.session) {
-    // delete session object
-    req.session.destroy((err) => {
-      if(err)  return next(err);
-      
-      res.redirect('/');
-    });
-  }
+app.get('/api/v1/users/logout', isAuthenticated, (req, res, next) => {
+  // delete session object
+  req.session.destroy((err) => {
+    if(err)  return next(err);
+    
+    res.redirect('/');
+  });
 });
 
 app.listen(PORT, () => {

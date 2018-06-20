@@ -32,6 +32,7 @@ class GameView extends Component {
             <HandView game={this.state.game}
                       hand={0}
                       handleClick={this.selectCard}
+                      holding={this.state.holding}
                       user={this.props.user} />
             <GridView game={this.state.game}
                      headline={this.state.headline}
@@ -41,6 +42,7 @@ class GameView extends Component {
             <HandView game={this.state.game}
                       hand={1}
                       handleClick={this.selectCard}
+                      holding={this.state.holding}
                       user={this.props.user} />
           </div>
         </div>
@@ -51,7 +53,6 @@ class GameView extends Component {
   }
 
   selectCard (pos, hand) {
-    console.log(this.state.currentPlayerHand, this.state.game.turn);
     if (hand === this.state.game.turn &&
         this.props.user.id === this.state.game.players[this.state.game.turn].userId) {
       const holding = { hand, pos };

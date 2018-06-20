@@ -35,7 +35,7 @@ class CreateGame extends Component {
           <input name='solo'
                  type='checkbox'
                  checked={this.state.solo}
-                 onChange={() => this.state.solo = !this.state.solo} />
+                 onChange={() => this.setState({solo: !this.state.solo})} />
         </div>
         <div className='close button'
              onClick={this.handleCreateGame}

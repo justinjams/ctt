@@ -25,23 +25,15 @@ class RegisterView extends Component {
     return (
       <div className='register-view'>
         <form action='/api/v1/users/new' method='post'>
-          <label>
-            Username
-            <input name='user[username]' type='text' value={this.state.values.username} onChange={this.createChangeHandler('username')} />
-          </label>
-          <label>
-            Email
-            <input name='user[email]' type='email' value={this.state.values.email} onChange={this.createChangeHandler('email')} />
-          </label>
-          <label>
-            Password
-            <input name='user[password]' type='password' value={this.state.values.password} onChange={this.createChangeHandler('password')} />
-          </label>
-          <label>
-            Confirm Password
-            <input name='user[passwordConf]' type='password' value={this.state.values.passwordConf} onChange={this.createChangeHandler('passwordConf')} />
-          </label>
-          <input type='submit' value='register' />
+          <label for="user[username]">Username</label>
+          <input type="text" name="user[username]" value={this.state.values.username} onChange={this.createChangeHandler('username')} />
+          <label for="user[email]">Email</label>
+          <input type="email" name="user[email]" value={this.state.values.email} onChange={this.createChangeHandler('email')} />
+          <label for="user[password]">Password</label>
+          <input type="password" name="user[password]" value={this.state.values.password} onChange={this.createChangeHandler('password')} />
+          <label for="user[passwordConf]">Confirm Password</label>
+          <input type="passwordConf" name="user[passwordConf]" value={this.state.values.passwordConf} onChange={this.createChangeHandler('passwordConf')} />
+          <input role="button" class="button" type='submit' value='REGISTER' />
         </form>
       </div>
     );
