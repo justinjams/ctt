@@ -15,7 +15,7 @@ class GameView extends Component {
 
   renderClassName () {
     const className = ['game-view', `player-${this.state.game.turn}-turn`];
-    this.state.game.players.map((p, i) => {
+    this.state.game.players.forEach((p, i) => {
       if (p.userId === this.props.user.id) {
         className.push(`player-${i}-playing`);
       }

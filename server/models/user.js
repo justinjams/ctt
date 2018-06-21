@@ -12,7 +12,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
-    trim: true
+    trim: true,
+    validate: {
+      validator: ((v) => /^[a-z0-9_-]{3,15}$/.test(v)),
+      message: 'Username should be 3-17 letters and numbers.'
+    }
   },
   password: {
     type: String,
@@ -45,7 +49,9 @@ UserSchema.statics.authenticate = function (userData, callback) {
       if (result === true) {
         return callback(null, user);
       } else {
-        return callback();
+        const err = new Error('Invalid credentials.');
+        err.status = 403;
+        return callback(err);
       }
     })
   });

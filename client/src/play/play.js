@@ -10,7 +10,7 @@ class Play extends Component {
     super(props);
 
     this.state = {
-      game: window.bootstrap.appState.game
+      game: this.props.game
     };
 
     this.onGameReady = this.onGameReady.bind(this);

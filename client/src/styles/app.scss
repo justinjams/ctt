@@ -1,24 +1,19 @@
 @import '_variables.scss';
 
-html, body, #root {
-  background: $dark-blue;
-  border-top: 1px solid $gold;
-  height: 100%;
-  overflow: hidden;
-}
-
 .button {
-  background: $dark-blue;
+  background-image: url($rock-texture);
+  background-color: $dark-blue;
   border: 1px solid $gold;
-  border-radius: 2px;
+  border-radius: 1px;
   color: $gold;
+  font-family: serif;
   font-size: 20px;
-  font-weight: bold;
   padding: 5px 10px;
   width: 150px;
 
   &:hover {
     background: lighten($dark-blue, 10%);
+    color: lighten($gold, 10%);
   }
 }
 

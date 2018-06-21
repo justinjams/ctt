@@ -28,7 +28,6 @@ class LobbyGame extends Component {
   }
 
   renderButton () {
-    let type = '';
     if (this.props.game.state === 'created') {
       return (
         <span className='join-btn button' onClick={this.handleJoin} role='button'>
