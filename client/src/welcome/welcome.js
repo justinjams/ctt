@@ -5,6 +5,7 @@ import logo from '../img/logo.png';
 
 import Login from './components/login';
 import Register from './components/register';
+import Footer from '../footer';
 
 class Welcome extends Component {
   render() {
@@ -18,9 +19,7 @@ class Welcome extends Component {
             <Login onUser={this.props.onUser} />
             <Register onUser={this.props.onUser} />
           </div>
-          <footer>
-            <a href="#">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Rules</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Contact</a>
-          </footer>
+          <Footer />
         </div>
       </div>
     );

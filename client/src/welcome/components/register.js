@@ -12,6 +12,7 @@ class Register extends Component {
     } };
 
     this.createChangeHandler = this.createChangeHandler.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   createChangeHandler(key) {
@@ -21,22 +22,57 @@ class Register extends Component {
     }
   }
 
+  renderErrors () {
+    if (this.state.errors) {
+      return (
+        <div className='errors'>
+          {this.state.errors.join('\n')}
+        </div>
+      );
+    }
+  }
+
   render() {
     return (
       <div className='register-view'>
-        <form action='/api/v1/users/new' method='post'>
-          <label htmlFor="user[username]">Username</label>
-          <input autoComplete="username" type="text" name="user[username]" value={this.state.values.username} onChange={this.createChangeHandler('username')} />
-          <label htmlFor="user[email]">Email</label>
-          <input autoComplete="email" type="email" name="user[email]" value={this.state.values.email} onChange={this.createChangeHandler('email')} />
-          <label htmlFor="user[password]">Password</label>
-          <input autoComplete="off" type="password" name="user[password]" value={this.state.values.password} onChange={this.createChangeHandler('password')} />
-          <label htmlFor="user[passwordConf]">Confirm Password</label>
-          <input autoComplete="off" type="password" name="user[passwordConf]" value={this.state.values.passwordConf} onChange={this.createChangeHandler('passwordConf')} />
-          <input className="button" type='submit' value='REGISTER' />
+        {this.renderErrors()}
+        <form action='/api/v1/users/new' onSubmit={this.handleSubmit} method='post'>
+          <label htmlFor='user[username]'>Username</label>
+          <input autoComplete='username' type='text' name='user[username]' value={this.state.values.username} onChange={this.createChangeHandler('username')} />
+          <label htmlFor='user[email]'>Email</label>
+          <input autoComplete='email' type='email' name='user[email]' value={this.state.values.email} onChange={this.createChangeHandler('email')} />
+          <label htmlFor='user[password]'>Password</label>
+          <input autoComplete='off' type='password' name='user[password]' value={this.state.values.password} onChange={this.createChangeHandler('password')} />
+          <label htmlFor='user[passwordConf]'>Confirm Password</label>
+          <input autoComplete='off' type='password' name='user[passwordConf]' value={this.state.values.passwordConf} onChange={this.createChangeHandler('passwordConf')} />
+          <input className='button' type='submit' value='REGISTER' />
         </form>
       </div>
     );
+  }
+
+  handleSubmit (e) {
+    e.preventDefault();
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('X-Requested-With', 'XMLHttpRequest');
+    const params = {
+      body: JSON.stringify({ user: this.state.values }),
+      credentials: 'same-origin',
+      headers: headers,
+      method: 'POST'
+    };
+    fetch(e.target.action, params).then((response) => {
+      response.json().then((body) => {
+        this.setState({ errors: [] });
+        if (body.error) {
+          this.setState({ errors: [body.message] });
+        } else if(body.user) {
+          this.props.onUser(body.user);
+        }
+      });
+    });
   }
 }
 

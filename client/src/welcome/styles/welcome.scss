@@ -17,6 +17,17 @@
   text-align: center;
   width: 482px;
 
+  .errors {
+    color: $error-red;
+    font-size: 12px;
+    width: 186px;
+  }
+
+  form {
+    margin: 0 auto;
+    width: 150px;
+  }
+
   h1 {
     background-image: url($rock-texture);
     background-color: $dark-blue;
@@ -54,6 +65,7 @@
       display: inline-block;
       margin: 0 28px;
       vertical-align: top;
+      width: 185px;
 
       label {
         display: block;
@@ -65,7 +77,7 @@
 
     .button {
       display: block;
-      margin: 16px 0 0;
+      margin: 16px auto 0;
     }
   }
 

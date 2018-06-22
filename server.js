@@ -42,7 +42,6 @@ const DATA_KEYS = Object.keys(data.cards);
 // middlewares
 
 function isAuthenticated(req, res, next) {
-  console.log(req.path)
   if (req.session.userId) {
     next();
   } else if(req.xhr) {
@@ -151,12 +150,20 @@ app.post('/api/v1/games/:gameId/forfeit', isAuthenticated, (req, res) => {
 app.post('/api/v1/users/new', (req, res, next) => {
   const userData = req.body.user;
 
-  if (userData.email &&
-      userData.username &&
-      userData.password &&
-      userData.passwordConf &&
-      userData.password === userData.passwordConf) {
-
+  if (userData.password !== userData.passwordConf) {
+    res.json({
+      message: 'Please confirm your password.',
+      error: 'Registration failed'
+    });
+  } else if (!userData.email ||
+             !userData.username ||
+             !userData.password ||
+             !userData.passwordConf) {
+    res.json({
+      message: 'Please fill out the entire form.',
+      error: 'Registration failed'
+    });
+  } else {
     const newUserData = {
       email: userData.email,
       username: userData.username,
@@ -164,13 +171,17 @@ app.post('/api/v1/users/new', (req, res, next) => {
     };
 
     User.create(newUserData, (err, user) => {
-      if (err) return next(err);
-      
-      req.session.userId = user.id;
-      res.redirect('/');
+      if (err) {
+        message = err.errors ? err.errors[Object.keys(err.errors)[0]].message : err.message;
+        res.json({
+          message: message,
+          error: 'Registration failed'
+        });
+      } else {
+        req.session.userId = user.id;
+        res.json({ user: user });
+      }
     });
-  } else {
-    console.error('Validation failed');
   }
 });
 
@@ -181,13 +192,21 @@ app.post('/api/v1/users/login', (req, res, next) => {
       userData.password) {
 
     User.authenticate(userData, (err, user) => {
-      if (err) return next(err);
-
-      req.session.userId = user.id;
-      res.redirect('/');
+      if (err)  {
+        res.json({
+          message: 'Invalid username or password.',
+          error: 'Authentication failed'
+        });
+      } else {
+        req.session.userId = user.id;
+        res.redirect('/');
+      }
     });
   } else {
-    console.error('Validation failed');
+    res.json({
+      message: 'Missing username or password.',
+      error: 'Authentication failed'
+    });
   }
 });
 

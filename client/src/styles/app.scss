@@ -25,10 +25,11 @@
     background-image: url($rock-texture);
     color: white;
     height: 60px;
-    position: absolute;
-    top: 0;
     width: 100%;
-    z-index: 1;
+
+    img {
+      height: 55px;
+    }
   }
 
   .app-title {
@@ -38,6 +39,7 @@
   }
 
   .app-nav {
+    margin: 0;
     padding: 0;
 
     a {
@@ -67,6 +69,17 @@
     left: 0;
     background-image: linear-gradient(to bottom right, $blue, $red);
     opacity: .6; 
+  }
+
+  footer {
+    bottom: 6px;
+    font-weight: bold;
+    position: fixed;
+    width: 100%;
+
+    a {
+      text-decoration: none;
+    }
   }
 }
 

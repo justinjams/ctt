@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './styles/app.css';
 import logo from './img/logo.png';
 
+import Footer from './footer';
 import Play from './play/play';
 import Welcome from './welcome/welcome';
 
@@ -18,6 +19,7 @@ class App extends Component {
     };
 
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleUser = this.handleUser.bind(this);
   }
 
   render () {
@@ -26,11 +28,11 @@ class App extends Component {
         <Router>
           <div className='app'>
             <header className='app-header'>
-              <Link to='/'>
-                <h1 className='app-title'>
-                <img src={logo} alt='' />
-                </h1>
-              </Link>
+              <h1 className='app-title'>
+                <Link to='/'>
+                  <img src={logo} alt='' />
+                </Link>
+              </h1>
               <ul className='app-nav'>
                 <li>
                   <Link to='/'>Play</Link>
@@ -43,12 +45,13 @@ class App extends Component {
                 </li>
               </ul>
             </header>
-            <div className='app-body' style={{background: `url('${this.state.bgImage}') center 60px no-repeat`}}>
+            <div className='app-body' style={{background: `url('${this.state.bgImage}') center no-repeat`}}>
               <Route path='/' 
                      render={(props) => <Play {...props} game={this.state.game} user={this.state.user} />} />
               <Route path='/cards' 
                      render={(props) => <Play {...props} game={this.state.game} user={this.state.user} />} />
             </div>
+            <Footer />
           </div>
         </Router>
       );
