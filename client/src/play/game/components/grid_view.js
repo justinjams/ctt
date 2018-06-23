@@ -39,7 +39,7 @@ class GridView extends Component {
           <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={8} />
         </div>
         <div className="grid-row">
-          <div className="forfeit button" role="button" onClick={this.handleForfeit}>Forfeit</div>
+          <div className="forfeit button" role="button" onClick={this.handleForfeit}>FORFEIT</div>
         </div>
       </div>
     );

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import io from 'socket.io-client';
 
 import './styles/app.css';
 import logo from './img/logo.png';
@@ -18,8 +19,20 @@ class App extends Component {
       user: this.props.user
     };
 
+    this.socket = io('http://localhost:3002');
+
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUser = this.handleUser.bind(this);
+    this.bindToGame = this.bindToGame.bind(this);
+    this.handleGame = this.handleGame.bind(this);
+  }
+
+  componentDidMount () {
+    this.bindToGame();
+  }
+
+  componentDidChange () {
+    this.bindToGame();
   }
 
   render () {
@@ -47,9 +60,7 @@ class App extends Component {
             </header>
             <div className='app-body' style={{background: `url('${this.state.bgImage}') center no-repeat`}}>
               <Route path='/' 
-                     render={(props) => <Play {...props} game={this.state.game} user={this.state.user} />} />
-              <Route path='/cards' 
-                     render={(props) => <Play {...props} game={this.state.game} user={this.state.user} />} />
+                     render={(props) => <Play {...props} game={this.state.game} user={this.state.user} onGameReady={this.handleGame} />} />
             </div>
             <Footer />
           </div>
@@ -60,6 +71,24 @@ class App extends Component {
     }
   }
 
+  bindToGame () {
+    if (this.state.game) {
+      const gameChannel = `games:play:${this.state.game.id}`;
+
+      if (this.state.lastGameChannel !== gameChannel) {
+        if (this.state.lastGameChannel) {
+          this.socket.off(this.state.lastGameChannel);
+        }
+        this.socket.on(gameChannel, (payload) => {
+          this.setState({
+            game: payload.game,
+            lastGameChannel: gameChannel
+          });
+        });
+      }
+    }
+  }
+
   handleLogout (e) {
     e.preventDefault();
     fetch('/api/v1/users/logout', { credentials: 'same-origin' }).then(() => window.location = '/' );
@@ -67,6 +96,10 @@ class App extends Component {
 
   handleUser (user) {
     this.setState({ user: user });
+  }
+
+  handleGame (game) {
+    this.setState({ game: game });
   }
 }
 

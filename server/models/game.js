@@ -129,7 +129,6 @@ class GameClass {
         const other = this.grid[neighbors[i]];
         if(neighbors[i] !== null && other && other.cardId) {
           const otherCard = new Card(other.cardId);
-          console.log(other, options);
           if(other.hand !== options.hand && card.power[i] > otherCard.power[j]) {
             this.captureCard(i, neighbors[i], options.hand, neighbors);
           }
@@ -149,8 +148,8 @@ class GameClass {
             });
           }
 
-          if (this.rules.SAME && card.power[i] === other.card.power[j]) {
-            sames.push(()=>{
+          if (this.rules.SAME && card.power[i] === otherCard.power[j]) {
+            sames.push(() => {
               if(options.hand === other.hand) return;
               this.captureCard(i, neighbors[i], options.hand, NEIGHBORS[neighbors[i]]);
               this.setCard({

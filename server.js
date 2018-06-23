@@ -19,7 +19,7 @@ app.use(express.json());
 const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -30,6 +30,9 @@ app.use(session({
   secret: 'i cant mid',
   store: new MongoStore({ mongooseConnection: db })
 }));
+
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 // APP DEPENDENCIES
 const Game = require('./server/models/game');
@@ -71,10 +74,10 @@ app.get('/api/v1/app/start', (req, res) => {
     Game.findOne({ state: ['created', 'active'], userIds: req.session.userId }, (err, game) => {
       if (err) next(err);
       if (game) bootstrap.appState.game = game.toAttributes();
-      res.send(JSON.stringify(bootstrap));
+      res.json(bootstrap);
     });
   } else {
-    res.send(JSON.stringify(bootstrap));
+    res.json(bootstrap);
   }
 });
 
@@ -88,10 +91,10 @@ app.get('/api/v1/games', isAuthenticated, (req, res) => {
        sort({ updatedAt: -1 }).
        exec((err, games) => {
     res.setHeader('Content-Type', 'application/json');
-    const gamesJson = JSON.stringify({
+    const gamesJson = {
       games: games.map((game) => game.toAttributes())
-    });
-    res.send(gamesJson);
+    };
+    res.json(gamesJson);
   });
 });
 
@@ -100,7 +103,7 @@ app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
                rules: req.body.rules,
                solo: req.body.solo }, (err, game) => {
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ game: game.toAttributes() }));
+    res.json({ game: game.toAttributes() });
   });
 });
 
@@ -108,11 +111,17 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
     const success = game.setCard(req.body, (err) => {
       res.setHeader('Content-Type', 'application/json');
+      const gameJson = game.toAttributes();
       const response = {
-        game: game.toAttributes(),
+        game: gameJson,
         success: !err
       };
-      res.send(JSON.stringify(response));
+      if (!err) {
+        io.emit(`games:play:${game.id}`, {
+          game: gameJson
+        });
+      }
+      res.json(response);
     });
   });
 });
@@ -127,7 +136,7 @@ app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
       }
       game.save(() => {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({ game: game.toAttributes() }));
+        res.json({ game: game.toAttributes() });
       });
     });
   });
@@ -141,7 +150,7 @@ app.post('/api/v1/games/:gameId/forfeit', isAuthenticated, (req, res) => {
       const response = {
         game: game.toAttributes(),
       };
-      res.send(JSON.stringify(response));
+      res.json(response);
     });
   });
 });
@@ -219,6 +228,6 @@ app.get('/api/v1/users/logout', isAuthenticated, (req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

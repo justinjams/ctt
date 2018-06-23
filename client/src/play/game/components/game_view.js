@@ -7,15 +7,15 @@ import GameWaiting from './game_waiting';
 class GameView extends Component {
   constructor (props) {
     super(props);
-    this.state = this.getInitialState(props.game);
+    this.state = this.getInitialState();
 
     this.onPlayHolding = this.onPlayHolding.bind(this);
     this.selectCard = this.selectCard.bind(this);
   }
 
   renderClassName () {
-    const className = ['game-view', `player-${this.state.game.turn}-turn`];
-    this.state.game.players.forEach((p, i) => {
+    const className = ['game-view', `player-${this.props.game.turn}-turn`];
+    this.props.game.players.forEach((p, i) => {
       if (p.userId === this.props.user.id) {
         className.push(`player-${i}-playing`);
       }
@@ -25,21 +25,21 @@ class GameView extends Component {
   }
 
   render () {
-    if (this.state.game.state !== 'created') {
+    if (this.props.game.state !== 'created') {
      return (
         <div className={this.renderClassName()}>
           <div>
-            <HandView game={this.state.game}
+            <HandView game={this.props.game}
                       hand={0}
                       handleClick={this.selectCard}
                       holding={this.state.holding}
                       user={this.props.user} />
-            <GridView game={this.state.game}
+            <GridView game={this.props.game}
                      headline={this.state.headline}
                      holding={this.state.holding}
                      onGameReady={this.props.onGameReady}
                      onPlayHolding={this.onPlayHolding} />
-            <HandView game={this.state.game}
+            <HandView game={this.props.game}
                       hand={1}
                       handleClick={this.selectCard}
                       holding={this.state.holding}
@@ -48,13 +48,13 @@ class GameView extends Component {
         </div>
       );
     } else {
-      return <GameWaiting game={this.state.game} onGameReady={this.props.onGameReady} />
+      return <GameWaiting game={this.props.game} onGameReady={this.props.onGameReady} />
     }
   }
 
   selectCard (pos, hand) {
-    if (hand === this.state.game.turn &&
-        this.props.user.id === this.state.game.players[this.state.game.turn].userId) {
+    if (hand === this.props.game.turn &&
+        this.props.user.id === this.props.game.players[this.props.game.turn].userId) {
       const holding = { hand, pos };
       this.setState({ holding: holding });
     }
@@ -71,21 +71,18 @@ class GameView extends Component {
     })
   }
 
-  getInitialState (game) {
+  getInitialState () {
     return {
-      game: game,
       headline: {
         messasge: '',
         color: ''
       },
-      holding: false,
-      currentPlayerHand: game.players.map((p) => p.userId).indexOf(this.props.user.id)
+      holding: false
     };
   }
 
   onPlayHolding (game) {
-    this.setState({ game: game,
-                    holding: false });
+    this.setState({ holding: false });
   }
 
   setHeadline (message, color) {

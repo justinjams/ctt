@@ -39,7 +39,7 @@ class CreateGame extends Component {
         </div>
         <div className='close button'
              onClick={this.handleCreateGame}
-             role="button">Create Game</div>
+             role="button">CREATE</div>
       </div>
     );
   }
