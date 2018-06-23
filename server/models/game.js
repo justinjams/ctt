@@ -106,7 +106,7 @@ class GameClass {
   }
 
   setCard (options, callback) {
-    if (!this.grid[options.gridPos] || options.combo) {
+    if (options.combo || !this.grid[options.gridPos]) {
       const card = new Card(options.cardId || this.players[options.hand].hand[options.handPos]);
       this.grid[options.gridPos] = this.grid[options.gridPos] || {};
       this.grid[options.gridPos].hand = options.hand;
@@ -190,8 +190,7 @@ class GameClass {
       }
 
       this.save((err) => {
-        if(err) return callback(err);
-        callback(null, true);
+        callback(err);
       });
     } else {
       callback('Invalid move');

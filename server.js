@@ -208,7 +208,7 @@ app.post('/api/v1/users/login', (req, res, next) => {
         });
       } else {
         req.session.userId = user.id;
-        res.redirect('/');
+        res.json({ user: user });
       }
     });
   } else {

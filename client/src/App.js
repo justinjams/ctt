@@ -19,7 +19,7 @@ class App extends Component {
       user: this.props.user
     };
 
-    this.socket = io('http://localhost:3002');
+    this.socket = io(`${window.location.hostname}:3002`);
 
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUser = this.handleUser.bind(this);
