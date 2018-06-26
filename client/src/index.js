@@ -1,17 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import './styles/index.css';
+
+import api from './helpers/api';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-fetch('/api/v1/app/start', {
-  credentials: 'same-origin',
-  headers: {
-    "X-Requested-With": "XMLHttpRequest"
-  }
-}).then((response) => {
-  return response.json();
-}).then((body) => {
+api.v1.request('get', '/api/v1/app/start').then((body) => {
   if (body) {
     ReactDOM.render(<App bgImage={body.bgImage}
                          game={body.appState.game}

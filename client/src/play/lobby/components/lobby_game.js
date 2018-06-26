@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import api from '../../../helpers/api';
+import assets from '../../../helpers/assets';
+
 class LobbyGame extends Component {
   constructor (props) {
     super(props);
@@ -10,8 +13,10 @@ class LobbyGame extends Component {
   }
 
   render () {
+    console.log(this.props.game);
     return (
       <div className='lobby-game-view'>
+        <img src={'x' || assets.getProfileIcon(this.props.game.players[0].user.profileIcon)} alt='' />
         <span>
           {this.props.game.players.length}/2 players
         </span>
@@ -46,18 +51,8 @@ class LobbyGame extends Component {
   }
 
   handleJoin () {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const params = {
-      body: JSON.stringify(this.lobbyFilters),
-      credentials: 'same-origin',
-      headers: headers,
-      method: 'POST'
-    };
-    fetch(`/api/v1/games/${this.props.game.id}/join`, params).then((response) => {
-      response.json().then((body) => {
-        this.props.onGameReady(body.game);
-      });
+    api.v1.games.join(this.props.game.id).then((body) => {
+      this.props.onGameReady(body.game);
     });
   }
 }

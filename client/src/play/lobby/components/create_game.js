@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import api from '../../../helpers/api';
+
 class CreateGame extends Component {
   constructor (props) {
     super(props);
@@ -45,18 +47,8 @@ class CreateGame extends Component {
   }
 
   handleCreateGame () {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const params = {
-      body: JSON.stringify({ rules: this.state.rules, solo: this.state.solo }),
-      credentials: 'same-origin',
-      headers: headers,
-      method: 'POST'
-    };
-    fetch('/api/v1/games/new', params).then((response) => {
-      response.json().then((body) => {
-        this.props.onGameReady(body.game);
-      });
+    api.v1.games.create({ rules: this.state.rules, solo: this.state.solo }).then((body) => {
+      this.props.onGameReady(body.game);
     });
   }
 

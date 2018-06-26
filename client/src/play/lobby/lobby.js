@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import './styles/lobby.css';
 
+import api from '../../helpers/api';
+
 import LobbyGame from './components/lobby_game';
 import CreateGame from './components/create_game';
 
@@ -31,7 +33,9 @@ class Lobby extends Component {
             <LobbyGame game={game} key={i} onGameReady={this.props.onGameReady} />
           )}
         </div>
-        <div className="button" role="button" onClick={this.handleCreateGame}>
+        <div className='lobby-preview'>
+        </div>
+        <div className="button create-game-btn" role="button" onClick={this.handleCreateGame}>
           CREATE GAME
         </div>
         {this.state.createGameOpen ? <div className='popover-bg'></div> : ''}
@@ -52,22 +56,11 @@ class Lobby extends Component {
 
   handleGameReady (game) {
     this.props.onGameReady(game);
-    this.setState({ createGameOpen: false });
   }
 
   fetchLobbies () {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const params = {
-      body: JSON.stringify(this.lobbyFilters),
-      credentials: 'same-origin',
-      headers: headers,
-      method: 'GET'
-    };
-    fetch('/api/v1/games', params).then((response) => {
-      response.json().then((body) => {
-        this.setState({ games: body.games });
-      });
+    api.v1.games.index().then((body) => {
+      this.setState({ games: body.games });
     });
   }
 

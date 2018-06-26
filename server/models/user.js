@@ -5,7 +5,11 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 const PASSWORD_REGEX = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 const USERNAME_REGEX = /^[a-z0-9_-]{3,15}$/;
 
+const Card = require('./card');
+
 const UserSchema = new mongoose.Schema({
+  cards: [String],
+  hand: [String],
   email: {
     type: String,
     unique: 'Email is already in use.',
@@ -24,6 +28,15 @@ const UserSchema = new mongoose.Schema({
       message: 'Password must be more complex. Try adding a special character.'
     }
   },
+  profileIcon: {
+    type: Number,
+    // TODO: Figure out how to require this
+    //required: true,
+    validate: {
+      validator: ((v) => PROFILE_ICONS.indexOf(v) > -1),
+      message: 'Profile icon selection invalid.'
+    }
+  },
   username: {
     type: String,
     unique: true,
@@ -34,24 +47,47 @@ const UserSchema = new mongoose.Schema({
       message: 'Username should be 3-17 letters and numbers.'
     }
   }
-});
+}, { timestamps: true });
+
+const PROFILE_ICONS = [
+  3154,
+  3155,
+  3156,
+  3157,
+  3158,
+  3159,
+  3160,
+  3161
+];
 
 UserSchema.pre('save', function (next) {
-  var user = this;
-  bcrypt.hash(user.password, 10, function (err, hash){
-    if (err) {
-      return next(err);
-    }
-    user.password = hash;
+  const user = this;
+  if(user.isNew) {
+    user.cards = [...Array(7)].reduce((memo, v, i) => {
+      let random;
+      while(memo.indexOf(random = Card.random()) > -1);
+      memo[i] = random;
+      return memo;
+    }, []);
+    user.hand = user.cards.slice(0, 5);
+    user.profileIcon = PROFILE_ICONS[parseInt(PROFILE_ICONS.length * Math.random())];
+
+    bcrypt.hash(user.password, 10, function (err, hash){
+      if (err) return next(err);
+
+      user.password = hash;
+      next();
+    });
+  } else {
     next();
-  })
+  }
 });
 
 UserSchema.post('save', function (error, doc, next) {
-    if (error.name === 'MongoError' && error.code === 11000) {
-      next(new Error('Email or username already in use.')); 
-    }
-    else next(error);
+  if (error.name === 'MongoError' && error.code === 11000) {
+    next(new Error('Email or username already in use.')); 
+  }
+  else next(error);
 });
 
 UserSchema.statics.authenticate = function (userData, callback) {
@@ -74,7 +110,21 @@ UserSchema.statics.authenticate = function (userData, callback) {
       }
     })
   });
+};
+
+class UserClass {
+  toAttributes () {
+    return {
+      id: this.id,
+      cards: this.cards.map((key) => new Card(key).toAttributes()),
+      hand: this.hand.map((key) => new Card(key).toAttributes()),
+      profileIcon: this.profileIcon,
+      username: this.username
+    }
+  }
 }
+UserSchema.loadClass(UserClass);
 
 const User = mongoose.model('User', UserSchema);
+
 module.exports = User;

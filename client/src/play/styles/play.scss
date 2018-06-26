@@ -68,8 +68,9 @@
     }
   }
 
-  .forfeit.button {
+  .forfeit {
     margin: 55px auto;
+    width: 150px;
   }
 
   .headline {
@@ -99,4 +100,8 @@
 
 .game-waiting {
   position: relative;
+
+  .button {
+    width: 120px;
+  }
 }

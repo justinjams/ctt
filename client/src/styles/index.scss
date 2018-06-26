@@ -11,3 +11,10 @@ html, body, #root {
   height: 100%;
   overflow: hidden;
 }
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}

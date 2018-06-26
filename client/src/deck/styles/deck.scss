@@ -1,0 +1,68 @@
+@import '../../styles/_variables.scss';
+
+.deck-view {
+  background-color: $dark-blue;
+  background-image: url($rock-texture);
+  border: 3px solid $dark-blue;
+  border-radius: 2px;
+  color: $white;
+  margin: 30px auto 0;
+  padding: 8px;
+  position: relative;
+  text-align: left;
+  width: 876px;
+
+  > div {
+    > div {
+      display: inline-block;
+    }
+  }
+
+  .deck-editor-title {
+    border-bottom: 1px solid $blue;
+    color: $gold;
+    margin: 0 0 6px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .card-view {
+    margin: 1px;
+  }
+
+  .selected .card-view {
+    border-color: $gold;
+  }
+
+  .selectables {
+    background: $dark-gold;
+    font-weight: bold;
+    padding: 4px 0 0;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      position: absolute;
+    }
+
+    li {
+      display: inline-block;
+      text-align: center;
+      width: 145px;
+    }
+  }
+
+  .pool {
+    background: linear-gradient(lighten($dark-blue, 8%), $dark-blue);
+    max-height: 414px;
+    overflow-y: scroll;
+    padding: 8px 0 0;
+  }
+
+  .pool-title {
+    border-bottom: 1px solid $blue;
+    color: $gold;
+    margin: 22px 0 6px;
+    text-align: center;
+  }
+}

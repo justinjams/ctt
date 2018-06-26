@@ -58,8 +58,24 @@ function isAuthenticated(req, res, next) {
   }
 }
 
+function loadAppState(req, res, next) {
+  if (req.session.userId) {
+    return User.findOne({ _id: req.session.userId }, (err, user) => {
+      if (err) return res.json(err);
+      res.locals.user = user
+      Game.findOne({ state: ['created', 'active'], userIds: req.session.userId }, (err, game) => {
+        if (err) return res.json(err);
+        res.locals.game = game;
+        next();
+      });
+    });
+  }
+
+  next();
+}
+
 // APP API
-app.get('/api/v1/app/start', (req, res) => {
+app.get('/api/v1/app/start', loadAppState, (req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
   const randomCard = DATA_KEYS[parseInt(Math.random() * DATA_KEYS.length)].toLowerCase();
@@ -67,18 +83,11 @@ app.get('/api/v1/app/start', (req, res) => {
     appState: {},
     bgImage: `https://s3.amazonaws.com/champions-triple-triad/champion/splash/${randomCard}_0.jpg`
   };
-  if (req.session.userId) {
-    bootstrap.appState.user = {
-      id: req.session.userId
-    };
-    Game.findOne({ state: ['created', 'active'], userIds: req.session.userId }, (err, game) => {
-      if (err) next(err);
-      if (game) bootstrap.appState.game = game.toAttributes();
-      res.json(bootstrap);
-    });
-  } else {
-    res.json(bootstrap);
-  }
+
+  bootstrap.appState.user = res.locals.user ? res.locals.user.toAttributes() : null;
+  bootstrap.appState.game = res.locals.game ? res.locals.game.toAttributes() : null;
+
+  res.json(bootstrap);
 });
 
 // GAMES API
@@ -108,13 +117,22 @@ app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
 });
 
 app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
-  Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
-    const success = game.setCard(req.body, (err) => {
-      res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Type', 'application/json');
+
+  Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
+    if (req.session.userId !== game.userIds[game.turn]) {
+      return res.json({
+        success: false,
+        error: 'Invalid move'
+      });
+    }
+
+    game.setCard(req.body, (err) => {
       const gameJson = game.toAttributes();
       const response = {
         game: gameJson,
-        success: !err
+        success: !err,
+        error: err
       };
       if (!err) {
         io.emit(`games:play:${game.id}`, {
@@ -127,14 +145,14 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
 });
 
 app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
-  Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
+  Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
     Player.forUser(req.session.userId, (err, player) => {
       game.userIds.push(req.session.userId);
       game.players.push(player);
       if (game.players.length === 2) {
         game.state = 'active';
       }
-      game.save(() => {
+      game.save((err) => {
         res.setHeader('Content-Type', 'application/json');
         res.json({ game: game.toAttributes() });
       });
@@ -143,13 +161,26 @@ app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
 });
 
 app.post('/api/v1/games/:gameId/forfeit', isAuthenticated, (req, res) => {
-  Game.findOne({ _id: req.params.gameId }).exec(function (err, game) {
+  Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
+    if (0 > game.userIds.indexOf(req.session.userId)) {
+      return res.json({
+        error: 'Invalid request'
+      });
+    }
     game.state = 'finished';
+
     game.save((err) => {
       res.setHeader('Content-Type', 'application/json');
       const response = {
         game: game.toAttributes(),
       };
+      if (err) {
+        response.error = 'Unable to complete';
+      } else {
+        io.emit(`games:play:${game.id}`, {
+          game: game.userIds.length > 1 ? game.toAttributes() : null
+        });
+      }
       res.json(response);
     });
   });
@@ -188,13 +219,39 @@ app.post('/api/v1/users/new', (req, res, next) => {
         });
       } else {
         req.session.userId = user.id;
-        res.json({ user: user });
+        req.session.userUsername = user.username;
+        res.json({ user: user.toAttributes() });
       }
     });
   }
 });
 
-app.post('/api/v1/users/login', (req, res, next) => {
+const USER_UPDATE_WHITELIST = [
+  'hand',
+  'profileIcon'
+];
+app.post('/api/v1/users/:userId', isAuthenticated, loadAppState, (req, res, next) => {
+  for(const key in req.body) {
+    if(USER_UPDATE_WHITELIST.indexOf(key) > -1) {
+      res.locals.user[key] = req.body[key];
+    }
+  }
+  res.locals.user.save((err) => {
+    if (err) {
+      return res.json({
+        message: 'Unable to make requested changes.',
+        error: 'Update failed'
+      });
+    }
+    io.emit(`users:${res.locals.user.id}`, {
+      user: res.locals.user.toAttributes()
+    });
+    res.json({ user: res.locals.user });
+  });
+});
+
+// SESSIONS API
+app.post('/api/v1/sessions/new', (req, res, next) => {
   const userData = req.body.user;
 
   if (userData.username &&
@@ -208,6 +265,7 @@ app.post('/api/v1/users/login', (req, res, next) => {
         });
       } else {
         req.session.userId = user.id;
+        req.session.userUsername = user.username;
         res.json({ user: user });
       }
     });
@@ -219,12 +277,12 @@ app.post('/api/v1/users/login', (req, res, next) => {
   }
 });
 
-app.get('/api/v1/users/logout', isAuthenticated, (req, res, next) => {
+app.delete('/api/v1/sessions', isAuthenticated, (req, res, next) => {
   // delete session object
   req.session.destroy((err) => {
-    if(err)  return next(err);
+    if(err) return next(err);
     
-    res.redirect('/');
+    res.json({});
   });
 });
 

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import api from '../../helpers/api';
+
 class Login extends Component {
   constructor (props) {
     super(props);
@@ -34,11 +36,11 @@ class Login extends Component {
     return (
       <div className='login-view'>
         {this.renderErrors()}
-        <form action='/api/v1/users/login' onSubmit={this.handleSubmit} method='post'>
-          <label htmlFor='user[username]'>Username</label>
-          <input autoComplete='username' type='text' name='user[username]' value={this.state.values.username} onChange={this.createChangeHandler('username')} />
-          <label htmlFor='user[password]'>Password</label>
-          <input autoComplete='current-password' type='password' name='user[password]' value={this.state.values.password} onChange={this.createChangeHandler('password')} />
+        <form action='/api/v1/sessions' onSubmit={this.handleSubmit} method='post'>
+          <label htmlFor='username'>Username</label>
+          <input autoComplete='username' type='text' name='username' value={this.state.values.username} onChange={this.createChangeHandler('username')} />
+          <label htmlFor='password'>Password</label>
+          <input autoComplete='current-password' type='password' name='password' value={this.state.values.password} onChange={this.createChangeHandler('password')} />
           <input className='button' type='submit' value='SIGN IN' />
         </form>
       </div>
@@ -46,27 +48,15 @@ class Login extends Component {
   }
 
   handleSubmit (e) {
-    console.log(e);
     e.preventDefault();
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('X-Requested-With', 'XMLHttpRequest');
-    const params = {
-      body: JSON.stringify({ user: this.state.values }),
-      credentials: 'same-origin',
-      headers: headers,
-      method: 'POST'
-    };
-    fetch(e.target.action, params).then((response) => {
-      response.json().then((body) => {
-        this.setState({ errors: [] });
-        if (body.error) {
-          this.setState({ errors: [body.message] });
-        } else if(body.user) {
-          this.props.onUser(body.user);
-        }
-      });
+    api.v1.sessions.create({ user: this.state.values }).then((body) => {
+      this.setState({ errors: [] });
+      if (body.error) {
+        this.setState({ errors: [body.message] });
+      } else if(body.user) {
+        this.props.onUser(body.user);
+      }
     });
   }
 }

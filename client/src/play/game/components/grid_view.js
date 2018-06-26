@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import GridCardView from './grid_card_view';
 
+import api from '../../../helpers/api';
+
 class GridView extends Component {
   constructor (props) {
     super(props);
@@ -10,6 +12,7 @@ class GridView extends Component {
   }
 
   render () {
+    console.log(this.props.game.state);
     return (
       <div className="grid-view">
         <div className="grid-row">
@@ -39,7 +42,7 @@ class GridView extends Component {
           <GridCardView game={this.props.game} handleClick={this.handleSelectGrid} pos={8} />
         </div>
         <div className="grid-row">
-          <div className="forfeit button" role="button" onClick={this.handleForfeit}>FORFEIT</div>
+          <div className="forfeit button" role="button" onClick={this.handleForfeit}>{this.props.game.state === 'finished' ? 'LEAVE' : 'FORFEIT'}</div>
         </div>
       </div>
     );
@@ -54,17 +57,8 @@ class GridView extends Component {
         hand: holding.hand,
         handPos: holding.pos
       }
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      const params = {
-        body: JSON.stringify(options),
-        credentials: 'same-origin',
-        headers: headers,
-        method: 'POST'
-      }
-      fetch(`/api/v1/games/${this.props.game.id}/play`, params).then((response) => {
-        return response.json();
-      }).then((body) => {
+
+      api.v1.games.play(this.props.game.id, options).then((body) => {
         if (body.success) {
           this.props.onPlayHolding(body.game);
         }
@@ -73,18 +67,11 @@ class GridView extends Component {
   }
 
   handleForfeit () {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const params = {
-      credentials: 'same-origin',
-      headers: headers,
-      method: 'POST'
+    if (this.props.game.state === 'finished') {
+      this.props.onGameReady();      
+    } else {
+      api.v1.games.forfeit(this.props.game.id);
     }
-    fetch(`/api/v1/games/${this.props.game.id}/forfeit`, params).then((response) => {
-      return response.json();
-    }).then((body) => {
-      this.props.onGameReady();
-    });
   }
 }
 export default GridView;

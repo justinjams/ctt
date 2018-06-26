@@ -87,9 +87,13 @@ class GameClass {
       players: this.players.map((p) => p.toAttributes()),
       rules: this.rules,
       state: this.state,
-      turn: (this.totalTurn + this.startPlayer) % 2,
+      turn: this.turn,
       updatedAt: this.updatedAt
     };
+  }
+
+  get turn() {
+    return (this.totalTurn + this.startPlayer) % 2;
   }
 
   toJson () {
@@ -102,11 +106,10 @@ class GameClass {
     this.players[hand].score++;
     other.hand = hand;
     other.flipped = ['top', 'right', 'bottom', 'left'][i];
-    console.log("Capturing", other.card, other.flipped);
   }
 
   setCard (options, callback) {
-    if (options.combo || !this.grid[options.gridPos]) {
+    if (options.hand == this.turn && (options.combo || !this.grid[options.gridPos])) {
       const card = new Card(options.cardId || this.players[options.hand].hand[options.handPos]);
       this.grid[options.gridPos] = this.grid[options.gridPos] || {};
       this.grid[options.gridPos].hand = options.hand;

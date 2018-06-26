@@ -1,5 +1,9 @@
 @import '_variables.scss';
 
+a {
+  text-decoration: none;
+}
+
 .button {
   background-image: url($rock-texture);
   background-color: $dark-blue;
@@ -10,7 +14,13 @@
   font-size: 20px;
   margin: 0 auto;
   padding: 5px 10px;
-  width: 150px;
+  user-select: none;
+
+  &.disabled {
+    color: gray;
+    border-color: gray;
+    pointer-events: none;
+  }
 
   &:hover {
     background: lighten($dark-blue, 10%);
@@ -24,13 +34,46 @@
   text-align: center;
 
   .app-header {
-    color: white;
+    color: $white;
     height: 60px;
     margin: 0 auto;
+
     width: 960px;
 
     img {
+      filter: drop-shadow(0 0 2px $dark-gold);
       height: 55px;
+      position: absolute;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+
+      ul {
+        padding: 0;
+      }
+
+      li {
+        display: block;
+        padding: 5px 20px;
+      }
+    }
+
+    .user-menu:focus + .menu {
+      background: $dark-blue;
+      display: block;
+      z-index:1;
+    }
+
+    .profile-icon {
+      height: 28px;
+      right: 11px;
+      top: 6px;
+    }
+
+    .button {
+      font-size: 14px;
     }
   }
 
@@ -42,15 +85,13 @@
 
   .app-nav {
     margin: 0;
-    padding: 0;
+    padding: 8px 0;
+    float: right;
 
-    a {
-      color: white;
-    }
-
-    li {
+    > li {
       display: inline-block;
       padding: 5px 10px;
+      position: relative;
     }
   }
 
@@ -69,8 +110,8 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: linear-gradient(to bottom right, $red, $blue);
-    opacity: .6; 
+    background-image: linear-gradient(to bottom right, $blue, rgba(50,50,50,0.8), $red);
+    opacity: .9; 
   }
 
   footer {
@@ -79,8 +120,8 @@
     position: fixed;
     width: 100%;
 
-    a {
-      text-decoration: none;
+    a:visited {
+      color: $blue;
     }
   }
 }
@@ -105,21 +146,21 @@
   }
 
   .rule-name {
-    color: white;
+    color: $white;
     font-size: 26px;
   }
 
   .close {
-    bottom: 24px;
-    position: absolute;
-    left: 80px;
+    margin: 15px auto;
+    width: 120px;
   }
 }
 
 .popover-bg {
-  background: rgba(50,50,50,0.7);
+  background: $dark-blue;
   height: 100%;
   left: 0;
+  opacity: .8;
   position: fixed;
   top: 0;
   width: 100%;

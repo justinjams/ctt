@@ -1,8 +1,8 @@
 @import '../../styles/_variables.scss';
 
 .welcome-bg {
-  background-position: center;
-  background-repeat: no-repeat;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
   background-size: cover !important;
   height: 100%;
   position: absolute;
@@ -20,11 +20,12 @@
   .errors {
     color: $error-red;
     font-size: 12px;
+    margin: 8px 0;
     width: 186px;
   }
 
   form {
-    margin: 0 auto;
+    margin: 12px auto 0;
     width: 150px;
   }
 
@@ -32,16 +33,15 @@
     background-image: url($rock-texture);
     background-color: $dark-blue;
     border: 1px solid $dark-gold;
-    border-top: 3px solid $gold;
+    border-top: 2px solid $gold;
     color: $gold;
-    margin: 0 0 8px -3px;
+    margin: 0 0 0 -3px;
     padding: 14px 0 2px;
     position: relative;
     width: 488px;
 
     img {
-      -webkit-filter: drop-shadow(5px 5px 5px #222222);
-      filter: drop-shadow(5px 5px 5px #222222);
+      filter: drop-shadow(0 0 2px $dark-gold);
     }
   }
 
@@ -59,9 +59,9 @@
   }
 
   .login-wrap {
-    margin: 12px 0 0;
+    position: relative;
 
-    > div {
+    .login-view, .register-view {
       display: inline-block;
       margin: 0 28px;
       vertical-align: top;
@@ -77,17 +77,28 @@
 
     .button {
       display: block;
-      margin: 16px auto 0;
+      margin: 16px auto;
     }
   }
 
   footer {
+    border-top: 3px solid lighten($dark-blue, 6%);
     color: $light-gold;
-    margin: 26px 0 12px;
+    padding: 8px 0;
 
     a {
       color: $blue;
       text-decoration: none;
     }
+  }
+
+  .vertical-line {
+    background: lighten($dark-blue, 6%);
+    border-radius: 5px;
+    display: inline-block;
+    height: 100%;
+    position: absolute;
+    width: 3px;
+    z-index: 1;
   }
 }

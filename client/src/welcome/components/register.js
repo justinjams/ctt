@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import api from '../../helpers/api';
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -54,24 +56,13 @@ class Register extends Component {
   handleSubmit (e) {
     e.preventDefault();
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('X-Requested-With', 'XMLHttpRequest');
-    const params = {
-      body: JSON.stringify({ user: this.state.values }),
-      credentials: 'same-origin',
-      headers: headers,
-      method: 'POST'
-    };
-    fetch(e.target.action, params).then((response) => {
-      response.json().then((body) => {
-        this.setState({ errors: [] });
-        if (body.error) {
-          this.setState({ errors: [body.message] });
-        } else if(body.user) {
-          this.props.onUser(body.user);
-        }
-      });
+    api.v1.users.create({ user: this.state.values }).then((body) => {
+      this.setState({ errors: [] });
+      if (body.error) {
+        this.setState({ errors: [body.message] });
+      } else if(body.user) {
+        this.props.onUser(body.user);
+      }
     });
   }
 }

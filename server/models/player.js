@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Card = require('./card');
+const User = require('./user');
 
 const PlayerSchema = new mongoose.Schema({
   hand: [String],
@@ -32,10 +33,13 @@ class PlayerClass {
 }
 
 PlayerSchema.statics.forUser = (userId, callback) => {
-  Player.create({
-    hand: [0,0,0,0,0].map(Card.random),
-    userId: userId
-  }, callback);
+  User.findOne({ _id: userId }).exec((err, user) => {
+    if (err) callback(err, user);
+    Player.create({
+      hand: user.hand.slice(),
+      userId: userId
+    }, callback);
+  });
 }
 
 PlayerSchema.loadClass(PlayerClass);

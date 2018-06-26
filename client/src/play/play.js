@@ -14,7 +14,7 @@ class Play extends Component {
                   onGameReady={this.props.onGameReady} />
       );
     } else {
-      return <Lobby onGameReady={this.props.onGameReady} />; //<MenuView onGameReady={this.onGameReady} />;
+      return <Lobby onGameReady={this.props.onGameReady} />;
     }
   }
 

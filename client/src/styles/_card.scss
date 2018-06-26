@@ -23,7 +23,7 @@
 
 .card-view {
   background-color: rgba(10, 1, 13, 0.6);
-  border: 8px solid white;
+  border: 8px solid $white;
   border-radius: 6px;
   height: 128px;
   position: relative;
@@ -63,7 +63,6 @@
 
   .side {
     backface-visibility: hidden;
-    border: 0 solid white;
     border-radius: 4px;
     height: 100%;
     position: absolute;

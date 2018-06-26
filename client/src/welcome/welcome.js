@@ -17,6 +17,7 @@ class Welcome extends Component {
           </h1>
           <div className="login-wrap">
             <Login onUser={this.props.onUser} />
+            <div className="vertical-line"></div>
             <Register onUser={this.props.onUser} />
           </div>
           <Footer />

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import api from '../../../helpers/api';
+
 class GameWaiting extends Component {
   constructor (props) {
     super(props);
@@ -8,19 +10,7 @@ class GameWaiting extends Component {
   }
 
   handleCancel () {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const params = {
-      credentials: 'same-origin',
-      headers: headers,
-      method: 'POST'
-    }
-    fetch(`/api/v1/games/${this.props.game.id}/forfeit`, params).then((response) => {
-      return response.json();
-    }).then((body) => {
-      console.log(this.props);
-      this.props.onGameReady();
-    });
+    api.v1.games.forfeit(this.props.game.id);
   }
 
   render () {
@@ -28,7 +18,7 @@ class GameWaiting extends Component {
       <div className='game-waiting'>
          Waiting for other players...
          <div role='button' className="button" onClick={this.handleCancel}>
-          Cancel Game
+          CANCEL
          </div>
       </div>
     );
