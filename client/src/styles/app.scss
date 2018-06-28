@@ -37,13 +37,11 @@ a {
     color: $white;
     height: 60px;
     margin: 0 auto;
-
     width: 960px;
 
     img {
       filter: drop-shadow(0 0 2px $dark-gold);
       height: 55px;
-      position: absolute;
     }
 
     .menu {
@@ -56,20 +54,37 @@ a {
 
       li {
         display: block;
-        padding: 5px 20px;
+        margin: 5px 20px;
       }
     }
 
-    .user-menu:focus + .menu {
+    .user-menu-btn {
+      border: 0;
+      background: rgba(0,0,0,0);
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .user-menu-btn:focus + .menu {
       background: $dark-blue;
       display: block;
-      z-index:1;
+      z-index: 1;
+    }
+
+    .user-menu-btn-display {
+      padding-right: 0;
     }
 
     .profile-icon {
-      height: 28px;
+      height: 27px;
+      margin: -5px 0 0 9px;
       right: 11px;
       top: 6px;
+      float: right;
     }
 
     .button {
@@ -90,7 +105,7 @@ a {
 
     > li {
       display: inline-block;
-      padding: 5px 10px;
+      margin: 5px 10px;
       position: relative;
     }
   }
@@ -120,6 +135,10 @@ a {
     position: fixed;
     width: 100%;
 
+    a {
+      color: $blue;
+    }
+
     a:visited {
       color: $blue;
     }
@@ -136,7 +155,7 @@ a {
   border: 20px solid #a77314;;
   border-radius: 12px;
   height: 260px;
-  margin: 0 -36px;
+  margin: 0 72px;
   position: absolute;
   top: 10px;
   width: 320px;
@@ -164,6 +183,43 @@ a {
   position: fixed;
   top: 0;
   width: 100%;
+}
+
+@-webkit-keyframes spinX {  
+  0% {
+    transform: rotateZ(0deg);
+    transform-origin: 0% 200% 0;
+  }
+  100% {
+    transform: rotateZ(360deg);
+    transform-origin: 0% 200% 0;
+  }  
+}
+
+.game-waiting {
+
+  .card-view {  
+    position: absolute;
+    animation: spinX 4s infinite ease-in-out;
+  }
+
+  .cards {
+    height: 300px;
+    margin: 0 auto;
+    position: relative;
+    width: 0;
+
+    @for $i from 0 through 4 {
+      :nth-child(#{$i}) {
+        animation-delay: #{$i/5 * 4}s;
+      }
+    } 
+  }
+
+  .lobby-game-view {
+    margin: 0 auto 10px;
+    width: 200px;
+  }
 }
 
 @import '_card.scss';

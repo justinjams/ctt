@@ -49,18 +49,9 @@ const UserSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-const PROFILE_ICONS = [
-  3154,
-  3155,
-  3156,
-  3157,
-  3158,
-  3159,
-  3160,
-  3161
-];
+const PROFILE_ICONS = [...Array(29)].map((_, i)=>i);
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', (next) => {
   const user = this;
   if(user.isNew) {
     user.cards = [...Array(7)].reduce((memo, v, i) => {
@@ -72,7 +63,7 @@ UserSchema.pre('save', function (next) {
     user.hand = user.cards.slice(0, 5);
     user.profileIcon = PROFILE_ICONS[parseInt(PROFILE_ICONS.length * Math.random())];
 
-    bcrypt.hash(user.password, 10, function (err, hash){
+    bcrypt.hash(user.password, 10, (err, hash) => {
       if (err) return next(err);
 
       user.password = hash;
@@ -83,15 +74,15 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-UserSchema.post('save', function (error, doc, next) {
+UserSchema.post('save', (error, doc, next) => {
   if (error.name === 'MongoError' && error.code === 11000) {
     next(new Error('Email or username already in use.')); 
   }
   else next(error);
 });
 
-UserSchema.statics.authenticate = function (userData, callback) {
-  User.findOne({ username: userData.username }).exec(function (err, user) {
+UserSchema.statics.authenticate = (userData, callback) => {
+  User.findOne({ username: userData.username }).exec((err, user) => {
     if (err) {
       return callback(err)
     } else if (!user) {
@@ -100,7 +91,7 @@ UserSchema.statics.authenticate = function (userData, callback) {
       return callback(err);
     }
 
-    bcrypt.compare(userData.password, user.password, function (err, result) {
+    bcrypt.compare(userData.password, user.password, (err, result) => {
       if (result === true) {
         return callback(null, user);
       } else {

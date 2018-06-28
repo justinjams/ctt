@@ -17,13 +17,13 @@ class GridView extends Component {
       <div className="grid-view">
         <div className="grid-row">
           <span className="player-0 score">
-            {this.props.game.players[0].score}
+            {this.props.game.scores[0].score}
           </span>
           <span className={`headline ${this.props.headline.color}`}>
             {this.props.headline.message}
           </span>
           <span className="player-1 score">
-            {this.props.game.players[1].score}
+            {this.props.game.scores[1]}
           </span>
         </div>
         <div className="grid-row">

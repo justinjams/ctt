@@ -13,12 +13,11 @@ class LobbyGame extends Component {
   }
 
   render () {
-    console.log(this.props.game);
     return (
       <div className='lobby-game-view'>
-        <img src={'x' || assets.getProfileIcon(this.props.game.players[0].user.profileIcon)} alt='' />
+        <img src={'x' || assets.getProfileIcon(1)} alt='' />
         <span>
-          {this.props.game.players.length}/2 players
+          {this.props.game.userIds.length}/2 players
         </span>
         {this.renderButton()}
         <div>
@@ -33,7 +32,9 @@ class LobbyGame extends Component {
   }
 
   renderButton () {
-    if (this.props.game.state === 'created') {
+    if (!this.props.onGameReady) {
+      return;
+    } else if (this.props.game.state === 'created') {
       return (
         <span className='join-btn button' onClick={this.handleJoin} role='button'>
           JOIN

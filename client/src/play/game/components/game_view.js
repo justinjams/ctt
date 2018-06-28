@@ -15,8 +15,8 @@ class GameView extends Component {
 
   renderClassName () {
     const className = ['game-view', `player-${this.props.game.turn}-turn`];
-    this.props.game.players.forEach((p, i) => {
-      if (p.userId === this.props.user.id) {
+    this.props.game.userIds.forEach((userId, i) => {
+      if (userId === this.props.user.id) {
         className.push(`player-${i}-playing`);
       }
     });
@@ -54,7 +54,7 @@ class GameView extends Component {
 
   selectCard (pos, hand) {
     if (hand === this.props.game.turn &&
-        this.props.user.id === this.props.game.players[this.props.game.turn].userId) {
+        this.props.user.id === this.props.game.userIds[this.props.game.turn]) {
       const holding = { hand, pos };
       this.setState({ holding: holding });
     }

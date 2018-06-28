@@ -36,7 +36,6 @@ const io = require('socket.io')(server);
 
 // APP DEPENDENCIES
 const Game = require('./server/models/game');
-const Player = require('./server/models/player');
 const User = require('./server/models/user');
 
 const data = require('./server/data/data.json');
@@ -99,7 +98,7 @@ app.get('/api/v1/games', isAuthenticated, (req, res) => {
   Game.find({ state: 'created' }).
        sort({ updatedAt: -1 }).
        exec((err, games) => {
-    res.setHeader('Content-Type', 'application/json');
+    if (err) return res.json(err);
     const gamesJson = {
       games: games.map((game) => game.toAttributes())
     };
@@ -111,32 +110,40 @@ app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
   Game.start({ userId: req.session.userId,
                rules: req.body.rules,
                solo: req.body.solo }, (err, game) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.json({ game: game.toAttributes() });
+    if (err) return res.json(err);
+    game.aiMove();
+    game.save((err) => {
+      if (err) return res.json(err);
+      res.json({ game: game.toAttributes() });
+    });
   });
 });
 
 app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-
+  console.log(1)
   Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
+    if (err) return res.json(err);
     if (req.session.userId !== game.userIds[game.turn]) {
       return res.json({
         success: false,
         error: 'Invalid move'
       });
     }
-
-    game.setCard(req.body, (err) => {
-      const gameJson = game.toAttributes();
+    const success = game.setCard(req.body);
+    console.log('before one');
+    game.aiMove();
+    console.log('before two');
+    game.save((err) => {
+      if (err) return res.json(err);
+      const gameAttributes = game.toAttributes();
       const response = {
-        game: gameJson,
-        success: !err,
+        game: gameAttributes,
+        success: success,
         error: err
       };
-      if (!err) {
+      if (success) {
         io.emit(`games:play:${game.id}`, {
-          game: gameJson
+          game: gameAttributes
         });
       }
       res.json(response);
@@ -146,14 +153,14 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
 
 app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
-    Player.forUser(req.session.userId, (err, player) => {
+    User.findOne({ _id: req.session.userId }).exec((err, user) => {
       game.userIds.push(req.session.userId);
-      game.players.push(player);
-      if (game.players.length === 2) {
+      game.hands.push(user.hand.slice())
+      if (game.userIds.length === 2) {
         game.state = 'active';
       }
       game.save((err) => {
-        res.setHeader('Content-Type', 'application/json');
+        if (err) return res.json(err);
         res.json({ game: game.toAttributes() });
       });
     });
@@ -170,18 +177,17 @@ app.post('/api/v1/games/:gameId/forfeit', isAuthenticated, (req, res) => {
     game.state = 'finished';
 
     game.save((err) => {
-      res.setHeader('Content-Type', 'application/json');
-      const response = {
-        game: game.toAttributes(),
-      };
-      if (err) {
-        response.error = 'Unable to complete';
-      } else {
+      if (err) return res.json(err);
+      else {
+        const gameAttributes = game.toAttributes();
         io.emit(`games:play:${game.id}`, {
-          game: game.userIds.length > 1 ? game.toAttributes() : null
+          game: game.userIds.length > 1 ? gameAttributes : null
         });
+        const response = {
+          game: gameAttributes,
+        };
+        res.json(response);
       }
-      res.json(response);
     });
   });
 });
@@ -266,7 +272,7 @@ app.post('/api/v1/sessions/new', (req, res, next) => {
       } else {
         req.session.userId = user.id;
         req.session.userUsername = user.username;
-        res.json({ user: user });
+        res.json({ user: user.toAttributes() });
       }
     });
   } else {

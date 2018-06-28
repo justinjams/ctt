@@ -15,6 +15,10 @@ class CardView extends Component {
   getCard() {
     return this.props.card;
   }
+  
+  getHand() {
+    return this.props.hand;
+  }
 
   championImage () {
     const card = this.getCard();
@@ -24,6 +28,8 @@ class CardView extends Component {
   }
 
   renderCardBack() {
+    if(this.props.noBack) return;
+    
     const cardBackImage = [hand0Card, hand1Card][this.getHand()];
     return (
       <div className="side back">

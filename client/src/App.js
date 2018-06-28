@@ -63,7 +63,13 @@ class App extends Component {
                   <Link className={`button ${this.state.game ? 'disabled' : ''}`} to='/deck'>DECK</Link>
                 </li>
                 <li>
-                  <input value={this.state.user.username + '    ▼'} className='user-menu button' type='button' onMouseDown={this.handleUserMenuMouseDown}></input>
+                  <div className='user-menu-btn-display button'>
+                    {this.state.user.username}
+                    <img className='profile-icon'
+                         role='button'
+                         src={assets.getProfileIcon(this.state.user.profileIcon)} alt='' />
+                  </div>
+                  <input className='user-menu-btn' role='button' onMouseDown={this.handleUserMenuMouseDown} />
                   <div className='menu'>
                     <ul>
                       <li>
@@ -71,7 +77,6 @@ class App extends Component {
                       </li>
                     </ul>
                   </div>
-                  <img className='profile-icon' src={assets.getProfileIcon(this.state.user.profileIcon)} alt='' />
                 </li>
               </ul>
             </header>
@@ -127,11 +132,9 @@ class App extends Component {
   }
 
   handleUserMenuMouseDown (e) {
-   // this.setState({ userMenuOpen: !this.state.userMenuOpen});
-
     if (document.activeElement === e.target) {
-      e.target.blur();
-      e.preventDefault();
+       e.target.blur();
+       e.preventDefault();
     }
   }
 

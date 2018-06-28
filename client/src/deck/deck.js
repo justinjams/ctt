@@ -6,16 +6,7 @@ import api from '../helpers/api'
 import assets from '../helpers/assets'
 
 // TODO: Avoid duping this on server and client
-const PROFILE_ICONS = [
-  3154,
-  3155,
-  3156,
-  3157,
-  3158,
-  3159,
-  3160,
-  3161
-];
+const PROFILE_ICONS = [...Array(29)].map((_, i) => i);
 
 class Deck extends Component {
   constructor (props) {

@@ -28,10 +28,11 @@ class Lobby extends Component {
   render () {
     return (
       <div className='lobby-view'>
+        <h2>
+          Find Game
+        </h2>
         <div className='lobby-games'>
-          {this.state.games.map((game, i) =>
-            <LobbyGame game={game} key={i} onGameReady={this.props.onGameReady} />
-          )}
+          {this.renderLobbies()}
         </div>
         <div className='lobby-preview'>
         </div>
@@ -48,6 +49,14 @@ class Lobby extends Component {
     if (this.state.createGameOpen) {
       return <CreateGame onGameReady={this.handleGameReady} />
     }
+  }
+
+  renderLobbies() {
+    if (this.state.games.length > 0) {
+      return this.state.games.map((game, i) =>
+        <LobbyGame game={game} key={i} onGameReady={this.props.onGameReady} />
+      );
+    } else return <div className='no-games'>No games available.</div>;
   }
 
   handleCreateGame () {

@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
-const AI = require('./ai');
-const Player = require('./player');
+const data = require('../../server/data/data.json');
+const DATA_KEYS = Object.keys(data.cards);
+
 const Card = require('./card');
+const User = require('./user');
+
 const STATES = [
   'created',
   'active',
@@ -45,17 +48,24 @@ const GridSchema = new mongoose.Schema({
 });
 
 const GameSchema = new mongoose.Schema({
+  ai: {
+    type: String
+  },
   state: {
     default: 'created',
     type: String,
     required: true
   },
   grid: [GridSchema],
-  players: [Player.schema],
-  userIds: [String],
+  hands: [[String]],
   rules: {
     default: DEFAULT_RULES,
     type: Object,
+    required: true
+  },
+  scores: {
+    default: [5, 5],
+    type: [Number],
     required: true
   },
   startPlayer: {
@@ -67,6 +77,7 @@ const GameSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  userIds: [String],
 }, { timestamps: true });
 
 class GameClass {
@@ -83,12 +94,16 @@ class GameClass {
     return {
       createdAt: this.createdAt,
       grid: gridAttributes,
+      hands: this.hands.map((hand) =>
+       hand.map((key) => new Card(key).toAttributes())
+      ),
       id: this.id,
-      players: this.players.map((p) => p.toAttributes()),
       rules: this.rules,
       state: this.state,
+      scores: this.scores,
       turn: this.turn,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      userIds: this.userIds
     };
   }
 
@@ -102,15 +117,29 @@ class GameClass {
 
   captureCard (i, pos, hand, neighbors) {
     const other = this.grid[pos];
-    this.players[other.hand].score--;
-    this.players[hand].score++;
+    this.scores[other.hand] --;
+    this.scores[hand] ++;
     other.hand = hand;
     other.flipped = ['top', 'right', 'bottom', 'left'][i];
   }
 
-  setCard (options, callback) {
+  aiMove() {
+    //return callback();
+    if (this.state === 'active' && this.userIds[this.turn] == 0) {
+      let pos = Math.floor(Math.random()*9);
+      while(this.grid[pos]) pos = Math.floor(Math.random()*9);
+      this.setCard({
+        gridPos: pos,
+        hand: this.turn,
+        handPos: 0
+      });
+      //this.players[this.turn].play(this);
+    }
+  }
+
+  setCard (options) {
     if (options.hand == this.turn && (options.combo || !this.grid[options.gridPos])) {
-      const card = new Card(options.cardId || this.players[options.hand].hand[options.handPos]);
+      const card = new Card(options.cardId || this.hands[options.hand][options.handPos]);
       this.grid[options.gridPos] = this.grid[options.gridPos] || {};
       this.grid[options.gridPos].hand = options.hand;
       this.grid[options.gridPos].cardId = card.key;
@@ -121,7 +150,7 @@ class GameClass {
       }
 
       if (options.handPos !== null && options.handPos !== undefined) {
-        this.players[options.hand].hand.splice(options.handPos, 1);
+        this.hands[options.hand].splice(options.handPos, 1);
       }
       const neighbors = NEIGHBORS[options.gridPos];
       let sames = [];
@@ -185,43 +214,44 @@ class GameClass {
         
         if (this.isGameOver()) {
           let winner;
-          if (this.players[0].score > this.players[1].score) winner = 'player1';
-          else if (this.players[0].score < this.players[1].score) winner = 'player2';
+          if (this.scores[0] > this.scores[1]) winner = 'player1';
+          else if (this.scores[0] < this.scores[1]) winner = 'player2';
           else winner = null;
           //this.view.setGameOver(winner);
         }
       }
 
-      this.save((err) => {
-        callback(err);
-      });
+      if (this.hands[0].length + this.hands[1].length === 1) {
+        this.state = 'finished';
+      }
+      return true;
     } else {
-      callback('Invalid move');
+      return false
     }
   }
 
   isGameOver () {
-    return (this.players[0].hand.length + this.players[1].hand.length) === 1
+    return (this.hands[0].length + this.hands[1].length) === 1
   }
 }
 
 GameSchema.loadClass(GameClass);
 
 GameSchema.statics.start = (gameData, callback) => {
-  Player.forUser(gameData.userId, (err, player) => {
-    const players = [player];
+  User.findOne({ _id: gameData.userId }).exec((err, user) => {
     const userIds = [gameData.userId];
     const params = {
-      players: players,
+      hands: [user.hand.slice()],
       rules: Object.assign({}, DEFAULT_RULES, gameData.rules), 
       startPlayer: Math.round(Math.random()),
       userIds: userIds
     };
 
     if (gameData.solo) {
-      players.push(player);
-      userIds.push(gameData.userId);
       params.state = 'active';
+      params.ai = 1;
+      params.userIds.push(0);
+      params.hands.push([0,0,0,0,0].map(()=> DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]));
     }
     Game.create(params, callback);
   });

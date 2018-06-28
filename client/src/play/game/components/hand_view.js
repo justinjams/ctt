@@ -14,7 +14,7 @@ class HandView extends Component {
   renderClassName () {
     let classNames = [`hand-view player-${this.props.hand}-hand`];
     if (!this.props.game.rules.OPEN &&
-        this.props.game.players[this.props.hand].userId !== this.props.user.id) {
+        this.props.game.userIds[this.props.hand] !== this.props.user.id) {
       classNames.push('closed');
     }
 
@@ -25,7 +25,7 @@ class HandView extends Component {
     return (
       <div className={this.renderClassName()}>
       {[0,1,2,3,4].map((pos)=>{
-        let card = this.props.game.players[this.props.hand].hand[pos];
+        let card = this.props.game.hands[this.props.hand][pos];
 
         return (
           <div className={`card-slider ${this.getSelected(pos)}`} key={pos}>
