@@ -120,7 +120,6 @@ app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
 });
 
 app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
-  console.log(1)
   Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
     if (err) return res.json(err);
     if (req.session.userId !== game.userIds[game.turn]) {
@@ -130,9 +129,7 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
       });
     }
     const success = game.setCard(req.body);
-    console.log('before one');
     game.aiMove();
-    console.log('before two');
     game.save((err) => {
       if (err) return res.json(err);
       const gameAttributes = game.toAttributes();

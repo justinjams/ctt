@@ -51,7 +51,7 @@ const UserSchema = new mongoose.Schema({
 
 const PROFILE_ICONS = [...Array(29)].map((_, i)=>i);
 
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function (next) {
   const user = this;
   if(user.isNew) {
     user.cards = [...Array(7)].reduce((memo, v, i) => {

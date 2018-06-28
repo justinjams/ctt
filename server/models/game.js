@@ -256,6 +256,5 @@ GameSchema.statics.start = (gameData, callback) => {
     Game.create(params, callback);
   });
 };
-
 const Game = mongoose.model('Game', GameSchema);
 module.exports = Game;
