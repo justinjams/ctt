@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import HandCardView from './hand_card_view';
+import Card from '../../../components/card';
 
-class HandView extends Component {
+class Hand extends Component {
 
   getSelected (pos) {
     if(this.props.holding &&
@@ -29,11 +29,11 @@ class HandView extends Component {
 
         return (
           <div className={`card-slider ${this.getSelected(pos)}`} key={pos}>
-            <HandCardView card={card}
-                          game={this.props.game}
-                          hand={this.props.hand}
-                          handleClick={this.props.handleClick}
-                          pos={pos} />
+            <Card card={card}
+                  game={this.props.game}
+                  hand={this.props.hand}
+                  handleClick={this.props.handleClick}
+                  pos={pos} />
           </div>
         );
       })}
@@ -41,4 +41,4 @@ class HandView extends Component {
     );
   }
 }
-export default HandView;
+export default Hand;

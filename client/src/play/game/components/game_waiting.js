@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import api from '../../../helpers/api';
-import CardView from './card_view';
 import Lobby from '../../lobby/components/lobby_game';
+
+import Card from '../../../components/card';
 
 class GameWaiting extends Component {
   constructor (props) {
@@ -22,14 +23,14 @@ class GameWaiting extends Component {
         {[0,1,2,3,4].map((pos)=>{
           let card = this.props.game.hands[0][pos];
 
-          return <CardView card={card}
-                           game={this.props.game}
-                           hand={0}
-                           noBack={true}
-                           key={pos}
-                           pos={pos} />;
+          return <Card card={card}
+                       game={this.props.game}
+                       hand={0}
+                       key={pos}
+                       pos={pos} />;
         })}
         </div>
+        <h3>Waiting for other players</h3>
         <Lobby game={this.props.game} />
         <div role='button' className="button" onClick={this.handleCancel}>
           CANCEL

@@ -19,7 +19,7 @@
   }
 
   .lobby-games {
-    background: linear-gradient(lighten($dark-blue, 8%), $dark-blue);
+    background: linear-gradient($dark-blue, black);
     border: 1px solid $blue;
     display: inline-block;
     height: 350px;

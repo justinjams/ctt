@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import './styles/deck.css';
 
+import Card from '../components/card';
+
 import api from '../helpers/api'
 import assets from '../helpers/assets'
 
@@ -50,30 +52,15 @@ class Deck extends Component {
   renderPool () {
     if (this.state.selected === 'Emblem') {
       const profileIcons = PROFILE_ICONS.filter((icon) => icon !== this.props.user.profileIcon);
-      return profileIcons.map((icon, i) => (
-        <div className='card-view' role="button" onClick={this.handleSelectCardBack(icon)} key={i}>
-          <div className="side">
-            <img height={128} width={128} src={assets.getProfileIcon(icon)} alt="" />
-          </div>
-        </div>
-      ));
+      return profileIcons.map((icon, i) => {
+        const img = assets.getProfileIcon(icon);
+        return this.renderCardBack(img);
+      });
     } else if (this.state.selected === 'Card') {
       const handKeys = this.props.user.hand.map((card) => card.key);
       const cards = this.props.user.cards.filter((card) => handKeys.indexOf(card.key) < 0);
       return cards.map((card, i) => (
-        <div className='card-view' role="button" onClick={this.handleSelectCard(card)} key={i}>
-          <div className="side">
-            <img height={128} width={128} src={assets.getTile(card.key.toLowerCase())} alt="" />
-            <div className="power-wrap">
-              <div className="power">
-                <div className="top">{card.power[0] > 9 ? 'A' : card.power[0]}</div>
-                <div className="right">{card.power[1] > 9 ? 'A' : card.power[1]}</div>
-                <div className="bottom">{card.power[2] > 9 ? 'A' : card.power[2]}</div>
-                <div className="left">{card.power[3] > 9 ? 'A' : card.power[3]}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Card handleClick={this.handleSelectCard(card)} card={card} key={i} />
       ));
     }
   }
@@ -82,7 +69,7 @@ class Deck extends Component {
     return (
       <div className='card-view' role="button" onClick={this.handleSelectCardBacks}>
         <div className="side">
-          <img height={128} width={128} src={img} alt="" />
+          <img height={122} width={122} src={img} alt="" />
         </div>
       </div>
     );
@@ -93,19 +80,7 @@ class Deck extends Component {
     const className = `card ${this.state.selected === 'Card' && this.state.selectedId === i ? 'selected' : ''}`;
     return (
       <div className={className} key={i}>
-        <div className='card-view' role="button" onClick={this.handleSelectCards(i)}>
-          <div className="side">
-            <img height={128} width={128} src={assets.getTile(card.key.toLowerCase())} alt="" />
-            <div className="power-wrap">
-              <div className="power">
-                <div className="top">{card.power[0] > 9 ? 'A' : card.power[0]}</div>
-                <div className="right">{card.power[1] > 9 ? 'A' : card.power[1]}</div>
-                <div className="bottom">{card.power[2] > 9 ? 'A' : card.power[2]}</div>
-                <div className="left">{card.power[3] > 9 ? 'A' : card.power[3]}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Card handleClick={this.handleSelectCards(i)} className={className} card={card} />
       </div>
     );
   }

@@ -111,6 +111,7 @@ app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
                rules: req.body.rules,
                solo: req.body.solo }, (err, game) => {
     if (err) return res.json(err);
+    game.log.push({ message: 'Game started. Good luck!' });
     game.aiMove();
     game.save((err) => {
       if (err) return res.json(err);
@@ -128,14 +129,13 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
         error: 'Invalid move'
       });
     }
-    const success = game.setCard(req.body);
-    game.aiMove();
+    const success = game.setCard(req.body) !== false;
     game.save((err) => {
       if (err) return res.json(err);
-      const gameAttributes = game.toAttributes();
+      let gameAttributes = game.toAttributes();
       const response = {
         game: gameAttributes,
-        success: success,
+        success: !!success,
         error: err
       };
       if (success) {
@@ -144,6 +144,15 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
         });
       }
       res.json(response);
+      setTimeout(() => {
+        game.aiMove();
+        game.save((err) => {
+          gameAttributes = game.toAttributes();
+          io.emit(`games:play:${game.id}`, {
+            game: gameAttributes
+          });
+        });
+      }, 1200)
     });
   });
 });
@@ -155,6 +164,7 @@ app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
       game.hands.push(user.hand.slice())
       if (game.userIds.length === 2) {
         game.state = 'active';
+        game.log.push({ message: 'Game started. Good luck!' });
       }
       game.save((err) => {
         if (err) return res.json(err);

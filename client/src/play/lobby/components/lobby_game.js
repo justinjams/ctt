@@ -15,7 +15,7 @@ class LobbyGame extends Component {
   render () {
     return (
       <div className='lobby-game-view'>
-        <img src={'x' || assets.getProfileIcon(1)} alt='' />
+        <img src={assets.getProfileIcon(1)} alt='' />
         <span>
           {this.props.game.userIds.length}/2 players
         </span>

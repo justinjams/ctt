@@ -74,7 +74,7 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-UserSchema.post('save', (error, doc, next) => {
+UserSchema.post('save', function (error, doc, next) {
   if (error.name === 'MongoError' && error.code === 11000) {
     next(new Error('Email or username already in use.')); 
   }

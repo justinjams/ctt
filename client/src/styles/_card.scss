@@ -23,13 +23,15 @@
 
 .card-view {
   background-color: rgba(10, 1, 13, 0.6);
-  border: 8px solid $white;
-  border-radius: 6px;
-  height: 128px;
+  border: 2px solid $gold;
+  border-radius: 3px;
+  height: 144px;
   position: relative;
+  text-align: center;
   transform-style: preserve-3d;
   transition: all 120ms ease-in-out;
-  width: 128px;
+  user-select: none;
+  width: 144px;
 
   &.top {
     animation: 1s ease-out 0s flip_top;
@@ -49,34 +51,78 @@
 
   &.player-0 {
     background: $blue;
-    border: 8px solid $blue;
+    border-color: $blue;
+
+    .side-gradient {
+      background-image: radial-gradient(transparent 65%, $blue 130%),
+                        linear-gradient(to top right, transparent 62%, $blue 120%);
+    }
+    .nameplate {
+      background: $blue;
+    }
   }
 
   &.player-1 {
     background: $red;
-    border: 8px solid $red;
+    border-color: $red;
+
+    .side-gradient {
+      background-image: radial-gradient(transparent 65%, $red 130%),
+                        linear-gradient(to top right, transparent 62%, $red 120%);
+    }
+
+    .nameplate {
+      background: $red;
+    }
   }
 
-  .side.back {
+  .side-back {
+    backface-visibility: hidden;
+    height: 142px;
+    overflow: hidden;
+    position: absolute;
+    top: 4px;
     transform: rotateY(180deg);
+    width: 142px;
   }
 
   .side {
     backface-visibility: hidden;
+    border: 10px solid $dark-blue;
     border-radius: 4px;
+    height: 124px;
+    overflow: hidden;
+    position: absolute;
+    width: 124px;
+
+    img {
+      border: 1px solid $white;
+    }
+  }
+
+  .side-gradient {
+    backface-visibility: hidden;
+    background-image: radial-gradient(transparent 70%, black 110%), linear-gradient(to top right, transparent 65%, black 120%);
     height: 100%;
     position: absolute;
-    overflow: hidden;
     width: 100%;
   }
 
   .power {
     backface-visibility: hidden;
-    color: rgba(255,255,0,1);
+    color: darken($gold, 20%);
     font-size: 20px;
     position: absolute;
     right: 24px;
-    text-shadow: -2px -2px 0px rgba(255,255,255,0.3), 2px 2px 0px rgba(0,0,0,0.8);
+    text-shadow: -1px -1px 1px lighten($gold, 50%),
+                -1px -1px 0 rgba(255,255,255,0.8),
+                1px 1px 2px black,
+                1px 1px 2px black,
+                0px 0px 5px black,
+                0px 0px 5px black,
+                0px 0px 5px black,
+                0px 0px 5px black;
+    -webkit-text-stroke: 1px lighten($gold, 5%);
     top: 18px; 
     transform-style: preserve-3d;
   }
@@ -102,6 +148,17 @@
 
   .left {
     left: -11px;
+  }
+
+  .nameplate {
+    backface-visibility: hidden;
+    background: $gold;
+    bottom: 10px;
+    color: lighten($gold, 50%);
+    position: absolute;
+    text-shadow: 0px 0px 2px black,0px 0px 2px black,0px 0px 2px black;
+    -webkit-text-stroke: 1px darken($gold, 20%);
+    width: 100%;
   }
 }
 

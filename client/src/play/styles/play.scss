@@ -2,6 +2,7 @@
 
 .game-view {
   margin: 15px auto;
+  user-select: none;
 }
 
 .game-over {
@@ -30,7 +31,7 @@
   vertical-align: top;
   width: 144px;
 
-  &.closed .card-view .side.back {
+  &.closed .card-view .side-back {
     transform: rotateY(0deg);
   }
 
@@ -40,61 +41,146 @@
 }
 
 .grid-view {
+  background-color: $dark-blue;
+  background-image: url($rock-texture);
+  border: 1px solid $dark-gold;
+  border-radius: 2px;
+  border-top: 2px solid $gold;
   display: inline-block;
-  width: 508px;
+  margin: 40px 42px;
+  padding: 10px 10px;
+  position: relative;
   vertical-align: top;
+  width: 466px;
 
   > :first-child {
-    height: 100px;
+    height: 92px;
   }
 
   .score {
     position: absolute;
+    filter: drop-shadow(0 0 5px black);
+    font-size: 78px;
+    font-weight: bold;
+    line-height: 72px;
+    -webkit-text-stroke: 1px $white;
   }
+
+  .scoreboard {
+    background: $dark-blue;
+    border-radius: 50px;
+    box-shadow: inset 0 0 10px black;
+    margin: 0 auto 10px;
+    width: 448px;
+
+    .player-0, .player-1 {
+      position: relative;
+      float: left;
+
+      .username {
+        border-top: 1px solid $dark-gold;
+        display: inline-block;
+        overflow: hidden;
+        width: 134px;
+      }
+
+      img {
+        border: 3px solid $gold;
+        border-radius: 80px;
+        display: inline-block;
+        filter: drop-shadow(0 0 2px $dark-gold);
+        padding: 2px;
+      }
+    }
+
+    > .player-0 {
+      text-align: right;
+    }
+
+    > .player-1 {
+      text-align: left;
+    }
+
+    .username {
+      color: lighten($gold, 50%);
+      text-shadow: 0px 0px 2px black,0px 0px 2px black,0px 0px 2px black;
+      -webkit-text-stroke: 1px darken($gold, 20%);
+    }
+  }
+
+  .vs {
+    color: lighten($gold, 50%);
+    font-size: 13px;
+    position: absolute;
+    text-shadow: 0px 0px 2px black,0px 0px 2px black,0px 0px 2px black;
+    -webkit-text-stroke: 1px darken($gold, 20%);
+    top: 84px;
+    width: 448px;
+  }
+
 
   .player-0 {
     color: $blue;
 
-    &.score {
+    .score {
       left: 24px;
+      padding-right: 5px;
+      top: 9px;
+    }
+
+    .username {
+      right: 0;
     }
   }
 
   .player-1 {
     color: $red;
 
-    &.score {
+    .score {
+      padding-left: 5px;
       right: 24px;
+      top: 9px;
+    }
+
+    .username {
+      left: 0;
     }
   }
 
   .forfeit {
-    margin: 55px auto;
+    margin: 12px auto;
     width: 150px;
   }
 
-  .headline {
-    bottom: 12px;
-    font-size: 54px;
-    font-weight: bold;
-    left: 0;
+  .log {
     position: absolute;
-    text-align: center;
-    width: 100%;
+    width: 252px;
+    color: $gold;
+    text-align: left;
+    margin: 0 98px;
+    height: 70px;
+    overflow: hidden;
+
+    .player {
+      font-weight: bold;
+      margin: 0 5px 0 0;
+    }
+
+    .item {
+      animation: 1s linear 0s slidein;
+      color: $white;
+      font-size: 12px;
+      overflow: hidden;
+    }
   }
 }
 
-.grid-row {
-  display: block;
-  margin-bottom: -5px;
-  position: relative;
-
-  .score {
-    bottom: 8px;
-    display: inline-block;
-    font-size: 50px;
-    font-weight: bold;
-    width: 102px;
+@keyframes slidein {
+  0% {
+    max-height: 0;
+  }
+  100% {
+    max-height: 300px;
   }
 }
 
