@@ -1,4 +1,5 @@
 @import '_variables.scss';
+@import '_fireworks.scss';
 
 a {
   text-decoration: none;
@@ -7,7 +8,9 @@ a {
 .button {
   background-image: url($rock-texture);
   background-color: $dark-blue;
+  border: 1px solid $dark-gold;
   border-radius: 1px;
+  border-top: 2px solid $gold;
   color: $gold;
   font-family: serif;
   font-size: 20px;
@@ -15,9 +18,6 @@ a {
   padding: 5px 10px;
   user-select: none;
   
-  border: 1px solid $dark-gold;
-  border-top: 2px solid $gold;
-
   &.disabled {
     color: gray;
     border-color: gray;
@@ -154,26 +154,38 @@ a {
 .rules-view {
   background-color: $dark-blue;
   background-image: url($rock-texture);
-  border: 20px solid #a77314;;
-  border-radius: 12px;
-  height: 260px;
-  margin: 0 72px;
+  border: 1px solid $dark-gold;
+  border-radius: 1px;
+  border-top: 2px solid $gold;
+  margin: 0 88px;
   position: absolute;
   top: 10px;
   width: 320px;
 
   .rule {
-    margin: 18px 0 0;
+    margin: 0 0 10px;
   }
 
   .rule-name {
     color: $white;
-    font-size: 26px;
+    font-size: 18px;
   }
 
   .close {
     margin: 15px auto;
     width: 120px;
+  }
+
+  h2 {
+    padding: 10px 0 0;
+  }
+
+  .rules, .opponent {
+    display: inline-block;
+    padding: 0 0 0 25px;
+    text-align: left;
+    vertical-align: top;
+    width: 135px;
   }
 }
 

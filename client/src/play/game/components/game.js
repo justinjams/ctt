@@ -26,8 +26,18 @@ class Game extends Component {
 
   render () {
     if (this.props.game.state !== 'created') {
-     return (
+      let fireworks;
+      if (this.props.game.state === 'finished') {
+        fireworks = (
+          <div className={`pyro player-${this.props.game.winner}`}>
+            <div className="before"></div>
+            <div className="after"></div>
+          </div>
+        );
+      }
+      return (
         <div className={this.renderClassName()}>
+          {fireworks}
           <div>
             <Hand game={this.props.game}
                   hand={0}

@@ -75,11 +75,6 @@ const GameSchema = new mongoose.Schema({
     type: Object,
     required: true
   },
-  scores: {
-    default: [5, 5],
-    type: [Number],
-    required: true
-  },
   startPlayer: {
     type: Number,
     required: true
@@ -89,7 +84,10 @@ const GameSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  userIds: [String]
+  userIds: [String],
+  winner: {
+    type: Number
+  }
 }, { timestamps: true });
 
 class GameClass {
@@ -119,12 +117,27 @@ class GameClass {
       scores: this.scores,
       turn: this.turn,
       updatedAt: this.updatedAt,
-      userIds: this.userIds
+      userIds: this.userIds,
+      winner: this.winner
     };
   }
 
   get turn() {
     return (this.totalTurn + this.startPlayer) % 2;
+  }
+
+  get scores() {
+    let l = 0;
+    let r = 0;
+    this.grid.forEach((b) => {
+      if(b) {
+        l += b.hand === 0;
+        r += b.hand === 1;
+      }
+    });
+    let result = [this.hands[0].length + l];
+    if(this.hands[1]) result.push(this.hands[1].length + r);
+    return result;
   }
 
   toJson () {
@@ -233,14 +246,12 @@ class GameClass {
 
       if (!options.combo) {
         this.totalTurn ++;
+      }
         
-        if (this.isGameOver()) {
-          let winner;
-          if (this.scores[0] > this.scores[1]) winner = 'player1';
-          else if (this.scores[0] < this.scores[1]) winner = 'player2';
-          else winner = null;
-          //this.view.setGameOver(winner);
-        }
+      if (this.isGameOver()) {
+        if (this.scores[0] > this.scores[1]) this.winner = 0;
+        else if (this.scores[0] < this.scores[1]) this.winner = 1;
+        //this.view.setGameOver(winner);
       }
 
       if (count > 0) {
@@ -250,6 +261,7 @@ class GameClass {
 
       if (this.hands[0].length + this.hands[1].length === 1) {
         this.state = 'finished';
+        this.log.push({ message: `Game over. :P${this.winner}: wins!`});
       }
       return count;
     } else {
@@ -276,7 +288,7 @@ GameSchema.statics.start = (gameData, callback) => {
       userIds: userIds
     };
 
-    if (gameData.solo) {
+    if (gameData.ai === 1) {
       params.state = 'active';
       params.ai = 1;
       params.names.push('Fake Mark');

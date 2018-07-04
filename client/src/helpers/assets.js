@@ -1,11 +1,11 @@
 const assets = {};
 
 assets.getTile = (championName) => {
-  return `https://s3.amazonaws.com/champions-triple-triad/champion/tiles/${championName}_0.jpg`;
+  return `http://assets.justinjams.com/champion/tiles/${championName}_0.jpg`;
 };
 
 assets.getProfileIcon = (icon) => {
-  return `https://s3.amazonaws.com/champions-triple-triad/profileicon/${icon}.png`;
+  return `http://assets.justinjams.com/profileicon/${icon}.png`;
 };
 
 export default assets;

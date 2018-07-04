@@ -3,7 +3,7 @@ import assets from '../helpers/assets'
 
 class Card extends Component {
   handleClick() {
-    this.props.handleClick(this.props.pos, this.props.hand)
+    this.props.handleClick && this.props.handleClick(this.props.pos, this.props.hand)
   }
 
   getFlipped() {

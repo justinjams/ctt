@@ -33,6 +33,7 @@ app.use(session({
 
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+io.set('origins', 'http://localhost:* http://ctt.justinjams.com.:*');
 
 // APP DEPENDENCIES
 const Game = require('./server/models/game');
@@ -80,7 +81,7 @@ app.get('/api/v1/app/start', loadAppState, (req, res) => {
   const randomCard = DATA_KEYS[parseInt(Math.random() * DATA_KEYS.length)].toLowerCase();
   const bootstrap = {
     appState: {},
-    bgImage: `https://s3.amazonaws.com/champions-triple-triad/champion/splash/${randomCard}_0.jpg`
+    bgImage: `http://assets.justinjams.com/champion/splash/${randomCard}_0.jpg`
   };
 
   bootstrap.appState.user = res.locals.user ? res.locals.user.toAttributes() : null;
@@ -109,7 +110,7 @@ app.get('/api/v1/games', isAuthenticated, (req, res) => {
 app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
   Game.start({ userId: req.session.userId,
                rules: req.body.rules,
-               solo: req.body.solo }, (err, game) => {
+               ai: req.body.ai }, (err, game) => {
     if (err) return res.json(err);
     game.log.push({ message: 'Game started. Good luck!' });
     game.aiMove();
@@ -176,12 +177,14 @@ app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
 
 app.post('/api/v1/games/:gameId/forfeit', isAuthenticated, (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
-    if (0 > game.userIds.indexOf(req.session.userId)) {
+    const index = game.userIds.indexOf(req.session.userId);
+    if (0 > index) {
       return res.json({
         error: 'Invalid request'
       });
     }
     game.state = 'finished';
+    game.log.push({ message: `Game over. :P${index}: forfeits!`});
 
     game.save((err) => {
       if (err) return res.json(err);

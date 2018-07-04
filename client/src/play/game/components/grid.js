@@ -26,9 +26,8 @@ class Grid extends Component {
   }
 
   get messages () {
-    return this.props.game.log.slice().reverse().slice(0, 5).map((m, i) => {
+    return this.props.game.log.slice().reverse().slice(0, 6).map((m, i) => {
       const message = m.message.split(':').map((w) => /^P\d$/.exec(w) ? <span className={`player-${w[1]} player`}>{this.props.game.names[w[1]]}</span> : w );
-      console.log(message);
       return <div className='item' key={m._id}>{message}</div>;
     });
   }

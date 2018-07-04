@@ -39,7 +39,7 @@ class Lobby extends Component {
         <div className="button create-game-btn" role="button" onClick={this.handleCreateGame}>
           CREATE GAME
         </div>
-        {this.state.createGameOpen ? <div className='popover-bg'></div> : ''}
+        {this.state.createGameOpen ? <div className='popover-bg' onClick={()=>this.setState({ createGameOpen: false })}></div> : ''}
         {this.renderCreateGame()}
       </div>
     );

@@ -29,7 +29,7 @@ class Deck extends Component {
         <h2 className='deck-editor-title'>Deck Editor</h2>
         <div className='selectables'>
           <div className={`card-back ${this.state.selected === 'Emblem' ? 'selected' : ''}`}>
-            {this.renderCardBack(assets.getProfileIcon(this.props.user.profileIcon))}
+            {this.renderCardBack(this.props.user.profileIcon, 0, this.handleSelectCardBacks)}
           </div>
           {[0,1,2,3,4].map(this.renderCard)}
           <ul>
@@ -41,7 +41,7 @@ class Deck extends Component {
             <li>Card 5</li>
           </ul>
         </div>
-        <h2 className='pool-title'>Swap {this.state.selected}</h2> 
+        <h2 className='pool-title'>Select {this.state.selected}</h2> 
         <div className='pool'>
           {this.renderPool()}
         </div>
@@ -53,8 +53,7 @@ class Deck extends Component {
     if (this.state.selected === 'Emblem') {
       const profileIcons = PROFILE_ICONS.filter((icon) => icon !== this.props.user.profileIcon);
       return profileIcons.map((icon, i) => {
-        const img = assets.getProfileIcon(icon);
-        return this.renderCardBack(img);
+        return this.renderCardBack(icon, i, this.handleSelectCardBack(icon));
       });
     } else if (this.state.selected === 'Card') {
       const handKeys = this.props.user.hand.map((card) => card.key);
@@ -65,9 +64,11 @@ class Deck extends Component {
     }
   }
 
-  renderCardBack (img) {
+  renderCardBack (icon, i, callback) {
+    const img = assets.getProfileIcon(icon);
+
     return (
-      <div className='card-view' role="button" onClick={this.handleSelectCardBacks}>
+      <div className='card-view' role="button" onClick={callback} key={i}>
         <div className="side">
           <img height={122} width={122} src={img} alt="" />
         </div>
