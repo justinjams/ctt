@@ -33,7 +33,7 @@ app.use(session({
 
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-io.set('origins', 'http://localhost:* http://ctt.justinjams.com.:*');
+io.set('origins', 'http://localhost:* http://ctt.justinjams.com:*');
 
 // APP DEPENDENCIES
 const Game = require('./server/models/game');

@@ -13,10 +13,10 @@ const STATES = [
 ];
 const DEFAULT_RULES = {
 //  ELEMENTAL: false,
-  OPEN: false,
-  PLUS: false,
+  OPEN: true,
+  PLUS: true,
 //  RANDOM: false,
-  SAME: false,
+  SAME: true,
 //  SAME_WALL: false,
 //  SUDDEN_DEATH: false
 }

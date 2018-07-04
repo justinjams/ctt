@@ -7,9 +7,9 @@ class CreateGame extends Component {
     super(props);
 
     this.state = { rules: {
-      OPEN: null,
-      SAME: null,
-      PLUS: null
+      OPEN: true,
+      SAME: true,
+      PLUS: true
     }, ai: 1 };
 
     this.handleCreateGame = this.handleCreateGame.bind(this);
