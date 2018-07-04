@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 import io from 'socket.io-client';
 
 import './styles/app.css';
@@ -32,6 +32,10 @@ class App extends Component {
     this.bindToGame = this.bindToGame.bind(this);
     this.handleGame = this.handleGame.bind(this);
     this.handleUserMenuMouseDown = this.handleUserMenuMouseDown.bind(this);
+
+    this.props.history.listen((location, action) => {
+      this.setState({});
+    });
   }
 
   componentDidMount () {
@@ -47,48 +51,46 @@ class App extends Component {
   render () {
     if (this.state.user) {
       return (
-        <Router>
-          <div className='app'>
-            <header className='app-header'>
-              <h1 className='app-title'>
-                <Link to='/'>
-                  <img src={logo} alt='' />
-                </Link>
-              </h1>
-              <ul className='app-nav'>
-                <li>
-                  <Link className='button' to='/'>PLAY</Link>
-                </li>
-                <li>
-                  <Link className={`button ${this.state.game ? 'disabled' : ''}`} to='/deck'>DECK</Link>
-                </li>
-                <li>
-                  <div className='user-menu-btn-display button'>
-                    {this.state.user.username}
-                    <img className='profile-icon'
-                         role='button'
-                         src={assets.getProfileIcon(this.state.user.profileIcon)} alt='' />
-                  </div>
-                  <input className='user-menu-btn' role='button' onMouseDown={this.handleUserMenuMouseDown} />
-                  <div className='menu'>
-                    <ul>
-                      <li>
-                        <div role='button' onMouseDown={this.handleLogout}>Logout</div>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </header>
-            <div className='app-body' style={{background: `url('${this.state.bgImage}') center no-repeat`}}>
-              <Route exact path='/' 
-                     render={(props) => <Play {...props} game={this.state.game} user={this.state.user} onGameReady={this.handleGame} />} />
-              <Route path='/deck' 
-                     render={(props) => <Deck {...props} user={this.state.user} />} />
-            </div>
-            <Footer />
+        <div className='app'>
+          <header className='app-header'>
+            <h1 className='app-title'>
+              <Link to='/'>
+                <img src={logo} alt='' />
+              </Link>
+            </h1>
+            <ul className='app-nav'>
+              <li>
+                <Link className={`button ${window.location.pathname === '/' ? 'disabled' : '' }`} to='/'>PLAY</Link>
+              </li>
+              <li>
+                <Link className={`button ${this.state.game ? 'disabled' : ''}`} to='/deck'>DECK</Link>
+              </li>
+              <li>
+                <div className='user-menu-btn-display button'>
+                  {this.state.user.username}
+                  <img className='profile-icon'
+                       role='button'
+                       src={assets.getProfileIcon(this.state.user.profileIcon)} alt='' />
+                </div>
+                <input className='user-menu-btn' role='button' onMouseDown={this.handleUserMenuMouseDown} />
+                <div className='menu'>
+                  <ul>
+                    <li>
+                      <div role='button' onMouseDown={this.handleLogout}>Logout</div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </header>
+          <div className='app-body' style={{background: `url('${this.state.bgImage}') center no-repeat`}}>
+            <Route exact path='/' 
+                   render={(props) => <Play {...props} game={this.state.game} user={this.state.user} onGameReady={this.handleGame} />} />
+            <Route path='/deck' 
+                   render={(props) => <Deck {...props} user={this.state.user} />} />
           </div>
-        </Router>
+          <Footer />
+        </div>
       );
     } else {
       return <Welcome bgImage={this.state.bgImage} onUser={this.handleUser} />;
@@ -152,4 +154,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
