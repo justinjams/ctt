@@ -25,7 +25,7 @@ class GridCard extends Card {
     }
   }
 
-  getCard() {
+  get card() {
     if (this.block) {
       return this.block.card;
     }

@@ -183,8 +183,11 @@ app.post('/api/v1/games/:gameId/forfeit', isAuthenticated, (req, res) => {
         error: 'Invalid request'
       });
     }
+
+    if(game.state != 'finished') {
+      game.log.push({ message: `Game over. :P${index}: forfeits!`});
+    }
     game.state = 'finished';
-    game.log.push({ message: `Game over. :P${index}: forfeits!`});
 
     game.save((err) => {
       if (err) return res.json(err);

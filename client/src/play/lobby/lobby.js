@@ -28,9 +28,9 @@ class Lobby extends Component {
   render () {
     return (
       <div className='lobby-view'>
-        <h2>
+        <div className='header'>
           Find Game
-        </h2>
+        </div>
         <div className='lobby-games'>
           {this.renderLobbies()}
         </div>
@@ -56,7 +56,7 @@ class Lobby extends Component {
       return this.state.games.map((game, i) =>
         <LobbyGame game={game} key={i} onGameReady={this.props.onGameReady} />
       );
-    } else return <div className='no-games'>No games available.</div>;
+    } else return <div className='no-games'>No games available. Create one!</div>;
   }
 
   handleCreateGame () {

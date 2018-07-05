@@ -25,9 +25,9 @@ class CreateGame extends Component {
   render () {
     return (
       <div className='rules-view'>
-        <h2>
-          Create Game
-        </h2>
+        <div className='header'>
+          Options
+        </div>
         <div className='opponent'>
           <span className='rule-name'>Opponent: </span>
           <select name='ai'

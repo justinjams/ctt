@@ -3,11 +3,13 @@
 .lobby-view {
   background-color: $dark-blue;
   background-image: url($rock-texture);
-  border: 3px solid $dark-blue;
-  border-radius: 2px;
-  color: $white;
+  border: 1px solid $dark-gold;
+  border-radius: 1px;
+  border-top: 2px solid $gold;
+  color: $blue;
+  filter: drop-shadow(0 0 3px black);
   margin: 30px auto 0;
-  padding: 7px 0;
+  padding: 8px 8px 14px;
   position: relative;
   width: 506px;
   user-select: none;
@@ -21,6 +23,7 @@
   .lobby-games {
     background: linear-gradient($dark-blue, black);
     border: 1px solid $blue;
+    border-top: 1px solid darken($blue, 13%);
     display: inline-block;
     height: 350px;
     overflow-y: scroll;
@@ -32,29 +35,43 @@
     margin: 10px 0 0;
   }
 
-  h2 {
-    color: $gold;
-    margin: -1px 0 5px;
+  .header {
+    margin: 0 0 5px;
   }
 }
 
 .lobby-game-view {
   background-color: $dark-blue;
   background-image: url($rock-texture);
-  border-radius: 2px;
+  border-radius: 40px 0 0 40px;
   border: 1px solid $white;
   color: $white;
   margin: 8px 0px;
-  padding: 6px;
   position: relative;
   text-align: left;
-  user-select: none;
+  user-select: none; 
+
+  > div {
+    display: inline-block;
+  }
+
+  img {
+    border: 2px solid $gold;
+    border-radius: 40px;
+    display: inline-block;
+    filter: drop-shadow(0 0 2px $dark-gold);
+    margin: 0 0 -4px 0;
+  }
 
   .join-btn {
     margin: 0 10px;
     padding: 5px 25px;
     position: absolute;
-    right: -2px;
+    right: -7px;
+  }
+
+  .rules {
+    margin: 0 0 0 10px;
   }
 
   .rule {

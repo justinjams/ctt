@@ -3,15 +3,18 @@
 .deck-view {
   background-color: $dark-blue;
   background-image: url($rock-texture);
-  border: 3px solid $dark-blue;
+  border: 1px solid $dark-gold;
+  border-radius: 1px;
+  border-top: 2px solid $gold;
   border-radius: 2px;
   color: $white;
+  filter: drop-shadow(0 0 3px black);
   margin: 30px auto 0;
-  padding: 8px;
+  padding: 8px 8px 14px;
   position: relative;
   text-align: left;
   user-select: none;
-  width: 900px;
+  width: 908px;
 
   > div {
     > div {
@@ -29,11 +32,18 @@
 
   .card-view {
     margin: 1px;
+    background: $dark-gold;
   }
 
-  .selected .card-view {
-    border-color: $gold;
+  .selectables .selected .card-view {
     animation: .6s selectedEffect infinite;
+    border-color: $gold;
+    opacity: 1;
+  }
+  
+  .selectables .card-view {
+    opacity: .6;
+    transition: opacity .1s linear;
   }
 
   @keyframes selectedEffect {
@@ -44,8 +54,9 @@
 
   .selectables {
     background: $dark-gold;
+    box-shadow: inset 0 0 2px black;
     font-weight: bold;
-    padding: 4px 0 0;
+    padding: 4px 4px 0;
 
     ul {
       margin: 0;
@@ -58,10 +69,15 @@
       text-align: center;
       width: 150px;
     }
+
+    > div {
+      background: black;
+    }
   }
 
   .pool {
     background: linear-gradient(lighten($dark-blue, 8%), $dark-blue);
+    box-shadow: inset 0 0 10px black;
     max-height: 414px;
     overflow-y: scroll;
     padding: 8px 0 0;

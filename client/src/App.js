@@ -63,22 +63,21 @@ class App extends Component {
                 <Link className={`button ${window.location.pathname === '/' ? 'disabled' : '' }`} to='/'>PLAY</Link>
               </li>
               <li>
-                <Link className={`button ${this.state.game ? 'disabled' : ''}`} to='/deck'>DECK</Link>
+                <Link className={`button ${this.state.game || window.location.pathname === '/deck' ? 'disabled' : ''}`} to='/deck'>DECK</Link>
               </li>
               <li>
-                <div className='user-menu-btn-display button'>
+                <div className='user-menu-btn-display button' role='button' onMouseDown={this.handleUserMenuMouseDown}>
                   {this.state.user.username}
                   <img className='profile-icon'
                        role='button'
                        src={assets.getProfileIcon(this.state.user.profileIcon)} alt='' />
-                </div>
-                <input className='user-menu-btn' role='button' onMouseDown={this.handleUserMenuMouseDown} />
-                <div className='menu'>
-                  <ul>
-                    <li>
-                      <div role='button' onMouseDown={this.handleLogout}>Logout</div>
-                    </li>
-                  </ul>
+                  <div className='menu'>
+                    <ul>
+                      <li>
+                        <div role='button' onMouseDown={this.handleLogout}>Logout</div>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </li>
             </ul>

@@ -44,7 +44,7 @@ class Grid extends Component {
             <span className="username">{this.props.game.names[0]}&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </div>
           <div className="player-1">
-            <span className="username">&nbsp;&nbsp;&nbsp;&nbsp;{this.props.game.names[1]}</span>
+            <span className="username">{this.props.game.names[1]}</span>
             <img src={assets.getProfileIcon(this.props.game.profileIcons[1])} alt='' height={80} width={80} />
             <span className="score">
               {this.props.game.scores[1]}

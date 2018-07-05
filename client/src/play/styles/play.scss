@@ -171,9 +171,10 @@
     }
 
     .item {
-      animation: 1s linear 0s slidein;
+      animation: 5s linear 0s slidein;
       color: $white;
       font-size: 12px;
+      max-height: 0;
       overflow: hidden;
     }
   }
@@ -183,8 +184,11 @@
   0% {
     max-height: 0;
   }
-  100% {
+  20% {
     max-height: 300px;
+  }
+  100% {
+    max-height: 0;
   }
 }
 

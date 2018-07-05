@@ -15,17 +15,19 @@ class LobbyGame extends Component {
   render () {
     return (
       <div className='lobby-game-view'>
-        <img src={assets.getProfileIcon(1)} alt='' />
-        <span>
-          {this.props.game.userIds.length}/2 players
-        </span>
-        {this.renderButton()}
-        <div>
-          {Object.keys(this.props.game.rules).map((rule, i) => {
-            let className = 'rule ';
-            className += this.props.game.rules[rule] ? 'active' : '';
-            return <span className={className} key={i}>{rule}</span>
-          })}
+        <img height={35} width={35} src={assets.getProfileIcon(1)} alt='' />
+        <div className='rules'>
+          <span>
+            {this.props.game.userIds.length}/2 players
+          </span>
+          {this.renderButton()}
+          <div>
+            {Object.keys(this.props.game.rules).map((rule, i) => {
+              let className = 'rule ';
+              className += this.props.game.rules[rule] ? 'active' : '';
+              return <span className={className} key={i}>{rule}</span>
+            })}
+          </div>
         </div>
       </div>
     );

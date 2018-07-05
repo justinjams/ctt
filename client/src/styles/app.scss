@@ -11,13 +11,21 @@ a {
   border: 1px solid $dark-gold;
   border-radius: 1px;
   border-top: 2px solid $gold;
+  box-shadow: inset 0 0 10px black;
   color: $gold;
+  filter: drop-shadow(0 0 0 $gold);
   font-family: serif;
-  font-size: 20px;
+  font-size: 16px;
   margin: 0 auto;
-  padding: 5px 10px;
+  padding: 8px 24px;
+
+  transition: filter .1s linear,
+    border-color .1s linear,
+    text-shadow .1s linear,
+    background .1s linear; 
   user-select: none;
-  
+  width: fit-content;
+
   &.disabled {
     color: gray;
     border-color: gray;
@@ -26,7 +34,11 @@ a {
 
   &:hover {
     background: lighten($dark-blue, 10%);
+    border-color: $gold;
+    box-shadow: inset 0 0 10px $blue;
     color: lighten($gold, 10%);
+    filter: drop-shadow(0px 0px 6px $dark-gold);
+    text-shadow: 0 0 5px $gold;
   }
 }
 
@@ -41,14 +53,13 @@ a {
     margin: 0 auto;
     width: 960px;
 
-    img {
-      filter: drop-shadow(0 0 2px $dark-gold);
-      height: 55px;
-    }
-
     .menu {
+      background: black;
       display: none;
+      left: 0;
       position: absolute;
+      top: 36px;
+      z-index: 1;
 
       ul {
         padding: 0;
@@ -60,21 +71,8 @@ a {
       }
     }
 
-    .user-menu-btn {
-      border: 0;
-      background: rgba(0,0,0,0);
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1;
-    }
-
-    .user-menu-btn:focus + .menu {
-      background: $dark-blue;
+    .user-menu-btn-display:hover .menu {
       display: block;
-      z-index: 1;
     }
 
     .user-menu-btn-display {
@@ -82,10 +80,8 @@ a {
     }
 
     .profile-icon {
-      height: 27px;
-      margin: -5px 0 0 9px;
-      right: 11px;
-      top: 6px;
+      height: 32px;
+      margin: -8px 0 0 16px;
       float: right;
     }
 
@@ -98,6 +94,11 @@ a {
     display: inline-block;
     float: left;
     margin: 0 30px;
+    
+    img {
+      filter: drop-shadow(0 0 2px $dark-gold);
+      height: 55px;
+    }
   }
 
   .app-nav {
@@ -109,46 +110,61 @@ a {
       display: inline-block;
       margin: 5px 10px;
       position: relative;
+      z-index: 1;
     }
   }
 
   .app-body {
     background-size: cover !important;
-    border-top: 2px solid $light-blue;
+    border-top: 2px solid $dark-gold;
     height: 100%;
     position: absolute;
     width: 100%;
   }
 
   .app-body:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
+    background-color: transparentize($dark-blue, 0.4);
     bottom: 0;
+    content: '';
     left: 0;
-    background-image: linear-gradient(to bottom right, $blue, rgba(50,50,50,0.8), $red);
-    opacity: .9; 
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 
   footer {
-    bottom: 6px;
-    font-weight: bold;
+    background: $dark-blue;
+    border: 1px solid $blue;
+    border-bottom: none;
+    border-radius: 15px 15px 0 0;
+    bottom: 0;
+    font-weight: normal;
+    left: 50%;
+    padding: 8px 10px 5px;
+    margin-left: -119px;
+    max-width: 216px;
     position: fixed;
     width: 100%;
 
     a {
-      color: $blue;
+      color: #68b3d2;
     }
 
     a:visited {
-      color: $blue;
+      color: #68b3d2;
     }
   }
 }
 
 [role="button"] {
   cursor: pointer;
+}
+
+.header {
+  color: $gold;
+  font-family: serif;
+  font-size: 22px;
+  font-weight: normal;
 }
 
 .rules-view {
@@ -176,16 +192,22 @@ a {
     width: 120px;
   }
 
-  h2 {
-    padding: 10px 0 0;
+  .rules, .opponent {
+    display: block;
+    margin: 0 25px 10px;
+    text-align: left;
+
+    > div {
+      display: inline-block;
+    }
+
+    .rule {
+      margin: 0 5px;
+    }
   }
 
-  .rules, .opponent {
-    display: inline-block;
-    padding: 0 0 0 25px;
-    text-align: left;
-    vertical-align: top;
-    width: 135px;
+  .lobby-view & .header {
+    margin: 4px 0;
   }
 }
 

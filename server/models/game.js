@@ -260,8 +260,10 @@ class GameClass {
       }
 
       if (this.hands[0].length + this.hands[1].length === 1) {
+        if(this.state != 'finished') {
+          this.log.push({ message: `Game over. :P${this.winner}: wins!`});
+        }
         this.state = 'finished';
-        this.log.push({ message: `Game over. :P${this.winner}: wins!`});
       }
       return count;
     } else {
@@ -291,7 +293,7 @@ GameSchema.statics.start = (gameData, callback) => {
     if (gameData.ai === 1) {
       params.state = 'active';
       params.ai = 1;
-      params.names.push('Fake Mark');
+      params.names.push('Random Ralph');
       params.userIds.push(0);
       params.hands.push([0,0,0,0,0].map(()=> DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]));
       params.profileIcons.push(712 + Math.round(Math.random()));

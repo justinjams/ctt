@@ -10,7 +10,7 @@ class Card extends Component {
     return '';
   }
 
-  getCard() {
+  get card() {
     return this.props.card;
   }
   
@@ -19,9 +19,8 @@ class Card extends Component {
   }
 
   championImage () {
-    const card = this.getCard();
-    if (card) {
-      return assets.getTile(card.key.toLowerCase());
+    if (this.card) {
+      return assets.getTile(this.card.key.toLowerCase());
     }
   }
 
@@ -42,7 +41,7 @@ class Card extends Component {
   }
 
   render () {
-    const card = this.getCard();
+    const card = this.card;
     if (!card && this.props.game) {
       const holdingClass = this.props.game.holding ? `holding ${this.props.game.holding.hand}` : '';
       return (<div className={`card-view ${holdingClass}`} onClick={this.handleClick.bind(this)} />);

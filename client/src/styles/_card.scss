@@ -22,8 +22,8 @@
 }
 
 .card-view {
-  background-color: rgba(10, 1, 13, 0.6);
-  border: 2px solid $gold;
+  background: linear-gradient(to bottom, black, $dark-blue);
+  border: 2px solid $dark-gold;
   border-radius: 3px;
   height: 144px;
   position: relative;
@@ -89,6 +89,8 @@
   .side {
     backface-visibility: hidden;
     border: 10px solid $dark-blue;
+    border-image: url($aluminum-texture) 30;
+    border-color: rgba(0,0,0,0);
     border-radius: 4px;
     height: 124px;
     overflow: hidden;

@@ -26,7 +26,7 @@ class Deck extends Component {
   render () {
     return (
       <div className='deck-view'>
-        <h2 className='deck-editor-title'>Deck Editor</h2>
+        <h2 className='header deck-editor-title'>Deck Editor</h2>
         <div className='selectables'>
           <div className={`card-back ${this.state.selected === 'Emblem' ? 'selected' : ''}`}>
             {this.renderCardBack(this.props.user.profileIcon, 0, this.handleSelectCardBacks)}
@@ -41,7 +41,7 @@ class Deck extends Component {
             <li>Card 5</li>
           </ul>
         </div>
-        <h2 className='pool-title'>Select {this.state.selected}</h2> 
+        <h2 className='header pool-title'>Select {this.state.selected}</h2> 
         <div className='pool'>
           {this.renderPool()}
         </div>
