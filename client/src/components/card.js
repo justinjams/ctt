@@ -20,7 +20,7 @@ class Card extends Component {
 
   championImage () {
     if (this.card) {
-      return assets.getTile(this.card.key.toLowerCase());
+      return assets.getTile(this.card.key.toLowerCase(), this.card.skinId);
     }
   }
 

@@ -14,7 +14,7 @@ class Game extends Component {
   }
 
   renderClassName () {
-    const className = ['game-view', `player-${this.props.game.turn}-turn`];
+    const className = ['game-view appears', `player-${this.props.game.turn}-turn`];
     this.props.game.userIds.forEach((userId, i) => {
       if (userId === this.props.user.id) {
         className.push(`player-${i}-playing`);
@@ -36,7 +36,7 @@ class Game extends Component {
         );
       }
       return (
-        <div className={this.renderClassName()}>
+        <div className={this.renderClassName()} style={{opacity: 1}}>
           {fireworks}
           <div>
             <Hand game={this.props.game}

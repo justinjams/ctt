@@ -19,13 +19,13 @@ class Deck extends Component {
     this.handleSelectCards = this.handleSelectCards.bind(this);
 
     this.state = {
-      selected: 'Emblem'
+      selected: 'Emblem',
     }
   }
 
   render () {
     return (
-      <div className='deck-view'>
+      <div className='deck-view appears'>
         <h2 className='header deck-editor-title'>Deck Editor</h2>
         <div className='selectables'>
           <div className={`card-back ${this.state.selected === 'Emblem' ? 'selected' : ''}`}>

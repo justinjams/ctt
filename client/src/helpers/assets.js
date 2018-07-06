@@ -1,6 +1,6 @@
 const assets = {};
 
-assets.getTile = (championName) => {
+assets.getTile = (championName, skinId) => {
   return `http://assets.justinjams.com/champion/tiles/${championName}_0.jpg`;
 };
 

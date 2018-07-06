@@ -11,6 +11,7 @@ class Grid extends Component {
     const messages = [];
 
     this.state = {
+      forfeitWarningOpen: false,
       messages: messages,
       renderedMessage: []
     };
@@ -23,12 +24,13 @@ class Grid extends Component {
 
     this.handleForfeit = this.handleForfeit.bind(this);
     this.handleSelectGrid = this.handleSelectGrid.bind(this);
+    this.handleForfeitCancel = this.handleForfeitCancel.bind(this);
   }
 
   get messages () {
     return this.props.game.log.slice().reverse().slice(0, 6).map((m, i) => {
       const message = m.message.split(':').map((w) => /^P\d$/.exec(w) ? <span className={`player-${w[1]} player`}>{this.props.game.names[w[1]]}</span> : w );
-      return <div className='item' key={m._id}>{message}</div>;
+      return <div className='item' key={m._id || i}>{message}</div>;
     });
   }
 
@@ -44,7 +46,7 @@ class Grid extends Component {
             <span className="username">{this.props.game.names[0]}&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </div>
           <div className="player-1">
-            <span className="username">{this.props.game.names[1]}</span>
+            <span className="username">&nbsp;&nbsp;&nbsp;&nbsp;{this.props.game.names[1]}</span>
             <img src={assets.getProfileIcon(this.props.game.profileIcons[1])} alt='' height={80} width={80} />
             <span className="score">
               {this.props.game.scores[1]}
@@ -73,8 +75,32 @@ class Grid extends Component {
         <div>
           <div className="forfeit button" role="button" onClick={this.handleForfeit}>{this.props.game.state === 'finished' ? 'LEAVE' : 'FORFEIT'}</div>
         </div>
+        {this.state.forfeitWarningOpen ? <div className='popover-bg' onClick={this.handleForfeitCancel}></div> : ''}
+        {this.renderForfeitWarning()}
       </div>
     );
+  }
+
+  handleForfeitCancel () {
+    this.setState({ forfeitWarningOpen: false });
+  }
+
+  renderForfeitWarning () {
+    if (this.state.forfeitWarningOpen) {
+      return (
+          <div className='rules-view forfeit-warning'>
+        <div className='header'>
+          Are you sure?
+        </div>
+        <div className='button'
+             onClick={this.handleForfeit}
+             role="button">FORFEIT</div>
+        <div className='button'
+             onClick={this.handleForfeitCancel}
+             role="button">CONTINUE</div>
+      </div>
+      );
+    }
   }
 
   handleSelectGrid (pos) {
@@ -99,7 +125,12 @@ class Grid extends Component {
     if (this.props.game.state === 'finished') {
       this.props.onGameReady();      
     } else {
-      api.v1.games.forfeit(this.props.game.id);
+      if (this.state.forfeitWarningOpen) {
+        api.v1.games.forfeit(this.props.game.id).then(this.handleForfeitCancel);
+
+      } else {
+        this.setState({ forfeitWarningOpen: true });
+      }
     }
   }
 }

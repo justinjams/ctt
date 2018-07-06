@@ -230,7 +230,7 @@ class GameClass {
 
       if (sames.length > 1 && !options.combo) {
         this.log.push({ message: `:P${options.hand}: activated SAME!` });
-        this.sames.map((f)=>f());
+        sames.map((f)=>f());
         //this.view.setHeadline('Same!', options.hand);
       }
 

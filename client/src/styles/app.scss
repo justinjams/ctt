@@ -2,10 +2,16 @@
 @import '_fireworks.scss';
 
 a {
+  color: #68b3d2;
   text-decoration: none;
 }
 
-.button {
+a:visited {
+  color: #68b3d2;
+}
+
+.button,
+a.button {
   background-image: url($rock-texture);
   background-color: $dark-blue;
   border: 1px solid $dark-gold;
@@ -26,6 +32,10 @@ a {
   user-select: none;
   width: fit-content;
 
+  &:visited {
+    color: $gold;
+  }
+
   &.disabled {
     color: gray;
     border-color: gray;
@@ -42,6 +52,36 @@ a {
   }
 }
 
+.appears {
+  animation: .15s ease-out 0s appearsAnim;
+}
+
+.appears-up {
+  animation: .15s ease-out 0s appearsUpAnim;
+}
+
+@keyframes appearsAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearsUpAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .app {
   background-color: $dark-blue;
   background-image: url($rock-texture);
@@ -55,11 +95,12 @@ a {
 
     .menu {
       background: black;
-      display: none;
+      display: block;
       left: 0;
       position: absolute;
-      top: 36px;
-      z-index: 1;
+      top: 9px;
+      transition: top .1s ease-out;
+      z-index: -1;
 
       ul {
         padding: 0;
@@ -67,12 +108,15 @@ a {
 
       li {
         display: block;
-        margin: 5px 20px;
+      }
+
+      li div {
+        padding: 5px 20px;
       }
     }
 
-    .user-menu-btn-display:hover .menu {
-      display: block;
+    .user-menu-btn-display:hover + .menu, .menu:hover {
+      top: 36px;
     }
 
     .user-menu-btn-display {
@@ -145,14 +189,6 @@ a {
     max-width: 216px;
     position: fixed;
     width: 100%;
-
-    a {
-      color: #68b3d2;
-    }
-
-    a:visited {
-      color: #68b3d2;
-    }
   }
 }
 
@@ -174,9 +210,11 @@ a {
   border-radius: 1px;
   border-top: 2px solid $gold;
   margin: 0 88px;
+  padding: 8px 8px 14px;
   position: absolute;
   top: 10px;
   width: 320px;
+  z-index: 2;
 
   .rule {
     margin: 0 0 10px;
@@ -188,13 +226,20 @@ a {
   }
 
   .close {
-    margin: 15px auto;
+    margin: 14px auto 0;
     width: 120px;
+  }
+
+  .opponent {
+    margin: 0 25px 10px;
+  }
+
+  .rules {
+    margin: 0 25px 0;
   }
 
   .rules, .opponent {
     display: block;
-    margin: 0 25px 10px;
     text-align: left;
 
     > div {
@@ -204,6 +249,10 @@ a {
     .rule {
       margin: 0 5px;
     }
+  }
+
+  .rules-link {
+    font-size: 14px;
   }
 
   .lobby-view & .header {
@@ -219,17 +268,33 @@ a {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 2;
 }
 
 @-webkit-keyframes spinX {
   0% {
+    opacity: 1;
     transform: rotateZ(0deg) rotateY(0deg);
     transform-origin: 0% 200% 0;
   }
+  20% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
   50% {
+    opacity: 0;
     transform: rotateZ(180deg) rotateY(180deg);
   }
+  80% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 1;
+  }
   100% {
+    opacity: 1;
     transform: rotateZ(360deg) rotateY(360deg);
     transform-origin: 0% 200% 0;
   }  
@@ -239,7 +304,7 @@ a {
 
   .card-view {  
     position: absolute;
-    animation: spinX 4s infinite ease-in-out;
+    animation: spinX 6s infinite ease-in-out;
   }
 
   .cards {
@@ -250,7 +315,7 @@ a {
 
     @for $i from 0 through 4 {
       :nth-child(#{$i}) {
-        animation-delay: #{$i/5 * 4}s;
+        animation-delay: #{$i/5 * 6}s;
       }
     } 
   }

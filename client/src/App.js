@@ -71,13 +71,13 @@ class App extends Component {
                   <img className='profile-icon'
                        role='button'
                        src={assets.getProfileIcon(this.state.user.profileIcon)} alt='' />
-                  <div className='menu'>
-                    <ul>
-                      <li>
-                        <div role='button' onMouseDown={this.handleLogout}>Logout</div>
-                      </li>
-                    </ul>
-                  </div>
+                </div>
+                <div className='menu'>
+                  <ul>
+                    <li>
+                      <div role='button' onMouseDown={this.handleLogout}>Logout</div>
+                    </li>
+                  </ul>
                 </div>
               </li>
             </ul>

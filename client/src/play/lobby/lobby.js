@@ -27,7 +27,7 @@ class Lobby extends Component {
 
   render () {
     return (
-      <div className='lobby-view'>
+      <div className='lobby-view appears'>
         <div className='header'>
           Find Game
         </div>

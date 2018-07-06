@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const PASSWORD_REGEX = /(?=^.{6,}$)(?=.*\d)(?=.*[a-zA-Z]).*$/;
+const PASSWORD_REGEX = /(?=^.{6,}$).*$/;
 const USERNAME_REGEX = /^[a-z0-9_-]{3,15}$/;
 
 const Card = require('./card');
@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: ((v) => PASSWORD_REGEX.test(v)),
-      message: 'Password must be more complex. Try adding a special character.'
+      message: 'Password must be at least 6 characters long.'
     }
   },
   profileIcon: {
@@ -107,8 +107,8 @@ class UserClass {
   toAttributes () {
     return {
       id: this.id,
-      cards: this.cards.map((key) => new Card(key).toAttributes()),
-      hand: this.hand.map((key) => new Card(key).toAttributes()),
+      cards: this.cards.map((key) => new Card(key, this.id).toAttributes()),
+      hand: this.hand.map((key) => new Card(key, this.id).toAttributes()),
       profileIcon: this.profileIcon,
       username: this.username
     }

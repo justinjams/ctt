@@ -1,6 +1,10 @@
 .grid-view .card-view {
   display: inline-block;
-  margin: 3px;
+  margin: 0 2px 0;
+
+  &:last-child {
+    margin: 0;
+  }
 }
 
 .hand-view .card-view {

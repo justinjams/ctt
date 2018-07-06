@@ -17,16 +17,18 @@ class CreateGame extends Component {
 
   createRulesHandler (prop) {
     return (e) => {
-      const newRules = Object.assign({ [prop]: e.target.checked }, this.state.rules);
+      const newRules = Object.assign(this.state.rules, { [prop]: e.target.checked });
+      console.log(prop, e.target.checked, newRules)
+      console.log(this.state.rules)
       this.setState({ rules: newRules });
     }
   }
 
   render () {
     return (
-      <div className='rules-view'>
+      <div className='rules-view appears-up'>
         <div className='header'>
-          Options
+          Game Settings
         </div>
         <div className='opponent'>
           <span className='rule-name'>Opponent: </span>
@@ -50,6 +52,7 @@ class CreateGame extends Component {
             );
           })}
         </div>
+        <a className="rules-link" href="http://ffxivtriad.com/rules" rel="noopener noreferrer nofollow" target="_blank">What do these mean?</a>
         <div className='close button'
              onClick={this.handleCreateGame}
              role="button">START</div>
