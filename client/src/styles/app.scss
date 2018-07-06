@@ -239,12 +239,7 @@ a.button {
   }
 
   .rules, .opponent {
-    display: block;
     text-align: left;
-
-    > div {
-      display: inline-block;
-    }
 
     .rule {
       margin: 0 5px;
@@ -301,6 +296,9 @@ a.button {
 }
 
 .game-waiting {
+  color: $gold;
+  margin: 20px auto 0;
+  font-weight: normal !important;
 
   .card-view {  
     position: absolute;
@@ -308,9 +306,11 @@ a.button {
   }
 
   .cards {
-    height: 225px;
+    height: 0;
     margin: 0 auto;
     position: relative;
+    top: 270px;
+    right: 0;
     width: 0;
 
     @for $i from 0 through 4 {
@@ -320,13 +320,9 @@ a.button {
     } 
   }
 
-  h3 {
-    color: $gold;
-  }
-
   .lobby-game-view {
     margin: 0 auto 10px;
-    width: 200px;
+    width: 226px;
   }
 }
 

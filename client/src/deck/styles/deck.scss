@@ -14,7 +14,7 @@
   position: relative;
   text-align: left;
   user-select: none;
-  width: 908px;
+  width: 910px;
 
   > div {
     > div {
@@ -23,7 +23,6 @@
   }
 
   .deck-editor-title {
-    border-bottom: 1px solid $blue;
     color: $gold;
     margin: 0 0 6px;
     text-align: center;
@@ -58,6 +57,8 @@
 
   .selectables {
     background: $dark-gold;
+    border: 1px solid $blue;
+    border-top: 1px solid darken($blue, 13%);
     box-shadow: inset 0 0 2px black;
     font-weight: bold;
     padding: 4px 4px 0;
@@ -82,9 +83,11 @@
   .pool {
     background: linear-gradient(lighten($dark-blue, 8%), $dark-blue);
     box-shadow: inset 0 0 10px black;
+    border: 1px solid $blue;
+    border-top: 1px solid darken($blue, 13%);
     max-height: 414px;
     overflow-y: scroll;
-    padding: 8px 0 0;
+    padding: 4px 4px 0;
 
     .card-view:before {
       background-image: radial-gradient(transparentize($gold, .6), transparent);
@@ -105,7 +108,6 @@
   }
 
   .pool-title {
-    border-bottom: 1px solid $blue;
     color: $gold;
     margin: 22px 0 6px;
     text-align: center;

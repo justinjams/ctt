@@ -51,10 +51,6 @@
   text-align: left;
   user-select: none; 
 
-  > div {
-    display: inline-block;
-  }
-
   img {
     border: 2px solid $gold;
     border-radius: 40px;
@@ -71,6 +67,7 @@
   }
 
   .rules {
+    display: inline-block;
     margin: 0 0 0 10px;
   }
 
@@ -82,5 +79,11 @@
     &.active {
       color: $white;
     }
+  }
+}
+
+.create-game-view {
+  .rule {
+    display: inline-block;
   }
 }

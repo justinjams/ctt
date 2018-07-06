@@ -18,7 +18,7 @@ class GameWaiting extends Component {
 
   render () {
     return (
-      <div className='game-waiting'>
+      <div className='game-waiting rules-view appears'>
         <div className='cards'>
         {[0,1,2,3,4].map((pos)=>{
           let card = this.props.game.hands[0][pos];
@@ -31,6 +31,7 @@ class GameWaiting extends Component {
         })}
         </div>
         <h3>Waiting for other players</h3>
+        <h4>Invite link: <br /><input value={`${window.location.origin}/g/${this.props.game.id}`} readonly></input></h4>
         <Lobby game={this.props.game} />
         <div role='button' className="button" onClick={this.handleCancel}>
           CANCEL

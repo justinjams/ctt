@@ -26,7 +26,7 @@ class CreateGame extends Component {
 
   render () {
     return (
-      <div className='rules-view appears-up'>
+      <div className='create-game-view rules-view appears-up'>
         <div className='header'>
           Game Settings
         </div>
