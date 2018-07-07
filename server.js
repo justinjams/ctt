@@ -80,8 +80,6 @@ function loadAppState(req, res, next) {
       });
     });
   }
-
-  next();
 }
 
 // APP API
