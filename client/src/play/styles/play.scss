@@ -210,6 +210,20 @@
   }
 }
 
+.game-invite {
+  margin: 0 auto;
+  position: relative;
+
+  h3 {
+    color: $gold;
+  }
+
+  .button {
+    display: inline-block;
+    margin: 3px 22px 0;
+  }
+}
+
 .game-waiting-wrap {
   .cards {
     height: 0;

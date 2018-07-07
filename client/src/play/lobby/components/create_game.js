@@ -10,7 +10,7 @@ class CreateGame extends Component {
       OPEN: true,
       SAME: true,
       PLUS: true
-    }, ai: 1 };
+    }, ai: 0 };
 
     this.handleCreateGame = this.handleCreateGame.bind(this);
   }
@@ -18,8 +18,6 @@ class CreateGame extends Component {
   createRulesHandler (prop) {
     return (e) => {
       const newRules = Object.assign(this.state.rules, { [prop]: e.target.checked });
-      console.log(prop, e.target.checked, newRules)
-      console.log(this.state.rules)
       this.setState({ rules: newRules });
     }
   }
@@ -35,8 +33,8 @@ class CreateGame extends Component {
           <select name='ai'
                   select={this.state.ai}
                   onChange={(e) => this.setState({ ai: e.target.value })}>
-            <option value={1}>AI (easy)</option>
             <option value={0}>Player</option>
+            <option value={1}>AI (easy)</option>
           </select>
         </div>
         <div className='rules'>
