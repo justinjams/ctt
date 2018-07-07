@@ -20,6 +20,7 @@ class App extends Component {
     this.state = {
       bgImage: this.props.bgImage,
       game: this.props.game,
+      gameInviteId: this.props.gameInviteId,
       user: this.props.user,
       userMenuOpen: false
     };
@@ -84,7 +85,7 @@ class App extends Component {
           </header>
           <div className='app-body' style={{background: `url('${this.state.bgImage}') center no-repeat`}}>
             <Route exact path='/' 
-                   render={(props) => <Play {...props} game={this.state.game} user={this.state.user} onGameReady={this.handleGame} />} />
+                   render={(props) => <Play {...props} game={this.state.game} user={this.state.user} gameInviteId={this.state.gameInviteId} onGameReady={this.handleGame} />} />
             <Route path='/deck' 
                    render={(props) => <Deck {...props} user={this.state.user} />} />
           </div>
@@ -149,7 +150,7 @@ class App extends Component {
   }
 
   handleGame (game) {
-    this.setState({ game: game });
+    this.setState({ game: game, gameInviteId: null });
   }
 }
 

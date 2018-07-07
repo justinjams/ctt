@@ -210,10 +210,53 @@
   }
 }
 
+.game-waiting-wrap {
+  .cards {
+    height: 0;
+    margin: 0 auto;
+    position: relative;
+    top: -368px;
+    right: 82px;
+    width: 0;
+
+    @for $i from 0 through 4 {
+      :nth-child(#{$i}) {
+        animation-delay: #{$i/5 * 6}s;
+      }
+    } 
+  }
+
+  .card-view {  
+    position: absolute;
+    animation: spinX 6s infinite ease-in-out;
+  }
+}
+
 .game-waiting {
+  color: $gold;
+  margin: 160px auto 0;
+  font-weight: normal !important;
   position: relative;
 
   .button {
     width: 120px;
+  }
+  
+  .invite-link {
+    width: 80%;
+    background: lighten($dark-blue, 13%);
+    border-color: $gold;
+    font-size: 18px;
+    color: white;
+  }
+
+  .invite {
+    font-size: 14px;
+    margin: 16px 0;
+  }
+
+  .lobby-game-view {
+    margin: 0 auto 10px;
+    width: 226px;
   }
 }

@@ -62,11 +62,21 @@ function loadAppState(req, res, next) {
   if (req.session.userId) {
     return User.findOne({ _id: req.session.userId }, (err, user) => {
       if (err) return res.json(err);
-      res.locals.user = user
+      res.locals.user = user;
       Game.findOne({ state: ['created', 'active'], userIds: req.session.userId }, (err, game) => {
         if (err) return res.json(err);
-        res.locals.game = game;
-        next();
+        if (game) {
+          res.locals.game = game;
+          next();
+        } else if(req.session.gameInviteId) {
+          Game.findOne({ _id: req.session.gameInviteId }, (err, game) => {
+            if (err) return res.json(err);
+            res.locals.game = game;
+            next();
+          });
+        } else {
+          next();
+        }
       });
     });
   }
@@ -77,7 +87,6 @@ function loadAppState(req, res, next) {
 // APP API
 app.get('/api/v1/app/start', loadAppState, (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-
   const randomCard = DATA_KEYS[parseInt(Math.random() * DATA_KEYS.length)].toLowerCase();
   const bootstrap = {
     appState: {},
@@ -86,8 +95,20 @@ app.get('/api/v1/app/start', loadAppState, (req, res) => {
 
   bootstrap.appState.user = res.locals.user ? res.locals.user.toAttributes() : null;
   bootstrap.appState.game = res.locals.game ? res.locals.game.toAttributes() : null;
+  bootstrap.appState.gameInviteId = req.session.gameInviteId;
 
   res.json(bootstrap);
+});
+
+app.get('/g/:gameId', (req, res) => {
+  Game.findOne({ _id: req.params.gameId }, (err, game) => {
+    if (err) console.error(err);
+    if (!err && game) {
+      req.session.gameInviteId = game.id;
+    }
+
+    res.redirect('/');
+  });
 });
 
 // GAMES API
@@ -161,14 +182,20 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
 app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
   Game.findOne({ _id: req.params.gameId }).exec((err, game) => {
     User.findOne({ _id: req.session.userId }).exec((err, user) => {
+      if (game.userIds.length >= 2 || game.state !== 'created') return res.json({});
       game.userIds.push(req.session.userId);
       game.hands.push(user.hand.slice())
+      game.names.push(user.name);
+      game.profileIcons.push(user.profileIcon);
       if (game.userIds.length === 2) {
         game.state = 'active';
-        game.log.push({ message: 'Game started. Good luck!' });
       }
       game.save((err) => {
         if (err) return res.json(err);
+        delete req.session.gameInviteId;
+        io.emit(`games:play:${game.id}`, {
+          game: game.toAttributes()
+        });
         res.json({ game: game.toAttributes() });
       });
     });
@@ -267,6 +294,13 @@ app.post('/api/v1/users/:userId', isAuthenticated, loadAppState, (req, res, next
     });
     res.json({ user: res.locals.user });
   });
+});
+
+app.delete('/api/v1/users/:userId/games/:gameId', isAuthenticated, (req, res, next) => {
+  if (req.session.gameInviteId === req.params.gameId) {
+    delete req.session.gameInviteId;
+  }
+  res.json({});
 });
 
 // SESSIONS API

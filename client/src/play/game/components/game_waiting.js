@@ -18,7 +18,18 @@ class GameWaiting extends Component {
 
   render () {
     return (
-      <div className='game-waiting rules-view appears'>
+      <div className='game-waiting-wrap'>
+        <div className='game-waiting rules-view appears'>
+          <h3>Waiting for a challenger</h3>
+          <div className='invite'>
+            Challenge a friend: <br />
+            <input className='invite-link' value={`${window.location.origin}/g/${this.props.game.id}`} readonly></input>
+          </div>
+          <Lobby game={this.props.game} />
+          <div role='button' className="button" onClick={this.handleCancel}>
+            CANCEL
+          </div>
+        </div>
         <div className='cards'>
         {[0,1,2,3,4].map((pos)=>{
           let card = this.props.game.hands[0][pos];
@@ -29,12 +40,6 @@ class GameWaiting extends Component {
                        key={pos}
                        pos={pos} />;
         })}
-        </div>
-        <h3>Waiting for other players</h3>
-        <h4>Invite link: <br /><input value={`${window.location.origin}/g/${this.props.game.id}`} readonly></input></h4>
-        <Lobby game={this.props.game} />
-        <div role='button' className="button" onClick={this.handleCancel}>
-          CANCEL
         </div>
       </div>
     );

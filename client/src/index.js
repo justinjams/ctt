@@ -15,6 +15,7 @@ api.v1.request('get', '/api/v1/app/start').then((body) => {
       <BrowserRouter>
         <App bgImage={body.bgImage}
                      game={body.appState.game}
+                     gameInviteId={body.appState.gameInviteId}
                      user={body.appState.user} />
       </BrowserRouter>,
       document.getElementById('root')

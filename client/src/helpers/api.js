@@ -65,4 +65,8 @@ api.v1.users.update = (userId, body) => {
   return v1Request({ body, method: 'POST', url: `/api/v1/users/${userId}` });
 };
 
+api.v1.users.decline = (userId, gameId) => {
+  return v1Request({ method: 'DELETE', url: `/api/v1/users/${userId}/games/${gameId}` });
+};
+
 export default api;
