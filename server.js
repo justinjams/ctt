@@ -79,6 +79,8 @@ function loadAppState(req, res, next) {
         }
       });
     });
+  } else {
+    next();
   }
 }
 
