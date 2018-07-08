@@ -26,10 +26,16 @@
 }
 
 .hand-view {
+  background-color: $dark-blue;
+  background-image: url($rock-texture);
+  border: 1px solid $dark-gold;
+  border-radius: 1px;
+  border-top: 2px solid $gold;
   display: inline-block;
-  perspective: 200;
+  padding: 8px;
+  position: relative;
   vertical-align: top;
-  width: 144px;
+  width: 148px;
 
   &.closed .card-view .side-back {
     transform: rotateY(0deg);
@@ -55,11 +61,6 @@
 
   > :first-child {
     height: 89px;
-  }
-
-  .card-view {
-    border: 1px solid $dark-gold;
-    border-bottom: 1px solid $gold;
   }
 
   .score {
@@ -174,23 +175,18 @@
 
     .player {
       font-weight: bold;
-      margin: 0 3px 0 0;
     }
 
     .item {
       animation: 5s linear 0s slidein;
       color: $white;
       font-size: 12px;
-      max-height: 0;
+      opacity: 0;
       overflow: hidden;
     }
   }
 
   .forfeit-warning {
-    .header {
-      margin: 0 0 15px; 
-    }
-
     .button {
       display: inline-block;
       margin: 0 15px;
@@ -200,18 +196,21 @@
 
 @keyframes slidein {
   0% {
-    max-height: 0;
+    opacity: 0;
   }
-  20% {
-    max-height: 300px;
+  3% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 1;
   }
   100% {
-    max-height: 0;
+    opacity: 0;
   }
 }
 
 .game-invite {
-  margin: 0 auto;
+  margin: 30px auto;
   position: relative;
 
   h3 {
@@ -257,11 +256,11 @@
   }
   
   .invite-link {
-    width: 80%;
     background: lighten($dark-blue, 13%);
     border-color: $gold;
-    font-size: 18px;
     color: white;
+    font-size: 12px;
+    width: 80%;
   }
 
   .invite {
@@ -270,7 +269,7 @@
   }
 
   .lobby-game-view {
-    margin: 0 auto 10px;
+    margin: 0 auto 20px;
     width: 226px;
   }
 }

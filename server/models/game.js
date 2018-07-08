@@ -68,7 +68,7 @@ const GameSchema = new mongoose.Schema({
   },  
   hands: [[String]],
   profileIcons: [[Number]],
-  names: [[String]],
+  usernames: [[String]],
   log: [GameLogSchema],
   rules: {
     default: DEFAULT_RULES,
@@ -111,7 +111,7 @@ class GameClass {
       id: this.id,
       log: this.log,
       profileIcons: this.profileIcons,
-      names: this.names,
+      usernames: this.usernames,
       rules: this.rules,
       state: this.state,
       scores: this.scores,
@@ -264,6 +264,8 @@ class GameClass {
           this.log.push({ message: `Game over. :P${this.winner}: wins!`});
         }
         this.state = 'finished';
+      } else {
+        this.logTurn();
       }
       return count;
     } else {
@@ -272,7 +274,11 @@ class GameClass {
   }
 
   isGameOver () {
-    return (this.hands[0].length + this.hands[1].length) === 1
+    return (this.hands[0].length + this.hands[1].length) === 1;
+  }
+
+  logTurn () {
+    this.log.push({ message: `:P${this.turn}:, it's your turn!` });
   }
 }
 
@@ -284,7 +290,7 @@ GameSchema.statics.start = (gameData, callback) => {
     const params = {
       hands: [user.hand.slice()],
       profileIcons: [user.profileIcon],
-      names: [user.username],
+      usernames: [user.username],
       rules: Object.assign({}, DEFAULT_RULES, gameData.rules), 
       startPlayer: Math.round(Math.random()),
       userIds: userIds
@@ -293,7 +299,7 @@ GameSchema.statics.start = (gameData, callback) => {
     if (gameData.ai === 1) {
       params.state = 'active';
       params.ai = 1;
-      params.names.push('Random Ralph');
+      params.usernames.push('Random Ralph');
       params.userIds.push(0);
       params.hands.push([0,0,0,0,0].map(()=> DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]));
       params.profileIcons.push(712 + Math.round(Math.random()));

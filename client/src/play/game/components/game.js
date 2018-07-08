@@ -36,7 +36,7 @@ class Game extends Component {
         );
       }
       return (
-        <div className={this.renderClassName()} style={{opacity: 1}}>
+        <div className={this.renderClassName()}>
           {fireworks}
           <div>
             <Hand game={this.props.game}

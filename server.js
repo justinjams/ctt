@@ -131,9 +131,10 @@ app.get('/api/v1/games', isAuthenticated, (req, res) => {
 app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
   Game.start({ userId: req.session.userId,
                rules: req.body.rules,
-               ai: req.body.ai }, (err, game) => {
+               ai: parseInt(req.body.ai) }, (err, game) => {
     if (err) return res.json(err);
     game.log.push({ message: 'Game started. Good luck!' });
+    game.logTurn();
     game.aiMove();
     game.save((err) => {
       if (err) return res.json(err);
@@ -185,7 +186,7 @@ app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
       if (game.userIds.length >= 2 || game.state !== 'created') return res.json({});
       game.userIds.push(req.session.userId);
       game.hands.push(user.hand.slice())
-      game.names.push(user.name);
+      game.usernames.push(user.username);
       game.profileIcons.push(user.profileIcon);
       if (game.userIds.length === 2) {
         game.state = 'active';

@@ -27,7 +27,8 @@ class GameInvite extends Component {
   render () {
     return (
       <div className='game-invite rules-view appears'>
-        <h3><b>{this.props.game.names[0]}</b> invited you to play!</h3>
+        <h2 className='header'>Challenge</h2>
+        <h3><b>{this.props.game.usernames[0]}</b> invited you to play!</h3>
         <Lobby game={this.props.game} />
         <div role='button' className="button" onClick={this.handleAccept}>
           ACCEPT

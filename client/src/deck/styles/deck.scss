@@ -12,7 +12,6 @@
   margin: 30px auto 0;
   padding: 8px 8px 14px;
   position: relative;
-  text-align: left;
   user-select: none;
   width: 910px;
 
@@ -24,9 +23,7 @@
 
   .deck-editor-title {
     color: $gold;
-    margin: 0 0 6px;
     text-align: center;
-    width: 100%;
   }
 
   .card-view {
@@ -109,7 +106,7 @@
 
   .pool-title {
     color: $gold;
-    margin: 22px 0 6px;
+    margin: 30px auto 15px;
     text-align: center;
   }
 }

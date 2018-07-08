@@ -20,9 +20,9 @@ class GameWaiting extends Component {
     return (
       <div className='game-waiting-wrap'>
         <div className='game-waiting rules-view appears'>
-          <h3>Waiting for a challenger</h3>
+          <h3 className='header'>Waiting for challenger</h3>
           <div className='invite'>
-            Challenge a friend: <br />
+            Invite a friend: <br />
             <input className='invite-link' value={`${window.location.origin}/g/${this.props.game.id}`} readonly></input>
           </div>
           <Lobby game={this.props.game} />

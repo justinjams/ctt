@@ -29,7 +29,7 @@ class Grid extends Component {
 
   get messages () {
     return this.props.game.log.slice().reverse().slice(0, 6).map((m, i) => {
-      const message = m.message.split(':').map((w) => /^P\d$/.exec(w) ? <span className={`player-${w[1]} player`}>{this.props.game.names[w[1]]}</span> : w );
+      const message = m.message.split(':').map((w) => /^P\d$/.exec(w) ? <span className={`player-${w[1]} player`}>{this.props.game.usernames[w[1]]}</span> : w );
       return <div className='item' key={m._id || i}>{message}</div>;
     });
   }
@@ -43,10 +43,10 @@ class Grid extends Component {
             <span className="score">
               {this.props.game.scores[0]}
             </span>
-            <span className="username">{this.props.game.names[0]}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span className="username">{this.props.game.usernames[0]}&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </div>
           <div className="player-1">
-            <span className="username">&nbsp;&nbsp;&nbsp;&nbsp;{this.props.game.names[1]}</span>
+            <span className="username">&nbsp;&nbsp;&nbsp;&nbsp;{this.props.game.usernames[1]}</span>
             <img src={assets.getProfileIcon(this.props.game.profileIcons[1])} alt='' height={80} width={80} />
             <span className="score">
               {this.props.game.scores[1]}
@@ -73,7 +73,7 @@ class Grid extends Component {
           <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={8} />
         </div>
         <div>
-          <div className="forfeit button" role="button" onClick={this.handleForfeit}>{this.props.game.state === 'finished' ? 'LEAVE' : 'FORFEIT'}</div>
+          <div className="forfeit button" role="button" onClick={this.handleForfeit}>{this.props.game.state === 'finished' ? 'LEAVE' : 'SURRENDER'}</div>
         </div>
         {this.state.forfeitWarningOpen ? <div className='popover-bg' onClick={this.handleForfeitCancel}></div> : ''}
         {this.renderForfeitWarning()}
@@ -90,14 +90,14 @@ class Grid extends Component {
       return (
           <div className='rules-view forfeit-warning'>
         <div className='header'>
-          Are you sure?
+          Surrender?
         </div>
         <div className='button'
              onClick={this.handleForfeit}
-             role="button">FORFEIT</div>
+             role="button">YES</div>
         <div className='button'
              onClick={this.handleForfeitCancel}
-             role="button">CONTINUE</div>
+             role="button">NO</div>
       </div>
       );
     }

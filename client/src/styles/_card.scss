@@ -7,14 +7,6 @@
   }
 }
 
-.hand-view .card-view {
-  margin: 1px;
-
-  &:empty {
-    display: none;
-  }
-}
-
 .player-0-turn.player-0-playing .player-0-hand .card-slider:hover,
 .player-0-turn.player-0-playing .player-0-hand .card-slider.selected  {
   transform: translateX(25px);
@@ -78,6 +70,11 @@
     .nameplate {
       background: $red;
     }
+  }
+
+  &:empty {
+    border: 2px solid $dark-gold;
+    border-bottom: 2px solid $gold;
   }
 
   .side-back {
@@ -168,10 +165,24 @@
     -webkit-text-stroke: 1px darken($gold, 20%);
     width: 100%;
   }
+
+  // &:before {
+  //   background: black;
+  //   content: '';
+  //   height: 100%;
+  //   left: 0;
+  //   position: absolute;
+  //   top: 0;
+  //   width: 100%;
+  // }
 }
 
 .card-slider {
   transition: all 120ms ease-in-out;
+
+  &:not(:last-child) {
+    margin: 0 0 4px;
+  }
 }
 
 @keyframes flip_top { from { transform: rotateX(0deg) } to { transform: rotateX(360deg) }  }

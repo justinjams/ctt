@@ -1,5 +1,5 @@
 {
-  "name": "loltt-client",
+  "name": "ctt-client",
   "version": "0.1.0",
   "author": "Justin Hall <justin@justinjams.com>",
   "private": true,
@@ -13,13 +13,12 @@
     "react-dom": "^16.3.2",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
-    "riot-lol-api": "^4.2.16",
     "socket.io": "^2.1.1"
   },
-  "homepage": "https://loltt-80a97.firebaseapp.com",
+  "homepage": "http://ctt.justinjams.com",
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",

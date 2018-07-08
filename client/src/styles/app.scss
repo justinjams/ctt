@@ -65,28 +65,6 @@ a.button {
   animation: .15s ease-out 0s appearsUpAnim;
 }
 
-@keyframes appearsAnim {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes appearsUpAnim {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .app {
   background-color: $dark-blue;
   background-image: url($rock-texture);
@@ -202,10 +180,62 @@ a.button {
 }
 
 .header {
+  background: $dark-blue;
+  border: 1px solid $gold;
+  border-top: 2px solid $gold;
+  border-bottom: 1px solid $dark-gold;
+  box-shadow: inset 0 0 30px $blue;
   color: $gold;
+  display: block;
   font-family: serif;
   font-size: 22px;
   font-weight: normal;
+  margin: -18px auto 12px;
+  padding: 0px 24px 1px;
+  color: lighten($gold, 10%);
+  text-shadow: 0px 0px 0 rgba(255,255,255,0.8),
+              1px 1px 2px black,
+              1px 1px 2px black,
+              0px 0px 5px black,
+              0px 0px 5px black,
+              0px 0px 5px black,
+              0px 0px 5px black;
+  -webkit-text-stroke: 1px darken($gold, 15%);
+  position: relative;
+  text-align: center;
+  width: max-content;
+
+  &:before {
+    box-shadow: inset 2px 0 3px $blue;
+    background: $dark-blue;
+    border-top: 2px solid $gold;
+    border-bottom: 1px solid $dark-gold;
+    border-left: 1px solid $gold;
+    content: '';
+    position: absolute;
+    top: -3%;
+    left: -3%;
+    height: 100%;
+    width: 53%;
+    transform: skew(0deg, 10deg);
+    z-index: -1;
+  }
+
+  &:after {
+    box-shadow: inset -2px 0 3px $blue;
+    background: black;
+    border-top: 2px solid $gold;
+    border-bottom: 1px solid $dark-gold;
+    border-right: 1px solid $gold;
+    content: '';
+    position: absolute;
+    top: -3%;
+    right: -3%;
+    height: 100%;
+    width: 53%;
+    transform: skew(0deg, -10deg);
+    z-index: -1;
+  }
 }
 
 .rules-view {
@@ -254,10 +284,6 @@ a.button {
   .rules-link {
     font-size: 14px;
   }
-
-  .lobby-view & .header {
-    margin: 4px 0;
-  }
 }
 
 .popover-bg {
@@ -271,7 +297,10 @@ a.button {
   z-index: 2;
 }
 
-@-webkit-keyframes spinX {
+@import '_card.scss';
+@import '_hand_hover.scss';
+
+@keyframes spinX {
   0% {
     opacity: 1;
     transform: rotateZ(0deg) rotateY(0deg);
@@ -300,4 +329,24 @@ a.button {
   }  
 }
 
-@import '_card.scss';
+@keyframes appearsAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearsUpAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
