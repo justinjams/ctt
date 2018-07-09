@@ -249,6 +249,7 @@ class GameClass {
       if (this.isGameOver()) {
         if (this.scores[0] > this.scores[1]) this.winner = 0;
         else if (this.scores[0] < this.scores[1]) this.winner = 1;
+        else this.winner = -1;
       }
 
       if (count > 0) {
@@ -259,10 +260,10 @@ class GameClass {
       if (this.hands[0].length + this.hands[1].length === 1) {
         if(this.state != 'finished') {
           let winnerText;
-          if (this.winner) {
-            winnerText = `:P${this.winner}: wins!`;
-          } else {
+          if (this.winner === -1) {
             winnerText = "It's a draw!"
+          } else {
+            winnerText = `:P${this.winner}: wins!`;
           }
           this.log.push({ message: `Game over. ${winnerText}`});
         }

@@ -1,5 +1,7 @@
 .player-0-turn.player-0-playing .player-0-hand .card-view:not(:empty):after,
-.player-0-turn.player-0-playing.holding .grid-view .card-view:empty:after  {
+.player-0-turn.player-0-playing.holding .grid-view .card-view:empty:after,
+.player-1-turn.player-1-playing .player-1-hand .card-view:not(:empty):after,
+.player-1-turn.player-1-playing.holding .grid-view .card-view:empty:after  {
   content: '';
   height: 100%;
   left: 0;
