@@ -148,8 +148,17 @@ a.button {
     }
   }
 
-  .app-body {
+  .app-bg {
     background-size: cover !important;
+    background-color: red;
+    height: 100%;
+    opacity: 0.5;
+    position: fixed;
+    width: 100%;
+    z-index: -1;
+  }
+
+  .app-body {
     height: 100%;
     position: absolute;
     top: 60px;
@@ -158,16 +167,6 @@ a.button {
     > :first-child {
       margin-bottom: 80px;
     }
-  }
-
-  .app-body:before {
-    background-color: transparentize($dark-blue, 0.4);
-    bottom: 0;
-    content: '';
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
   }
 
   footer {

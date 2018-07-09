@@ -52,7 +52,7 @@ class App extends Component {
   render () {
     if (this.state.user) {
       return (
-        <div className='app'>
+        <div className='app' ref={e => this.ref = e}>
           <header className='app-header'>
             <h1 className='app-title'>
               <Link to='/'>
@@ -83,13 +83,14 @@ class App extends Component {
               </li>
             </ul>
           </header>
-          <div className='app-body' style={{background: `url('${this.state.bgImage}') center no-repeat`}}>
+          <div className='app-body'>
             <Route exact path='/' 
                    render={(props) => <Play {...props} game={this.state.game} user={this.state.user} gameInviteId={this.state.gameInviteId} onGameReady={this.handleGame} />} />
             <Route path='/deck' 
                    render={(props) => <Deck {...props} user={this.state.user} />} />
           </div>
           <Footer />
+          <div className='app-bg' style={{background: `url('${this.state.bgImage}') 0px 60px no-repeat`}} ></div>
         </div>
       );
     } else {

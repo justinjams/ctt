@@ -14,9 +14,9 @@ const STATES = [
 const DEFAULT_RULES = {
 //  ELEMENTAL: false,
   OPEN: true,
-  PLUS: true,
+  PLUS: false,
 //  RANDOM: false,
-  SAME: true,
+  SAME: false,
 //  SAME_WALL: false,
 //  SUDDEN_DEATH: false
 }

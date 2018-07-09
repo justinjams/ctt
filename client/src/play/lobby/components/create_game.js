@@ -8,8 +8,8 @@ class CreateGame extends Component {
 
     this.state = { rules: {
       OPEN: true,
-      SAME: true,
-      PLUS: true
+      SAME: false,
+      PLUS: false
     }, ai: 0 };
 
     this.handleCreateGame = this.handleCreateGame.bind(this);

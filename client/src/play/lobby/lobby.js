@@ -56,7 +56,7 @@ class Lobby extends Component {
       return this.state.games.map((game, i) =>
         <LobbyGame game={game} key={i} onGameReady={this.props.onGameReady} />
       );
-    } else return <div className='no-games'>No games available. Create one!</div>;
+    } else return <div className='no-games'>No games available.<br />Create one to do battle with players or AI!</div>;
   }
 
   handleCreateGame () {
