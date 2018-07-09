@@ -36,6 +36,10 @@ class Card {
   }
 }
 
+Card.all = () => {
+  return DATA_KEYS.slice();
+}
+
 Card.random = () => {
   return DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)];
 };

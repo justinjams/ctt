@@ -54,12 +54,13 @@ const PROFILE_ICONS = [...Array(29)].map((_, i)=>i);
 UserSchema.pre('save', function (next) {
   const user = this;
   if(user.isNew) {
-    user.cards = [...Array(15)].reduce((memo, v, i) => {
-      let random;
-      while(memo.indexOf(random = Card.random()) > -1);
-      memo[i] = random;
-      return memo;
-    }, []);
+    // user.cards = [...Array(15)].reduce((memo, v, i) => {
+    //   let random;
+    //   while(memo.indexOf(random = Card.random()) > -1);
+    //   memo[i] = random;
+    //   return memo;
+    // }, []);
+    user.cards = Card.all();
     user.hand = user.cards.slice(0, 5);
     user.profileIcon = PROFILE_ICONS[parseInt(PROFILE_ICONS.length * Math.random())];
 
