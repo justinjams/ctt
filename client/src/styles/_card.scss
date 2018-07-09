@@ -1,19 +1,27 @@
-.grid-view .card-view {
-  display: inline-block;
-  margin: 0 2px 0;
+.player-0-turn.player-0-playing .player-0-hand .card-view:not(:empty):after,
+.player-0-turn.player-0-playing.holding .grid-view .card-view:empty:after  {
+  content: '';
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 
-  &:last-child {
-    margin: 0;
+  $value: ();
+  @for $i from 0 through 3 {
+    $shadow: 0 0 #{$i * 6}px $green, inset 0 0 #{$i * 3}px $green;
+    $value: append($value, $shadow, comma)
   }
+  box-shadow: $value;
 }
 
-.player-0-turn.player-0-playing .player-0-hand .card-slider:hover,
-.player-0-turn.player-0-playing .player-0-hand .card-slider.selected  {
+.player-0-turn.player-0-playing .player-0-hand .card-view:not(:empty):hover,
+.player-0-turn.player-0-playing .player-0-hand .selected .card-view:not(:empty) {
   transform: translateX(25px);
 }
 
-.player-1-turn.player-1-playing .player-1-hand .card-slider:hover,
-.player-1-turn.player-1-playing .player-1-hand .card-slider.selected {
+.player-1-turn.player-1-playing .player-1-hand .card-view:not(:empty):hover,
+.player-1-turn.player-1-playing .player-1-hand .selected .card-view:not(:empty) {
   transform: translateX(-25px);
 }
 
@@ -21,6 +29,7 @@
   background: linear-gradient(to bottom, black, $dark-blue);
   border: 2px solid $dark-gold;
   border-radius: 3px;
+  border-bottom: 2px solid $gold;
   height: 144px;
   position: relative;
   text-align: center;
@@ -73,8 +82,7 @@
   }
 
   &:empty {
-    border: 2px solid $dark-gold;
-    border-bottom: 2px solid $gold;
+    z-index: 1;
   }
 
   .side-back {
@@ -165,19 +173,10 @@
     -webkit-text-stroke: 1px darken($gold, 20%);
     width: 100%;
   }
-
-  // &:before {
-  //   background: black;
-  //   content: '';
-  //   height: 100%;
-  //   left: 0;
-  //   position: absolute;
-  //   top: 0;
-  //   width: 100%;
-  // }
 }
 
 .card-slider {
+  position: relative;
   transition: all 120ms ease-in-out;
 
   &:not(:last-child) {

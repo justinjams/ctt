@@ -2850,36 +2850,6 @@
                 3
             ]
         },
-        "Pyke": {
-            "id": 555,
-            "key": "Pyke",
-            "name": "Pyke",
-            "title": "the Bloodharbor Ripper",
-            "skins": [
-                {
-                    "id": 555000,
-                    "name": "default",
-                    "num": 0
-                },
-                {
-                    "id": 555001,
-                    "name": "Sand Wraith Pyke",
-                    "num": 1
-                }
-            ],
-            "info": {
-                "attack": 9,
-                "defense": 3,
-                "magic": 1,
-                "difficulty": 7
-            },
-            "power": [
-                7,
-                9,
-                3,
-                1
-            ]
-        },
         "Heimerdinger": {
             "id": 74,
             "key": "Heimerdinger",

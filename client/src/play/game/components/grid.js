@@ -34,6 +34,15 @@ class Grid extends Component {
     });
   }
 
+  renderCard (i) {
+    return (
+      <div className='card-slider' key={i}>
+        <div className='card-slot'></div>
+        <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={i} />
+      </div>
+    );
+  }
+
   render () {
     return (
       <div className="grid-view">
@@ -58,19 +67,19 @@ class Grid extends Component {
           <div className='vs'>vs</div>
         </div>
         <div className="grid-row">
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={0} />
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={1} />
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={2} />
+          {this.renderCard(0)}
+          {this.renderCard(1)}
+          {this.renderCard(2)}
         </div>
         <div className="grid-row">
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={3} />
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={4} />
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={5} />
+          {this.renderCard(3)}
+          {this.renderCard(4)}
+          {this.renderCard(5)}
         </div>
         <div className="grid-row">
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={6} />
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={7} />
-          <GridCard game={this.props.game} handleClick={this.handleSelectGrid} pos={8} />
+          {this.renderCard(6)}
+          {this.renderCard(7)}
+          {this.renderCard(8)}
         </div>
         <div>
           <div className="forfeit button" role="button" onClick={this.handleForfeit}>{this.props.game.state === 'finished' ? 'LEAVE' : 'SURRENDER'}</div>

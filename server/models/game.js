@@ -231,7 +231,6 @@ class GameClass {
       if (sames.length > 1 && !options.combo) {
         this.log.push({ message: `:P${options.hand}: activated SAME!` });
         sames.map((f)=>f());
-        //this.view.setHeadline('Same!', options.hand);
       }
 
       if (this.rules.PLUS && !options.combo) {
@@ -239,7 +238,6 @@ class GameClass {
           if (pluses[sum].length > 1) {
             this.log.push({ message: `:P${options.hand}: activated PLUS!` });
             pluses[sum].map((f)=>f());
-            //this.view.setHeadline('Plus!', options.hand);
           }
         }
       }
@@ -251,7 +249,6 @@ class GameClass {
       if (this.isGameOver()) {
         if (this.scores[0] > this.scores[1]) this.winner = 0;
         else if (this.scores[0] < this.scores[1]) this.winner = 1;
-        //this.view.setGameOver(winner);
       }
 
       if (count > 0) {
@@ -261,7 +258,13 @@ class GameClass {
 
       if (this.hands[0].length + this.hands[1].length === 1) {
         if(this.state != 'finished') {
-          this.log.push({ message: `Game over. :P${this.winner}: wins!`});
+          let winnerText;
+          if (this.winner) {
+            winnerText = `:P${this.winner}: wins!`;
+          } else {
+            winnerText = "It's a draw!"
+          }
+          this.log.push({ message: `Game over. ${winnerText}`});
         }
         this.state = 'finished';
       } else {
@@ -299,7 +302,7 @@ GameSchema.statics.start = (gameData, callback) => {
     if (gameData.ai === 1) {
       params.state = 'active';
       params.ai = 1;
-      params.usernames.push('Random Ralph');
+      params.usernames.push('Aldous (AI)');
       params.userIds.push(0);
       params.hands.push([0,0,0,0,0].map(()=> DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]));
       params.profileIcons.push(712 + Math.round(Math.random()));

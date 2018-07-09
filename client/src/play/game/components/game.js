@@ -14,9 +14,12 @@ class Game extends Component {
   }
 
   renderClassName () {
-    const className = ['game-view appears', `player-${this.props.game.turn}-turn`];
+    const className = ['game-view appears',
+                       `player-${this.props.game.turn}-turn`,
+                       this.state.holding ? 'holding' : ''];
     this.props.game.userIds.forEach((userId, i) => {
-      if (userId === this.props.user.id) {
+      if (this.props.game.state === 'active' && 
+          userId === this.props.user.id) {
         className.push(`player-${i}-playing`);
       }
     });
@@ -45,7 +48,6 @@ class Game extends Component {
                   holding={this.state.holding}
                   user={this.props.user} />
             <Grid game={this.props.game}
-                  headline={this.state.headline}
                   holding={this.state.holding}
                   onGameReady={this.props.onGameReady}
                   onPlayHolding={this.onPlayHolding} />

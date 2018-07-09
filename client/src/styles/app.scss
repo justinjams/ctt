@@ -27,9 +27,9 @@ a.button {
   filter: drop-shadow(0 0 0 $gold);
   font-family: serif;
   font-size: 16px;
+  letter-spacing: 1px;
   margin: 0 auto;
   padding: 8px 24px;
-
   transition: filter .1s linear,
     border-color .1s linear,
     text-shadow .1s linear,
@@ -66,15 +66,22 @@ a.button {
 }
 
 .app {
-  background-color: $dark-blue;
-  background-image: url($rock-texture);
+  height: 100%;
   text-align: center;
 
   .app-header {
+    background-color: $dark-blue;
+    background-image: url($rock-texture);
+    border-bottom: 2px solid $dark-gold;
     color: $white;
     height: 60px;
     margin: 0 auto;
+    left: 50%;
+    padding: 0 100%;
+    position: fixed;
+    transform: translateX(-50%);
     width: 960px;
+    z-index: 3;
 
     .menu {
       background: black;
@@ -143,10 +150,14 @@ a.button {
 
   .app-body {
     background-size: cover !important;
-    border-top: 2px solid $dark-gold;
     height: 100%;
     position: absolute;
+    top: 60px;
     width: 100%;
+
+    > :first-child {
+      margin-bottom: 80px;
+    }
   }
 
   .app-body:before {
@@ -190,6 +201,7 @@ a.button {
   font-family: serif;
   font-size: 22px;
   font-weight: normal;
+  letter-spacing: 1px;
   margin: -18px auto 12px;
   padding: 0px 24px 1px;
   color: lighten($gold, 10%);

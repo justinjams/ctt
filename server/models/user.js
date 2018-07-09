@@ -54,7 +54,7 @@ const PROFILE_ICONS = [...Array(29)].map((_, i)=>i);
 UserSchema.pre('save', function (next) {
   const user = this;
   if(user.isNew) {
-    user.cards = [...Array(7)].reduce((memo, v, i) => {
+    user.cards = [...Array(15)].reduce((memo, v, i) => {
       let random;
       while(memo.indexOf(random = Card.random()) > -1);
       memo[i] = random;

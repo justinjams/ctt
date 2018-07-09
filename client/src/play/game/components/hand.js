@@ -24,11 +24,17 @@ class Hand extends Component {
   render () {
     return (
       <div className={this.renderClassName()}>
+      <div className='header-wrap'>
+        <div className='header'>
+          {this.props.game.usernames[this.props.hand]}
+        </div>
+      </div>
       {[0,1,2,3,4].map((pos)=>{
         let card = this.props.game.hands[this.props.hand][pos];
 
         return (
           <div className={`card-slider ${this.getSelected(pos)}`} key={pos}>
+            <div className='card-slot'></div>
             <Card card={card}
                   game={this.props.game}
                   hand={this.props.hand}
