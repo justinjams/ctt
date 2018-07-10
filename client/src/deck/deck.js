@@ -10,6 +10,8 @@ import assets from '../helpers/assets'
 // TODO: Avoid duping this on server and client
 const PROFILE_ICONS = [...Array(29)].map((_, i) => i);
 
+const POOL_ROW_COLUMNS = 6;
+
 class Deck extends Component {
   constructor (props) {
     super(props);
@@ -17,10 +19,27 @@ class Deck extends Component {
     this.handleSelectCardBacks = this.handleSelectCardBacks.bind(this);
     this.handleSelectCardBack = this.handleSelectCardBack.bind(this);
     this.handleSelectCards = this.handleSelectCards.bind(this);
-
+    this.handlePoolScroll = this.handlePoolScroll.bind(this);
     this.state = {
-      selected: 'Emblem',
+      poolRowClasses: [],
+      selected: 'Emblem'
     }
+  }
+
+  handlePoolScroll () {
+    if (this.cardRef && this.poolRef) {
+      let classes = [];
+      const offset = Math.max(0, (this.poolRef.scrollTop/this.cardRef.offsetHeight|0) - 1);
+      console.log(offset)
+      for(let i = 0; i < 5; i++) {
+        classes.push(`show-row-${offset + i}`);
+      }
+      this.setState({ poolRowClasses: classes });
+    } 
+  }
+
+  componentDidMount () {
+    this.handlePoolScroll();
   }
 
   render () {
@@ -28,7 +47,7 @@ class Deck extends Component {
       <div className='deck-view appears'>
         <h2 className='header deck-editor-title'>Deck Editor</h2>
         <div className='selectables'>
-          <div className={`card-back ${this.state.selected === 'Emblem' ? 'selected' : ''}`}>
+          <div className={`card-back ${this.state.selected === 'Emblem' ? 'selected' : ''}`} ref={(e) => this.cardRef = e} >
             {this.renderCardBack(this.props.user.profileIcon, 0, this.handleSelectCardBacks)}
           </div>
           {[0,1,2,3,4].map(this.renderCard)}
@@ -41,8 +60,10 @@ class Deck extends Component {
             <li>Card 5</li>
           </ul>
         </div>
-        <h2 className='header pool-title'>Select {this.state.selected}</h2> 
-        <div className='pool'>
+        <h2 className='header pool-title'>Your {this.state.selected}s</h2> 
+        <div className={`pool ${this.state.poolRowClasses.join(' ')}`}
+             ref={(e) => this.poolRef = e}
+             onScroll={this.handlePoolScroll}>
           {this.renderPool()}
         </div>
       </div>
@@ -59,7 +80,9 @@ class Deck extends Component {
       const handKeys = this.props.user.hand.map((card) => card.key);
       const cards = this.props.user.cards.filter((card) => handKeys.indexOf(card.key) < 0);
       return cards.map((card, i) => (
-        <Card handleClick={this.handleSelectCard(card)} card={card} key={i} />
+        <div className={`row-${i/POOL_ROW_COLUMNS|0}`} key={i}>
+          <Card handleClick={this.handleSelectCard(card)} card={card} />
+        </div>
       ));
     }
   }
@@ -68,9 +91,11 @@ class Deck extends Component {
     const img = assets.getProfileIcon(icon);
 
     return (
-      <div className='card-view' role="button" onClick={callback} key={i}>
-        <div className="side">
-          <img height={122} width={122} src={img} alt="" />
+      <div className={`row-${i/POOL_ROW_COLUMNS|0}`} key={i}>
+        <div className='card-view' role="button" onClick={callback} key={i}>
+          <div className="side">
+            <img height={122} width={122} src={img} alt="" />
+          </div>
         </div>
       </div>
     );
@@ -78,7 +103,7 @@ class Deck extends Component {
 
   renderCard (i) {
     const card = this.props.user.hand[i];
-    const className = `card ${this.state.selected === 'Card' && this.state.selectedId === i ? 'selected' : ''}`;
+    const className = `card ${this.state.selected === 'Card' && this.state.selectedId === i ? 'selected' : ''} row-${i/POOL_ROW_COLUMNS|0}`;
     return (
       <div className={className} key={i}>
         <Card handleClick={this.handleSelectCards(i)} className={className} card={card} />

@@ -37,7 +37,7 @@ class Card {
 }
 
 Card.all = () => {
-  return DATA_KEYS.slice();
+  return DATA_KEYS.slice().sort();
 }
 
 Card.random = () => {

@@ -175,7 +175,7 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
             game: gameAttributes
           });
         });
-      }, 1200)
+      }, 1200);
     });
   });
 });

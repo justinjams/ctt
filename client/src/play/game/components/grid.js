@@ -12,6 +12,7 @@ class Grid extends Component {
 
     this.state = {
       forfeitWarningOpen: false,
+      loading: false,
       messages: messages,
       renderedMessage: []
     };
@@ -91,7 +92,7 @@ class Grid extends Component {
   }
 
   handleForfeitCancel () {
-    this.setState({ forfeitWarningOpen: false });
+    this.setState({ forfeitWarningOpen: false, loading: false });
   }
 
   renderForfeitWarning () {
@@ -135,8 +136,8 @@ class Grid extends Component {
       this.props.onGameReady();      
     } else {
       if (this.state.forfeitWarningOpen) {
+        this.setState({ loading: true });
         api.v1.games.forfeit(this.props.game.id).then(this.handleForfeitCancel);
-
       } else {
         this.setState({ forfeitWarningOpen: true });
       }

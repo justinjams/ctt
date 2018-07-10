@@ -80,7 +80,31 @@
 }
 
 .create-game-view {
+  h3 {
+    color: $gold;
+    padding: 5px 0;
+    text-align: center;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  li {
+    display: inline-block;
+  }
+
   .rule {
     display: inline-block;
+  }
+
+  .button {
+    margin: 0 3px;
+  }
+
+  .close {
+    margin: 16px auto 0;
   }
 }

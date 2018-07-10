@@ -44,7 +44,7 @@
   border-radius: 1px;
   border-top: 2px solid $gold;
   display: inline-block;
-  margin: 45px 0 0;
+  margin: 25px 0 0;
   padding: 30px 8px 8px;
   position: relative;
   vertical-align: top;
@@ -77,7 +77,7 @@
   border-radius: 2px;
   border-top: 2px solid $gold;
   display: inline-block;
-  margin: 100px 42px;
+  margin: 94px 42px;
   padding: 10px 10px;
   position: relative;
   vertical-align: top;
@@ -216,6 +216,8 @@
   }
 
   .forfeit-warning {
+    width: 242px;
+    
     .button {
       display: inline-block;
       margin: 0 15px;
@@ -257,6 +259,9 @@
 }
 
 .game-waiting-wrap {
+  margin: -55px auto;
+  width: 320px;
+
   .cards {
     height: 0;
     margin: 0 auto;

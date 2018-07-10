@@ -28,7 +28,7 @@
 }
 
 .card-view {
-  background: linear-gradient(to bottom, black, $dark-blue);
+  background: linear-gradient(to bottom, $dark-blue, lighten($dark-blue, 3%));
   border: 2px solid $dark-gold;
   border-radius: 3px;
   border-bottom: 2px solid $gold;

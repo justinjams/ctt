@@ -19,9 +19,9 @@ h2, h3, h4, h5 {
 a.button {
   background-image: url($rock-texture);
   background-color: $dark-blue;
-  border: 1px solid $dark-gold;
+  border: 2px solid $dark-gold;
   border-radius: 1px;
-  border-top: 2px solid $gold;
+  border-top: 3px solid $gold;
   box-shadow: inset 0 0 10px black;
   color: $gold;
   filter: drop-shadow(0 0 0 $gold);
@@ -30,6 +30,7 @@ a.button {
   letter-spacing: 1px;
   margin: 0 auto;
   padding: 8px 24px;
+  position: relative;
   transition: filter .1s linear,
     border-color .1s linear,
     text-shadow .1s linear,
@@ -47,13 +48,34 @@ a.button {
     pointer-events: none;
   }
 
-  &:hover {
+  &:hover, &.active {
     background: lighten($dark-blue, 10%);
     border-color: $gold;
     box-shadow: inset 0 0 10px $blue;
     color: lighten($gold, 10%);
     filter: drop-shadow(0px 0px 6px $dark-gold);
     text-shadow: 0 0 5px $gold;
+  }
+  // https://stephanwagner.me/only-css-loading-spinner
+
+  @keyframes spinner {
+    to {transform: rotate(360deg);}
+  }
+   
+  &.loading:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid $blue;
+    border-top-color: $dark-blue;
+    animation: spinner .6s linear infinite;
   }
 }
 
@@ -84,24 +106,33 @@ a.button {
     z-index: 3;
 
     .menu {
-      background: black;
+      border: 1px solid $blue;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      box-sizing: border-box;
+      background: $dark-blue;
+      color: $light-blue;
       display: block;
       left: 0;
       position: absolute;
       top: 9px;
       transition: top .1s ease-out;
+      width: 100%;
       z-index: -1;
 
       ul {
         padding: 0;
+        width: 100%;
       }
 
       li {
         display: block;
+        width: 100%;
       }
 
       li div {
-        padding: 5px 20px;
+        padding: 5px 0;
+        width: 100%;
       }
     }
 
@@ -159,7 +190,6 @@ a.button {
   }
 
   .app-body {
-    height: 100%;
     position: absolute;
     top: 60px;
     width: 100%;
@@ -255,11 +285,9 @@ a.button {
   border: 1px solid $dark-gold;
   border-radius: 1px;
   border-top: 2px solid $gold;
-  margin: 0 88px;
   padding: 8px 8px 14px;
-  position: absolute;
-  top: 10px;
-  width: 320px;
+  position: relative;
+  margin: -350px auto;
   z-index: 2;
 
   .rule {
@@ -282,14 +310,6 @@ a.button {
 
   .rules {
     margin: 0 25px 0;
-  }
-
-  .rules, .opponent {
-    text-align: left;
-
-    .rule {
-      margin: 0 5px;
-    }
   }
 
   .rules-link {

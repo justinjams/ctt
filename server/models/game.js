@@ -6,6 +6,11 @@ const DATA_KEYS = Object.keys(data.cards);
 const Card = require('./card');
 const User = require('./user');
 
+const AI = {
+  ALDOUS: 1,
+  BART: 2
+};
+
 const STATES = [
   'created',
   'active',
@@ -42,7 +47,7 @@ const GameLogSchema = new mongoose.Schema({
 
 const GameSchema = new mongoose.Schema({
   ai: {
-    type: String
+    type: Number
   },
   state: {
     default: 'created',
@@ -152,17 +157,55 @@ class GameClass {
     other.flipped = ['top', 'right', 'bottom', 'left'][i];
   }
 
+  randomAiMove() {
+    let pos = Math.floor(Math.random()*9);
+    while(this.grid[pos]) pos = Math.floor(Math.random()*9);
+    this.setCard({
+      gridPos: pos,
+      hand: this.turn,
+      handPos: 0
+    });
+  }
+
   aiMove() {
-    //return callback();
     if (this.state === 'active' && this.userIds[this.turn] == 0) {
-      let pos = Math.floor(Math.random()*9);
-      while(this.grid[pos]) pos = Math.floor(Math.random()*9);
-      this.setCard({
-        gridPos: pos,
-        hand: this.turn,
-        handPos: 0
-      });
-      //this.players[this.turn].play(this);
+
+      if (this.ai === AI.ALDOUS) {
+        this.randomAiMove();
+      } else if (this.ai === AI.BART) {
+        const BART_TRIES = 5;
+        let moved = false;
+        for(let handPos = 0; handPos < this.hands[1].length; handPos++) {
+          const card = new Card(this.hands[1][handPos]);
+
+          // 5 tries at finding a good spot
+          for(let i = 0; i < BART_TRIES; i++) {
+            let pos = Math.floor(Math.random()*9);
+            const neighbors = NEIGHBORS[pos];
+            if (!this.grid[pos]) {
+              for(let j = 0; j < 4; j++) {
+                const k = (j + 2) % 4;
+                const other = this.grid[neighbors[j]];
+                if(neighbors[i] !== null && other && other.cardId) {
+                  const otherCard = new Card(other.cardId);
+                  if(other.hand !== 1 && card.power[j] > otherCard.power[k]) {
+                    this.setCard({
+                      gridPos: pos,
+                      hand: 1,
+                      handPos: handPos
+                    });
+                    j=4;
+                    i=BART_TRIES;
+                    moved = true;
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+        if(!moved) this.randomAiMove();
+      }
     }
   }
 
@@ -300,13 +343,22 @@ GameSchema.statics.start = (gameData, callback) => {
       userIds: userIds
     };
 
-    if (gameData.ai === 1) {
-      params.state = 'active';
-      params.ai = 1;
-      params.usernames.push('Aldous (AI)');
+    if (gameData.ai > 0) {
+      params.ai = gameData.ai;
+      params.state = 'active'
       params.userIds.push(0);
       params.hands.push([0,0,0,0,0].map(()=> DATA_KEYS[Math.floor(Math.random() * DATA_KEYS.length)]));
-      params.profileIcons.push(712 + Math.round(Math.random()));
+
+      switch(gameData.ai) {
+        case 1:
+          params.usernames.push('Aldous');
+          params.profileIcons.push(712);
+          break;
+        case 2:
+          params.usernames.push('Bart');
+          params.profileIcons.push(713);
+          break;
+      }
     }
     Game.create(params, callback);
   });

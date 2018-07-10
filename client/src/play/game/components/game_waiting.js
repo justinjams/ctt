@@ -9,11 +9,16 @@ class GameWaiting extends Component {
   constructor (props) {
     super(props);
 
+    this.state = { loading: false };
+
     this.handleCancel = this.handleCancel.bind(this);
   }
 
   handleCancel () {
-    api.v1.games.forfeit(this.props.game.id);
+    this.setState({ loading: true });
+    api.v1.games.forfeit(this.props.game.id).then(() => {
+      this.setState({ loading: false });
+    });
   }
 
   render () {
@@ -26,7 +31,9 @@ class GameWaiting extends Component {
             <input className='invite-link' value={`${window.location.origin}/g/${this.props.game.id}`} readonly></input>
           </div>
           <Lobby game={this.props.game} />
-          <div role='button' className="button" onClick={this.handleCancel}>
+          <div role='button'
+              className={`button ${this.state.loading ? 'disabled loading' : ''}`}
+               onClick={this.handleCancel}>
             CANCEL
           </div>
         </div>

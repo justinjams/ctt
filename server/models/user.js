@@ -61,7 +61,7 @@ UserSchema.pre('save', function (next) {
     //   return memo;
     // }, []);
     user.cards = Card.all();
-    user.hand = user.cards.slice(0, 5);
+    user.hand = [...new Array(5)].map(Card.random);
     user.profileIcon = PROFILE_ICONS[parseInt(PROFILE_ICONS.length * Math.random())];
 
     bcrypt.hash(user.password, 10, (err, hash) => {

@@ -85,6 +85,13 @@
     max-height: 414px;
     overflow-y: scroll;
     padding: 4px 4px 0;
+    text-align: left;
+
+    .card-view {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity .1s ease-in;
+    }
 
     .card-view:before {
       background-image: radial-gradient(transparentize($gold, .6), transparent);
@@ -96,11 +103,17 @@
       right: 0;
       top: 0;
       z-index:1;
-      transition: opacity .05s linear;
     }
 
     .card-view:hover:before {
       opacity: 1;
+    }
+
+    @for $i from 0 through 50 {
+      &.show-row-#{$i} .row-#{$i} .card-view {
+        opacity: 1;
+        visibility: visible;
+      }
     }
   }
 

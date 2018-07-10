@@ -83,7 +83,7 @@
 
   footer {
     border-top: 3px solid lighten($dark-blue, 6%);
-    color: $light-gold;
+    color: lighten($dark-blue, 10%);
     padding: 8px 0;
 
     a {
