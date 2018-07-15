@@ -175,9 +175,8 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
       setTimeout(() => {
         game.aiMove();
         game.save((err) => {
-          gameAttributes = game.toAttributes();
           io.emit(`games:play:${game.id}`, {
-            game: gameAttributes
+            game: game.toAttributes()
           });
         });
       }, 1200);

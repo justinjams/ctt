@@ -33,7 +33,8 @@ class Game extends Component {
     const className = ['game-view appears',
                        `player-${this.props.game.turn}-turn`,
                        this.state.holding ? 'holding' : ''];
-    if (this.props.game.state === 'active') {
+    if (this.props.game.userIds[this.props.game.turn] === this.props.user.id &&
+        this.props.game.state === 'active') {
       className.push(`player-${this.props.game.turn}-playing`);
     }
 
