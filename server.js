@@ -100,10 +100,12 @@ app.get('/api/v1/app/start', loadAppState, (req, res) => {
   res.json(bootstrap);
 });
 
+
+// GAMES API
 app.get('/g/:gameId', (req, res) => {
   Game.findOne({ _id: req.params.gameId }, (err, game) => {
     if (err) console.error(err);
-    if (!err && game) {
+    else if (game) {
       req.session.gameInviteId = game.id;
     }
 
@@ -111,7 +113,6 @@ app.get('/g/:gameId', (req, res) => {
   });
 });
 
-// GAMES API
 app.get('/api/v1/games', isAuthenticated, (req, res) => {
   const params = {
     state: req.body.state
@@ -138,7 +139,11 @@ app.post('/api/v1/games/new', isAuthenticated, (req, res) => {
     game.aiMove();
     game.save((err) => {
       if (err) return res.json(err);
-      res.json({ game: game.toAttributes() });
+      const gameAttributes = game.toAttributes();
+      res.json({ game: gameAttributes });
+      io.emit('lobby', {
+        game: gameAttributes
+      });
     });
   });
 });
@@ -155,7 +160,7 @@ app.post('/api/v1/games/:gameId/play', isAuthenticated, (req, res) => {
     const success = game.setCard(req.body) !== false;
     game.save((err) => {
       if (err) return res.json(err);
-      let gameAttributes = game.toAttributes();
+      const gameAttributes = game.toAttributes();
       const response = {
         game: gameAttributes,
         success: !!success,
@@ -197,6 +202,7 @@ app.post('/api/v1/games/:gameId/join', isAuthenticated, (req, res) => {
         io.emit(`games:play:${game.id}`, {
           game: game.toAttributes()
         });
+          
         res.json({ game: game.toAttributes() });
       });
     });

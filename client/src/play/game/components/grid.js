@@ -17,12 +17,6 @@ class Grid extends Component {
       renderedMessage: []
     };
 
-    // setInterval(() => {
-    //   const message = 'Test message! ' + Math.round(99*Math.random());
-    //   messages.push({ text: message, id: Math.round(999999*Math.random()) });
-    //   this.setState({ messages: messages });
-    // }, 1000);
-
     this.handleForfeit = this.handleForfeit.bind(this);
     this.handleSelectGrid = this.handleSelectGrid.bind(this);
     this.handleForfeitCancel = this.handleForfeitCancel.bind(this);

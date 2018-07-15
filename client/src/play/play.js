@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './styles/play.css';
 
-import Game from './game/components/game';
+import Game from './game/game';
 import GameInvite from './game/components/game_invite';
 import Lobby from './lobby/lobby';
 

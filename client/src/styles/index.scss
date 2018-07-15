@@ -1,5 +1,19 @@
 @import '_variables.scss';
 
+a {
+  color: #68b3d2;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #68b3d2;
+}
+
+h2, h3, h4, h5 {
+  font-weight: normal;
+  margin: 0;
+}
+
 body {
   background: black;
   margin: 0;

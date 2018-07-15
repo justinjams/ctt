@@ -1,20 +1,6 @@
 @import '_variables.scss';
 @import '_fireworks.scss';
 
-a {
-  color: #68b3d2;
-  text-decoration: none;
-}
-
-a:visited {
-  color: #68b3d2;
-}
-
-h2, h3, h4, h5 {
-  font-weight: normal;
-  margin: 0;
-}
-
 .button,
 a.button {
   background-image: url($rock-texture);
@@ -200,19 +186,21 @@ a.button {
   }
 
   footer {
+    bottom: 0;
+    color: lighten($dark-blue, 10%);
+    font-weight: normal;
+    position: fixed;
+    width: 100%;
+  }
+
+  .footer-body {
     background: $dark-blue;
     border: 1px solid $blue;
     border-bottom: none;
     border-radius: 8px 8px 0 0;
-    bottom: 0;
-    color: lighten($dark-blue, 10%);
-    font-weight: normal;
-    left: 50%;
-    padding: 8px 10px 5px;
-    margin-left: -103px;
+    margin:0 auto;
     max-width: 206px;
-    position: fixed;
-    width: 100%;
+    padding: 8px 10px 5px;
   }
 }
 
@@ -286,9 +274,9 @@ a.button {
   border: 1px solid $dark-gold;
   border-radius: 1px;
   border-top: 2px solid $gold;
+  margin: -350px auto;
   padding: 8px 8px 14px;
   position: relative;
-  margin: -350px auto;
   z-index: 2;
 
   .rule {
@@ -330,7 +318,6 @@ a.button {
 }
 
 @import '_card.scss';
-@import '_hand_hover.scss';
 
 @keyframes spinX {
   0% {

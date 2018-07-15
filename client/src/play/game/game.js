@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Grid from './grid';
-import Hand from './hand';
-import GameWaiting from './game_waiting';
+import Grid from './components/grid';
+import Hand from './components/hand';
+import GameWaiting from './components/game_waiting';
 
 class Game extends Component {
   constructor (props) {
@@ -13,34 +13,39 @@ class Game extends Component {
     this.selectCard = this.selectCard.bind(this);
   }
 
+  selectCard (pos, hand) {
+    if (hand === this.props.game.turn &&
+        this.props.user.id === this.props.game.userIds[this.props.game.turn]) {
+      const holding = { hand, pos };
+      this.setState({ holding: holding });
+    }
+  }
+
+  getInitialState () {
+    return { holding: false };
+  }
+
+  onPlayHolding (game) {
+    this.setState({ holding: false });
+  }
+
   renderClassName () {
     const className = ['game-view appears',
                        `player-${this.props.game.turn}-turn`,
                        this.state.holding ? 'holding' : ''];
-    this.props.game.userIds.forEach((userId, i) => {
-      if (this.props.game.state === 'active' && 
-          userId === this.props.user.id) {
-        className.push(`player-${i}-playing`);
-      }
-    });
+    if (this.props.game.state === 'active') {
+      className.push(`player-${this.props.game.turn}-playing`);
+    }
 
     return className.join(' ');
   }
 
   render () {
     if (this.props.game.state !== 'created') {
-      let fireworks;
-      if (this.props.game.state === 'finished') {
-        fireworks = (
-          <div className={`pyro player-${this.props.game.winner}`}>
-            <div className="before"></div>
-            <div className="after"></div>
-          </div>
-        );
-      }
+      
       return (
         <div className={this.renderClassName()}>
-          {fireworks}
+          {this.renderFireworks()}
           <div>
             <Hand game={this.props.game}
                   hand={0}
@@ -64,22 +69,15 @@ class Game extends Component {
     }
   }
 
-  selectCard (pos, hand) {
-    if (hand === this.props.game.turn &&
-        this.props.user.id === this.props.game.userIds[this.props.game.turn]) {
-      const holding = { hand, pos };
-      this.setState({ holding: holding });
+  renderFireworks () {
+    if (this.props.game.state === 'finished') {
+      return (
+        <div className={`pyro player-${this.props.game.winner}`}>
+          <div className="before"></div>
+          <div className="after"></div>
+        </div>
+      );
     }
-  }
-
-  getInitialState () {
-    return {
-      holding: false
-    };
-  }
-
-  onPlayHolding (game) {
-    this.setState({ holding: false });
   }
 }
 export default Game;
