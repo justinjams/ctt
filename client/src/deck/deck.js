@@ -61,10 +61,12 @@ class Deck extends Component {
           </ul>
         </div>
         <h2 className='header pool-title'>Your {this.state.selected}s</h2> 
-        <div className={`pool ${this.state.poolRowClasses.join(' ')}`}
-             ref={(e) => this.poolRef = e}
-             onScroll={this.handlePoolScroll}>
-          {this.renderPool()}
+        <div className='pool-wrap'>
+          <div className={`pool ${this.state.poolRowClasses.join(' ')}`}
+               ref={(e) => this.poolRef = e}
+               onScroll={this.handlePoolScroll}>
+            {this.renderPool()}
+          </div>
         </div>
       </div>
     );
