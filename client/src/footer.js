@@ -5,7 +5,7 @@ class Footer extends Component {
     return (
       <footer>
         <div className='footer-body'>
-          <a href="/about.html" target="_blank" rel="noopener noreferrer">About</a>
+          <a href="/about" target="_blank" rel="noopener noreferrer">About</a>
           &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
           <a href="http://ffxivtriad.com/rules" rel="noopener noreferrer nofollow" target="_blank">Rules</a>
           &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
